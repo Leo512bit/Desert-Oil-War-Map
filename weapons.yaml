@@ -1,0 +1,460 @@
+HeavyTurretGun:
+	Inherits: TurretGun
+	Range: 10c0
+
+CydogJaw:
+	Inherits: DogJaw
+	Range: 5c512
+
+VolkovWeapon:
+	Inherits: SilencedPPK
+	ReloadDelay: 25
+	Range: 6c0
+	-ValidTargets:
+	InvalidTargets: Air, Bridge, Structure
+	Warhead@1Dam: SpreadDamage
+		Spread: 256
+		Versus:
+			None: 100
+			Wood: 75
+			Light: 60
+			Heavy: 25
+			Concrete: 50
+		-ValidTargets:
+		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: artillery_explosion
+		ImpactSounds: kaboom25.aud
+		ValidTargets: Ground, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: small_splash
+		ImpactSounds: splash9.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
+
+SuperTankPrimary:
+	Inherits: 120mm
+	ReloadDelay: 70
+	Report: turret1.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 50000
+		InvalidTargets: Air, Infantry
+
+APTusk:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 60
+	Range: 6c0
+	Burst: 2
+	Projectile: Missile
+		Speed: 298
+		TrailImage: smokey
+		HorizontalRateOfTurn: 10
+		RangeLimit: 7c204
+			Damage: 2600
+
+APTusk.stnk:
+	Inherits: APTusk
+	ReloadDelay: 100
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 2900
+			Heavy: 115
+
+Maverick:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 50
+	Range: 9c0
+	MinRange: 2c0
+	Report: missile7.aud
+	Burst: 1
+	BurstDelays: 7
+  	ValidTargets: Air, Structure, Vehicle, Ship, Infantry, Ground 
+	Projectile: Missile
+		Speed: 256
+		Inaccuracy: 316
+		CruiseAltitude: 2c0
+		RangeLimit: 14c410
+	Warhead@1Dam: SpreadDamage
+		Damage: 7000
+		Versus:
+			None: 30
+			Wood: 90
+			Light: 90
+			Heavy: 115
+			Concrete: 100
+
+HellfireAG:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 30
+	MinRange: 1c256
+	ValidTargets: Structure, Vehicle, Ship
+	Burst: 4
+	BurstDelays: 7
+	Projectile: Missile
+		Speed: 256
+		HorizontalRateOfTurn: 10
+		RangeLimit: 8c512
+	Warhead@1Dam: SpreadDamage
+		Damage: 6000
+		Versus:
+			None: 30
+			Wood: 90
+			Light: 90
+			Concrete: 100
+
+ChainGun:
+	Inherits: ^HeavyMG
+	ReloadDelay: 10
+	Range: 5c0
+	MinRange: 0c768
+	InvalidTargets: Structure
+	Projectile: InstantHit
+		Blockable: false
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 144
+            
+SuperTusk:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 60
+	Range: 6c512
+	Burst: 12
+	ValidTargets: Air, Infantry
+	Projectile: Missile
+		Speed: 341
+		HorizontalRateOfTurn: 15
+		RangeLimit: 9c614
+	Warhead@1Dam: SpreadDamage
+		Spread: 256
+		Damage: 5000
+		Versus:
+			None: 100
+			Light: 60
+			Heavy: 24
+			Concrete: 50
+		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
+	Warhead@3Eff: CreateEffect
+		ImpactSounds: kaboom12.aud
+		ValidTargets: Ground, Trees
+	Warhead@5EffAir: CreateEffect
+		Explosions: med_explosion_air
+		ImpactSounds: kaboom25.aud
+		ValidTargets: Air
+Dragon:
+	Inherits: ^AntiGroundMissile
+	Projectile: Missile
+		TrailImage: smokey
+	Damage: 3000
+		ValidTargets: Ground, Water, Air
+		Versus:
+			None: 999
+			Wood: 74
+			Light: 34
+			Heavy: 20
+			Concrete: 45
+
+25mm:
+	Inherits: ^Cannon
+	ReloadDelay: 21
+	Range: 4c768
+	Report: cannon2.aud
+	Projectile: Bullet
+		Speed: 853
+		Image: 50CAL
+	Warhead@1Dam: SpreadDamage
+		Damage: 2500
+		Versus:
+			None: 255
+			Wood: 52
+			Light: 116
+			Heavy: 48
+			Concrete: 32
+	-Warhead@2Smu:
+	Warhead@3Eff: CreateEffect
+		-ImpactSounds:
+	Warhead@4EffWater: CreateEffect
+		-ImpactSounds:
+
+90mm:
+	Inherits: ^Cannon
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 200
+			Heavy: 115
+
+105mm:
+	Inherits: ^Cannon
+	ReloadDelay: 70
+	Burst: 2
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 2900
+			Heavy: 115
+
+Smm:
+	Inherits: ^Cannon
+	ReloadDelay: 180
+	Range: 20c0
+	Burst: 1
+	Warhead@1Dam: SpreadDamage
+		Damage: 6000
+		Versus:
+			Heavy: 115
+			Concrete: 2500000
+    Speed: 570
+
+SCUD:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 240
+	Range: 17c0
+	MinRange: 4c0
+	Report: missile1.aud
+	-Projectile:
+	Projectile: Bullet
+		Speed: 170
+		Blockable: false
+		TrailImage: smokey
+		TrailDelay: 5
+		Inaccuracy: 213
+		Image: V2
+		Shadow: True
+		LaunchAngle: 62
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 4500
+		Falloff: 1000, 368, 135, 50, 18, 7, 0
+		ValidTargets: Ground, Water, Trees
+		Versus:
+			None: 9
+			Wood: 75
+			Light: 70
+			Heavy: 40
+			Concrete: 100
+		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath, Incendiary
+	Warhead@3Eff: CreateEffect
+		Explosions: napalm
+		ImpactSounds: firebl3.aud
+	Warhead@4EffWater: CreateEffect
+		Explosions: large_splash
+        
+T7mm:
+	Inherits: ^Cannon
+	ReloadDelay: 50
+    Range: 6c768
+	Burst: 1
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 290
+			Heavy: 115
+            
+M1Carbine:
+	Inherits: ^LightMG
+	ReloadDelay: 20
+	Range: 5c0
+	Report: gun11.aud
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			Wood: 0
+            Heavy: 0
+    InvalidTargets: Vehicle, Ship, Structure
+    
+ChainGun.Yak:
+	Inherits: ^HeavyMG
+	ReloadDelay: 10
+	Range: 5c0
+	MinRange: 0c768
+	Projectile: InstantHit
+		Blockable: false
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 144
+			Wood: 10
+			Heavy: 10
+          
+Vulcan.garr:
+	Inherits: ^HeavyMG
+	Warhead@1Dam: SpreadDamage
+        InvalidTargets: Vehicle 
+		Damage: 1000
+		Versus:
+			None: 200
+			Wood: 50
+			Light: 50
+			Heavy: 0
+			Concrete: 20
+	Warhead@4Dam_2: SpreadDamage
+		Spread: 128
+		Damage: 1000
+		Delay: 2
+		Versus:
+			None: 200
+			Wood: 50
+			Light: 50
+			Heavy: 0
+			Concrete: 20
+		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
+	Warhead@4Eff_2: CreateEffect
+		Explosions: piffs
+		ValidTargets: Ground, Ship, Trees
+        InvalidTargets: Vehicle 
+		Delay: 2
+	Warhead@4Eff_2Water: CreateEffect
+		Explosions: water_piffs
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge, Vehicle
+		Delay: 2
+	Warhead@5Dam_3: SpreadDamage
+		Spread: 128
+		Damage: 1000
+		Delay: 4
+        InvalidTargets: Vehicle 
+		Versus:
+			None: 200
+			Wood: 50
+			Light: 50
+			Heavy: 0
+			Concrete: 20
+		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
+	Warhead@6Eff_3: CreateEffect
+		Explosions: piffs
+		ValidTargets: Ground, Ship, Trees
+        InvalidTargets: Vehicle 
+		Delay: 4
+	Warhead@6Eff_3Water: CreateEffect
+		Explosions: water_piffs
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge, Vehicle
+		Delay: 4
+	Warhead@7Dam_4: SpreadDamage
+		Spread: 128
+		Damage: 1000
+		Delay: 6
+		Versus:
+			None: 200
+			Wood: 50
+			Light: 50
+			Heavy: 0
+			Concrete: 20
+		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
+	Warhead@8Eff_4: CreateEffect
+		Explosions: piffs
+		ValidTargets: Ground, Ship, Trees
+        InvalidTargets: Vehicle 
+		Delay: 6
+	Warhead@8Eff_4Water: CreateEffect
+		Explosions: water_piffs
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
+		Delay: 6
+	Warhead@9Dam_5: SpreadDamage
+		Spread: 128
+		Damage: 1000
+		Delay: 8
+		Versus:
+			None: 200
+			Wood: 50
+			Light: 50
+			Heavy: 0
+			Concrete: 20
+		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
+	Warhead@10Eff_5: CreateEffect
+		Explosions: piffs
+		ValidTargets: Ground, Ship, Trees, Vehicle
+		Delay: 8
+	Warhead@10Eff_5Water: CreateEffect
+		Explosions: water_piffs
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
+		Delay: 8
+	Warhead@11Dam_6: SpreadDamage
+		Spread: 128
+		Damage: 1000
+		Delay: 10
+		Versus:
+			None: 200
+			Wood: 50
+			Light: 50
+			Heavy: 0
+			Concrete: 20
+		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
+	Warhead@12Eff_6: CreateEffect
+		Explosions: piffs
+		ValidTargets: Ground, Ship, Trees
+		Delay: 10
+	Warhead@12Eff_6Water: CreateEffect
+		Explosions: water_piffs
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge, Vehicle
+		Delay: 10      
+        
+SubMissile:
+	Inherits: ^SubMissileDefault
+	Range: 30c0
+	TargetActorCenter: true
+	-Projectile:
+	Projectile: Bullet
+		Speed: 162
+		Blockable: false
+		LaunchAngle: 120
+		Inaccuracy: 0c614
+		Image: MISSILE
+		Shadow: True
+		ContrailLength: 30
+
+8Inch:
+	Inherits: ^Artillery
+	MinRange: 3c0
+	ReloadDelay: 250
+	Range: 20c0
+	Burst: 2
+	Report: turret1.aud
+	TargetActorCenter: true
+	Projectile: Bullet
+		Inaccuracy: 1c938
+		ContrailLength: 30
+	Warhead@1Dam: SpreadDamage
+		Spread: 213
+		Damage: 2500
+		Falloff: 1000, 368, 135, 50, 18, 7, 0
+		Versus:
+			None: 99999
+			Wood: 47
+			Light: 60
+			Heavy: 40
+			Concrete: 100
+	Warhead@4EffWater: CreateEffect
+		Explosions: large_splash
+        
+^SubMissileDefault:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 300
+	Range: 8c0
+	Burst: 2
+	Projectile: Missile
+		Speed: 234
+		Inaccuracy: 0c614
+		HorizontalRateOfTurn: 15
+		RangeLimit: 9c0
+		Image: MISSILE
+		TrailImage: smokey
+		ContrailLength: 30
+	Warhead@1Dam: SpreadDamage
+		Spread: 426
+		Damage: 2500
+		Falloff: 1000, 368, 135, 50, 18, 7, 0
+		Versus:
+			None: 999
+			Wood: 50
+			Light: 30
+			Heavy: 30
+			Concrete: 100
+		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: artillery_explosion
+		ImpactSounds: kaboom15.aud
+	Warhead@4EffWater: CreateEffect
+		Explosions: large_splash
+		ImpactSounds: splash9.aud
