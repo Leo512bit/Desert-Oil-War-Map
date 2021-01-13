@@ -1,0 +1,206 @@
+ntnk:
+	idle: 1tnk
+		Facings: 32
+		UseClassicFacingFudge: True
+	turret: 1tnk
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	muzzle: gunfire2
+		Length: 2
+	icon: 1tnkicon
+
+ntnk.destroyed:
+	idle: 1tnk
+		Facings: 32
+		UseClassicFacingFudge: True
+		ZOffset: -512
+	turret: 1tnk
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+		ZOffset: -512
+
+5tnk:
+	idle: htnk
+		Facings: 32
+		UseClassicFacingFudge: True
+	turret: htnk
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	muzzle: gunfire2
+		Length: 5
+	icon: 4tnkicon
+
+5tnk.destroyed:
+	idle: htnk
+		Facings: 32
+		UseClassicFacingFudge: True
+		ZOffset: -512
+	turret: htnk
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+		ZOffset: -512
+srty:
+	idle: arty
+		Facings: 32
+		UseClassicFacingFudge: True
+	muzzle: gunfire2
+		Length: 5
+	icon: artyicon
+
+barb:
+	idle:
+		Length: 16
+	damaged-idle:
+		Start: 16
+		Length: 16
+	icon: barbicon
+
+cycl:
+	icon: cyclicon
+
+wood:
+	idle: wood
+		Length: 16
+	damaged-idle: wood
+		Start: 16
+		Length: 16
+	icon: woodicnh
+    
+7tnk:
+	idle: t72
+		Facings: 32
+	turret: t72
+		Start: 32
+		Facings: 32
+		ZOffset: 1
+	muzzle: gunfire2
+		Length: 5
+	icon: t72icon
+ 
+7tnk.destroyed:
+	idle: t72
+		Facings: 32
+		ZOffset: -512
+	turret: t72
+		Start: 32
+		Facings: 32
+		ZOffset: -512
+
+carr: carr
+	idle:
+		Start: 0
+		Length: 1
+	icon: carricon
+
+carr.deployed:
+	idle: carr
+		Start: 0
+		Length: 1
+		ZOffset: -1023
+	active: carr
+		Start: 0
+		Length: 9
+		Tick: 100
+		ZOffset: -1023	
+	icon: carricon
+    
+mfix:
+	idle: mcv
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: fixicon
+    
+mfix.deployed:
+	idle: fix
+		Offset: 0,1
+		ZOffset: -1c511
+	damaged-idle:
+		Start: 7
+		Offset: 0,1
+		ZOffset: -1c511
+	active: fix
+		Start: 1
+		Length: 6
+		Offset: 0,1
+		ZOffset: -1c511
+	damaged-active:
+		Start: 8
+		Length: 6
+		Offset: 0,1
+		ZOffset: -1c511
+	make: fixmake
+		Length: *
+		Offset: 0,1
+	bib: mbFIX
+		Length: *
+		ZOffset: -1c511
+		Offset: 0,-4
+		UseTilesetExtension: true
+	icon: fixicon
+    
+oilbisland:
+	Defaults:
+		Offset: 0,-6
+	idle: oilb
+	damaged-idle:
+		Start: 1
+		Length: *
+	make:
+	bib: bib3
+		Length: *
+		Offset: 0,0
+		UseTilesetExtension: true
+		TilesetOverrides:
+			INTERIOR: TEMPERAT
+            
+isoil:
+	idle: cncoil
+		Length: 14
+        
+deado:
+	idle: v19
+		Start: 28
+	fire-start: flmspt
+		Length: *
+		Offset: 7,-15
+		ZOffset: 1
+	fire-loop: flmspt
+		Start: 50
+		Length: *
+		Offset: 7,-15
+		ZOffset: 1
+        
+ttnk.destroyed:
+	idle: ttnk
+		Facings: 32
+		UseClassicFacingFudge: True
+	spinner: ttnk
+		Start: 32
+		Length: 32
+	turret: ttnk
+		Start: 32
+		Facings: 32
+		ZOffset: -512
+	icon: ttnkicon
+    
+ctnk.destroyed:
+	idle: ctnk
+		Facings: 32
+		UseClassicFacingFudge: True
+	turret: ttnk
+		Start: 32
+		Facings: 32
+		ZOffset: -512
+
+arco:
+	idle:
+	damaged-idle:
+		Start: 1
+
+arco.husk:
+	idle: arco
+		Start: 1
