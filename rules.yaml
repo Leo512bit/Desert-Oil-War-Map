@@ -543,63 +543,6 @@ OILB:
 		Palette: player
 		IsPlayerPalette: True
 	UpdatesDerrickCount:
-
-V19:
-	Inherits: ^CivBuilding
-	RenderSprites:
-		Palette: colorpicker
-	Tooltip:
-		Name: Oil Pump
-	TooltipDescription@ally:
-		Description: Provides additional funds.
-		ValidStances: Ally
-	TooltipDescription@other:
-		Description: Capture to receive additional funds.
-	CaptureManager:
-	Capturable:
-		Types: building
-	CapturableProgressBar:
-	CapturableProgressBlink:
-	EngineerRepairable:
-	CashTrickler:
-		Interval: 295
-		Amount: 50
-	GpsDot:
-		String: Oil
-	RevealsShroud:
-		Range: 3c0
-	OwnerLostAction:
-		Action: ChangeOwner
-	-SpawnActorOnDeath@1:
- 		OwnerType: InternalName
-	-SpawnActorOnDeath@2:
-	-SpawnActorOnDeath@3:
-	SpawnActorOnDeath:
- 		OwnerType: InternalName
-	Targetable:
-		TargetTypes: Ground, C4, DetonateAttack, Structure, NoAutoTarget\
-	UpdatesDerrickCount:
-        
-V19.Husk:
-	Inherits: ^CivBuilding
-	RenderSprites:
-		Palette: player
-	Tooltip:
-		Name: Husk (Oil Pump)
-	WithSpriteBody:
-	WithIdleOverlay:
-		StartSequence: fire-start
-		Sequence: fire-loop
-	CapturableProgressBar:
-	CapturableProgressBlink:
-	CaptureManager:
-	Capturable:
-		Types: building-husk
-	TransformOnCapture:
-		IntoActor: v19
-		ForceHealthPercentage: 50
-	Targetable:
-		TargetTypes: building-husk
         
 WEAP:
 	Inherits: ^Building
@@ -4934,10 +4877,7 @@ OILBisland:
 	UpdatesDerrickCount:
     
 isoil:
-	Inherits: ^CivBuilding
-	RenderSprites:
-        Palette: cnc
-		PlayerPalette: cncplayer
+	Inherits: ^TechBuilding
 	Tooltip:
 		Name: Oil Pump
 	TooltipDescription@ally:
@@ -4958,6 +4898,9 @@ isoil:
 		String: Oil
 	RevealsShroud:
 		Range: 3c0
+	SpawnActorOnDeath:
+		Actor: isoilhusk
+		OwnerType: InternalName
 	OwnerLostAction:
 		Action: ChangeOwner
 	UpdatesDerrickCount:
@@ -5169,7 +5112,7 @@ ARCO:
 	UpdatesDerrickCount:
 
 ARCO.Husk:
-	Inherits: ^CivBuilding
+	Inherits: ^TechBuilding
 	RenderSprites:
         Palette: cnc
 		PlayerPalette: cncplayer
@@ -5188,3 +5131,74 @@ ARCO.Husk:
 		ForceHealthPercentage: 50
 	Targetable:
 		TargetTypes: building-husk
+
+isoilhusk:
+	Inherits: ^TechBuilding
+	RenderSprites:
+		Palette: player
+	Tooltip:
+		Name: Husk (Oil Pump)
+	WithSpriteBody:
+	WithIdleOverlay:
+		StartSequence: fire-start
+		Sequence: fire-loop
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	CaptureManager:
+	Capturable:
+		Types: building-husk
+	TransformOnCapture:
+		IntoActor: isoil
+		ForceHealthPercentage: 50
+	Targetable:
+		TargetTypes: building-husk
+
+OILP.husk:
+	Inherits: ^TechBuilding
+	RenderSprites:
+		Palette: player
+	Tooltip:
+		Name: Husk (Oil Pump)
+	WithSpriteBody:
+	WithIdleOverlay:
+		StartSequence: fire-start
+		Sequence: fire-loop
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	CaptureManager:
+	Capturable:
+		Types: building-husk
+	TransformOnCapture:
+		IntoActor: OILP
+		ForceHealthPercentage: 50
+	Targetable:
+		TargetTypes: building-husk
+
+OILP:
+	Inherits: ^TechBuilding
+	Tooltip:
+		Name: Oil Pump
+	TooltipDescription@ally:
+		Description: Provides additional funds.
+		ValidStances: Ally
+	TooltipDescription@other:
+		Description: Capture to receive additional funds.
+	CaptureManager:
+	Capturable:
+		Types: building
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	EngineerRepairable:
+	CashTrickler:
+		Interval: 295
+		Amount: 50
+	GpsDot:
+		String: Oil
+	RevealsShroud:
+		Range: 3c0
+	SpawnActorOnDeath:
+		Actor: OILP.husk
+		OwnerType: InternalName
+	OwnerLostAction:
+		Action: ChangeOwner
+	UpdatesDerrickCount:
