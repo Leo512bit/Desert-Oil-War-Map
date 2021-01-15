@@ -158,7 +158,7 @@ oilbisland:
 			INTERIOR: TEMPERAT
             
 isoil:
-	idle: cncoil
+	idle: v19
 		Length: 14
         
 deado:
@@ -204,3 +204,54 @@ arco:
 arco.husk:
 	idle: arco
 		Start: 1
+
+hosp.husk:
+	idle: hosp
+		Start: 8
+	bib: mbHOSP
+		UseTilesetExtension: true
+		TilesetOverrides:
+			WINTER: TEMPERAT
+			JUNGLE: TEMPERAT
+			SNOW: TEMPERAT
+		Length: *
+		Offset: 0,1
+
+oilp.slow:
+	idle: v19
+		Length: 14
+		Tick: 120
+	damaged-idle: v19
+		Start: 14
+		Length: 14
+		Tick: 120
+
+OILPslowhusk:
+	idle: v19
+		Start: 28
+	fire-start: flmspt
+		Length: *
+		Offset: 7,-15
+		ZOffset: 1
+	fire-loop: flmspt
+		Start: 50
+		Length: *
+		Offset: 7,-15
+		ZOffset: 1
+
+oilp:
+	idle: v19
+		Length: 14
+        
+oilp.husk:
+	idle: v19
+		Start: 28
+	fire-start: flmspt
+		Length: *
+		Offset: 7,-15
+		ZOffset: 1
+	fire-loop: flmspt
+		Start: 50
+		Length: *
+		Offset: 7,-15
+		ZOffset: 1

@@ -5202,3 +5202,90 @@ OILP:
 	OwnerLostAction:
 		Action: ChangeOwner
 	UpdatesDerrickCount:
+
+HOSP.Husk:
+	Inherits: ^TechBuilding
+	Building:
+		Footprint: xx xx
+		Dimensions: 2,2
+	Tooltip:
+		Name: Husk (Hospital)
+	WithSpriteBody:
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	CaptureManager:
+	Capturable:
+		Types: building-husk
+	TransformOnCapture:
+		IntoActor: HOSP
+		ForceHealthPercentage: 50
+	Targetable:
+		TargetTypes: building-husk
+
+HOSP:
+	Inherits: ^TechBuilding
+	Inherits@shape: ^2x2Shape
+	OwnerLostAction:
+		Action: ChangeOwner
+	Selectable:
+		Priority: 0
+		Bounds: 48,48
+	Building:
+		Footprint: xx xx
+		Dimensions: 2,2
+	Health:
+		HP: 80000
+	CaptureManager:
+	Capturable:
+		Types: building
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	EngineerRepairable:
+	Tooltip:
+		Name: Hospital
+	TooltipDescription@ally:
+		Description: Provides infantry with self-healing.
+		ValidStances: Ally
+	TooltipDescription@other:
+		Description: Capture to enable self-healing for infantry.
+		ValidStances: Neutral, Enemy
+	RevealsShroud:
+		Range: 4c0
+	WithBuildingBib:
+		HasMinibib: true
+	WithDeathAnimation:
+		DeathSequence: dead
+		UseDeathTypeSuffix: false
+	ProvidesPrerequisite@buildingname:
+	AppearsOnMapPreview:
+	GpsDot:
+		String: Hospital
+	SpawnActorOnDeath:
+		Actor: hosp.husk
+		OwnerType: InternalName
+
+OILP.slow:
+	Inherits: ^TechBuilding
+	Tooltip:
+		Name: Slow Oil Pump
+	TooltipDescription@ally:
+		Description: Provides additional funds.
+		ValidStances: Ally
+	TooltipDescription@other:
+		Description: Capture to receive additional funds.
+	CaptureManager:
+	Capturable:
+		Types: building
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	EngineerRepairable:
+	CashTrickler:
+		Interval: 500
+		Amount: 50
+	GpsDot:
+		String: Oil
+	RevealsShroud:
+		Range: 3c0
+	OwnerLostAction:
+		Action: ChangeOwner
+	UpdatesDerrickCount:

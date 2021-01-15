@@ -458,3 +458,42 @@ SubMissile:
 	Warhead@4EffWater: CreateEffect
 		Explosions: large_splash
 		ImpactSounds: splash9.aud
+
+Stinger:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 60
+	Range: 7c512
+	Burst: 2
+	BurstDelays: 0
+	InvalidTargets: Underwater
+	Projectile: Missile
+		Arm: 3
+		Inaccuracy: 0
+		HorizontalRateOfTurn: 20
+		RangeLimit: 9c512
+		Speed: 170
+		CloseEnough: 149
+	Warhead@1Dam: SpreadDamage
+		Damage: 2500
+		Versus:
+			None: 999
+			Wood: 88
+			Light: 88
+			Heavy: 120
+			Concrete: 60
+
+2Inch:
+	Inherits: ^Cannon
+	ReloadDelay: 60
+	Range: 5c512
+	Report: cannon2.aud
+	InvalidTargets: Underwater
+	Projectile: Bullet
+		Speed: 426
+	Warhead@1Dam: SpreadDamage
+		Damage: 2500
+		Versus:
+			None: 999
+			Wood: 72
+			Light: 72
+			Concrete: 48
