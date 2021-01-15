@@ -2,9 +2,9 @@ MapFormat: 11
 
 RequiresMod: ra
 
-Title: Desert Oil War *incomplete* R39
+Title: Desert Oil War *incomplete* R40
 
-Author: LeonardMT
+Author: LeonardMT 
 
 Tileset: DESERT
 
@@ -115,13 +115,13 @@ Players:
 		Enemies: Creeps
 
 Actors:
-	Actor0: v19
+	Actor0: oilp
 		Location: 193,166
 		Owner: Creeps
 	Actor1: oilb
 		Location: 191,163
 		Owner: Creeps
-	Actor2: v19
+	Actor2: oilp
 		Location: 200,161
 		Owner: Creeps
 	Actor3: minv
@@ -178,7 +178,7 @@ Actors:
 	Actor23: barl
 		Location: 199,161
 		Owner: Creeps
-	Actor24: v19
+	Actor24: oilp
 		Owner: Neutral
 		Location: 7,145
 	Actor25: oilb
@@ -307,16 +307,16 @@ Actors:
 	Actor68: mpspawn
 		Owner: Neutral
 		Location: 10,166
-	Actor69: v19
+	Actor69: oilp
 		Location: 4,166
 		Owner: Neutral
-	Actor70: v19
+	Actor70: oilp
 		Location: 5,166
 		Owner: Neutral
-	Actor71: v19
+	Actor71: oilp
 		Location: 5,167
 		Owner: Neutral
-	Actor72: v19
+	Actor72: oilp
 		Location: 4,167
 		Owner: Neutral
 	Actor73: 4tnk
@@ -350,73 +350,73 @@ Actors:
 	Actor85: mpspawn
 		Owner: Neutral
 		Location: 182,103
-	Actor91: v19
+	Actor91: oilp
 		Owner: Neutral
 		Location: 8,101
-	Actor92: v19
+	Actor92: oilp
 		Owner: Neutral
 		Location: 8,102
-	Actor93: v19
+	Actor93: oilp
 		Owner: Neutral
 		Location: 7,102
-	Actor94: v19
+	Actor94: oilp
 		Owner: Neutral
 		Location: 7,101
-	Actor95: v19
+	Actor95: oilp
 		Owner: Neutral
 		Location: 5,66
-	Actor96: v19
+	Actor96: oilp
 		Owner: Neutral
 		Location: 6,66
-	Actor97: v19
+	Actor97: oilp
 		Owner: Neutral
 		Location: 6,67
-	Actor98: v19
+	Actor98: oilp
 		Owner: Neutral
 		Location: 5,67
-	Actor99: v19
+	Actor99: oilp
 		Owner: Neutral
 		Location: 4,39
-	Actor100: v19
+	Actor100: oilp
 		Owner: Neutral
 		Location: 5,39
-	Actor101: v19
+	Actor101: oilp
 		Owner: Neutral
 		Location: 4,40
-	Actor102: v19
+	Actor102: oilp
 		Owner: Neutral
 		Location: 5,40
-	Actor103: v19
+	Actor103: oilp
 		Owner: Neutral
 		Location: 195,12
-	Actor104: v19
+	Actor104: oilp
 		Owner: Neutral
 		Location: 196,12
-	Actor105: v19
+	Actor105: oilp
 		Owner: Neutral
 		Location: 195,13
-	Actor106: v19
+	Actor106: oilp
 		Owner: Neutral
 		Location: 196,13
-	Actor111: v19
+	Actor111: oilp
 		Owner: Neutral
 		Location: 188,79
-	Actor112: v19
+	Actor112: oilp
 		Owner: Neutral
 		Location: 189,79
-	Actor113: v19
+	Actor113: oilp
 		Owner: Neutral
 		Location: 188,80
-	Actor114: v19
+	Actor114: oilp
 		Owner: Neutral
 		Location: 189,80
-	Actor115: v19
+	Actor115: oilp
 		Owner: Neutral
 		Location: 188,102
-	Actor116: v19
+	Actor116: oilp
 		Owner: Neutral
 		Location: 189,102
-	Actor118: v19
+	Actor118: oilp
 		Owner: Neutral
 		Location: 189,103
 	Actor124: oilb
@@ -467,49 +467,49 @@ Actors:
 	Actor140: oilb
 		Owner: Neutral
 		Location: 78,65
-	Actor141: v19
+	Actor141: oilp
 		Owner: Neutral
 		Location: 79,77
-	Actor142: v19
+	Actor142: oilp
 		Owner: Neutral
 		Location: 85,78
-	Actor144: v19
+	Actor144: oilp
 		Owner: Neutral
 		Location: 93,81
-	Actor145: v19
+	Actor145: oilp
 		Owner: Neutral
 		Location: 88,71
-	Actor146: v19
+	Actor146: oilp
 		Owner: Neutral
 		Location: 80,69
-	Actor147: v19
+	Actor147: oilp
 		Owner: Neutral
 		Location: 100,80
-	Actor148: v19
+	Actor148: oilp
 		Owner: Neutral
 		Location: 99,77
-	Actor149: v19
+	Actor149: oilp
 		Owner: Neutral
 		Location: 99,74
-	Actor150: v19
+	Actor150: oilp
 		Owner: Neutral
 		Location: 94,71
-	Actor151: v19
+	Actor151: oilp
 		Owner: Neutral
 		Location: 90,69
-	Actor152: v19
+	Actor152: oilp
 		Owner: Neutral
 		Location: 75,79
-	Actor153: v19
+	Actor153: oilp
 		Owner: Neutral
 		Location: 76,83
-	Actor154: v19
+	Actor154: oilp
 		Owner: Neutral
 		Location: 73,84
-	Actor156: v19
+	Actor156: oilp
 		Owner: Neutral
 		Location: 83,83
-	Actor157: v19
+	Actor157: oilp
 		Owner: Neutral
 		Location: 83,85
 	Actor178: oilb
@@ -760,7 +760,7 @@ Actors:
 	Actor288: t08
 		Owner: Neutral
 		Location: 99,78
-	Actor289: v19
+	Actor289: oilp
 		Owner: Neutral
 		Location: 80,80
 	Actor290: tc01
@@ -852,13 +852,13 @@ Actors:
 		Owner: Neutral
 		Facing: 96
 		Location: 88,82
-	Actor315: v19
+	Actor315: oilp
 		Owner: Neutral
 		Location: 30,156
-	Actor316: v19
+	Actor316: oilp
 		Owner: Neutral
 		Location: 24,166
-	Actor317: v19
+	Actor317: oilp
 		Owner: Neutral
 		Location: 150,136
 	Actor318: oilb
@@ -1066,7 +1066,7 @@ Actors:
 		Owner: Neutral
 		Facing: 96
 		Location: 82,79
-	Actor439: v19.husk
+	Actor439: oilp.husk
 		Owner: Neutral
 		Location: 89,86
 	Actor440: v20
@@ -1283,7 +1283,7 @@ Actors:
 	Actor521: oilb
 		Owner: Neutral
 		Location: 57,64
-	Actor522: v19
+	Actor522: oilp
 		Owner: Neutral
 		Location: 56,69
 	Actor523: v37
@@ -1488,22 +1488,22 @@ Actors:
 	Actor586: t09
 		Owner: Neutral
 		Location: 57,74
-	Actor513: v19
+	Actor513: oilp
 		Owner: Neutral
 		Location: 100,45
-	Actor514: v19
+	Actor514: oilp
 		Owner: Neutral
 		Location: 100,47
-	Actor587: v19
+	Actor587: oilp
 		Owner: Neutral
 		Location: 106,47
-	Actor588: v19
+	Actor588: oilp
 		Owner: Neutral
 		Location: 103,46
-	Actor589: v19
+	Actor589: oilp
 		Owner: Neutral
 		Location: 110,49
-	Actor590: v19
+	Actor590: oilp
 		Owner: Neutral
 		Location: 110,55
 	Actor591: gmine
@@ -1931,10 +1931,10 @@ Actors:
 	Actor737: oilb
 		Owner: Neutral
 		Location: 195,184
-	Actor739: v19
+	Actor739: oilp
 		Owner: Neutral
 		Location: 198,187
-	Actor740: v19
+	Actor740: oilp
 		Owner: Neutral
 		Location: 188,187
 	Actor733: rock6
@@ -2086,16 +2086,16 @@ Actors:
 	Actor788: mpspawn
 		Owner: Neutral
 		Location: 7,13
-	Actor789: v19
+	Actor789: oilp
 		Owner: Neutral
 		Location: 3,12
-	Actor790: v19
+	Actor790: oilp
 		Owner: Neutral
 		Location: 4,12
-	Actor791: v19
+	Actor791: oilp
 		Owner: Neutral
 		Location: 3,13
-	Actor792: v19
+	Actor792: oilp
 		Owner: Neutral
 		Location: 4,13
 	Actor799: oilb
@@ -2339,18 +2339,12 @@ Actors:
 	Actor911: oilb
 		Owner: Neutral
 		Location: 61,42
-	Actor912: v19
+	Actor912: oilp
 		Owner: Neutral
 		Location: 70,49
 	Actor913: oilb
 		Owner: Neutral
 		Location: 57,45
-	Actor914: v19
-		Owner: Neutral
-		Location: 52,44
-	Actor915: v19
-		Owner: Neutral
-		Location: 54,39
 	Actor916: c10
 		Owner: Neutral
 		Facing: 96
@@ -2538,7 +2532,7 @@ Actors:
 	Actor971: oilb
 		Owner: Neutral
 		Location: 68,33
-	Actor972: v19
+	Actor972: oilp
 		Owner: Neutral
 		Location: 63,34
 	Actor973: oilb
@@ -2589,10 +2583,10 @@ Actors:
 	Actor988: v23
 		Owner: Neutral
 		Location: 59,22
-	Actor989: v19
+	Actor989: oilp
 		Owner: Neutral
 		Location: 62,25
-	Actor990: v19
+	Actor990: oilp
 		Owner: Neutral
 		Location: 62,21
 	Actor991: oilb
@@ -2664,10 +2658,10 @@ Actors:
 	Actor1013: oilb
 		Owner: Neutral
 		Location: 7,190
-	Actor1014: v19
+	Actor1014: oilp
 		Owner: Neutral
 		Location: 3,181
-	Actor1015: v19
+	Actor1015: oilp
 		Owner: Neutral
 		Location: 5,185
 	Actor1016: oilb
@@ -2676,10 +2670,10 @@ Actors:
 	Actor1017: oilb
 		Owner: Neutral
 		Location: 4,172
-	Actor1018: v19
+	Actor1018: oilp
 		Owner: Neutral
 		Location: 11,172
-	Actor1019: v19
+	Actor1019: oilp
 		Owner: Neutral
 		Location: 9,174
 	Actor1020: brl3
@@ -2709,7 +2703,7 @@ Actors:
 	Actor1028: oilb
 		Owner: Neutral
 		Location: 86,50
-	Actor1029: v19
+	Actor1029: oilp
 		Owner: Neutral
 		Location: 87,52
 	Actor1030: oilb
@@ -2721,79 +2715,79 @@ Actors:
 	Actor1032: oilb
 		Owner: Neutral
 		Location: 89,53
-	Actor1033: v19
+	Actor1033: oilp
 		Owner: Neutral
 		Location: 89,49
-	Actor1034: v19
+	Actor1034: oilp
 		Owner: Neutral
 		Location: 81,47
-	Actor1035: v19
+	Actor1035: oilp
 		Owner: Neutral
 		Location: 81,45
-	Actor1036: v19
+	Actor1036: oilp
 		Owner: Neutral
 		Location: 79,43
-	Actor1037: v19
+	Actor1037: oilp
 		Owner: Neutral
 		Location: 94,47
 	Actor1043: mpspawn
 		Owner: Neutral
 		Location: 192,145
-	Actor1044: v19
+	Actor1044: oilp
 		Owner: Neutral
 		Location: 196,145
-	Actor1045: v19
+	Actor1045: oilp
 		Owner: Neutral
 		Location: 197,145
-	Actor1046: v19
+	Actor1046: oilp
 		Owner: Neutral
 		Location: 196,146
-	Actor1047: v19
+	Actor1047: oilp
 		Owner: Neutral
 		Location: 197,146
-	Actor1048: v19
+	Actor1048: oilp
 		Owner: Neutral
 		Location: 190,37
-	Actor1049: v19
+	Actor1049: oilp
 		Owner: Neutral
 		Location: 191,37
 	Actor1050: mpspawn
 		Owner: Neutral
 		Location: 186,38
-	Actor1051: v19
+	Actor1051: oilp
 		Owner: Neutral
 		Location: 190,38
-	Actor1052: v19
+	Actor1052: oilp
 		Owner: Neutral
 		Location: 191,38
-	Actor1053: v19
+	Actor1053: oilp
 		Owner: Neutral
 		Location: 188,55
-	Actor1054: v19
+	Actor1054: oilp
 		Owner: Neutral
 		Location: 189,55
 	Actor1055: mpspawn
 		Owner: Neutral
 		Location: 183,56
-	Actor1056: v19
+	Actor1056: oilp
 		Owner: Neutral
 		Location: 188,56
-	Actor1057: v19
+	Actor1057: oilp
 		Owner: Neutral
 		Location: 189,56
 	Actor1058: mpspawn
 		Owner: Neutral
 		Location: 10,187
-	Actor1059: v19
+	Actor1059: oilp
 		Owner: Neutral
 		Location: 24,128
-	Actor1060: v19
+	Actor1060: oilp
 		Owner: Neutral
 		Location: 25,128
-	Actor1061: v19
+	Actor1061: oilp
 		Owner: Neutral
 		Location: 24,129
-	Actor1062: v19
+	Actor1062: oilp
 		Owner: Neutral
 		Location: 25,129
 	Actor1063: mpspawn
@@ -3012,7 +3006,7 @@ Actors:
 	Actor1120: oilb
 		Owner: Neutral
 		Location: 127,67
-	Actor1121: v19
+	Actor1121: oilp
 		Owner: Neutral
 		Location: 121,64
 	Actor1122: t08
@@ -3042,10 +3036,10 @@ Actors:
 	Actor1130: oilb
 		Owner: Neutral
 		Location: 131,81
-	Actor1131: v19
+	Actor1131: oilp
 		Owner: Neutral
 		Location: 124,81
-	Actor1132: v19
+	Actor1132: oilp
 		Owner: Neutral
 		Location: 133,86
 	Actor1133: oilb
@@ -3154,19 +3148,19 @@ Actors:
 		Owner: Neutral
 		Location: 189,166
 		Health: 100
-	Actor1168: v19
+	Actor1168: oilp
 		Owner: Neutral
 		Location: 159,128
-	Actor1169: v19
+	Actor1169: oilp
 		Owner: Neutral
 		Location: 160,128
 	Actor1170: mpspawn
 		Owner: Neutral
 		Location: 155,129
-	Actor1171: v19
+	Actor1171: oilp
 		Owner: Neutral
 		Location: 159,129
-	Actor1172: v19
+	Actor1172: oilp
 		Owner: Neutral
 		Location: 160,129
 	Actor1173: t08
@@ -3397,43 +3391,43 @@ Actors:
 	Actor1253: oilb
 		Owner: Neutral
 		Location: 143,41
-	Actor1254: v19
+	Actor1254: oilp
 		Owner: Neutral
 		Location: 138,44
-	Actor1255: v19
+	Actor1255: oilp
 		Owner: Neutral
 		Location: 143,47
-	Actor1256: v19
+	Actor1256: oilp
 		Owner: Neutral
 		Location: 136,46
-	Actor1257: v19
+	Actor1257: oilp
 		Owner: Neutral
 		Location: 132,49
-	Actor1258: v19
+	Actor1258: oilp
 		Owner: Neutral
 		Location: 140,47
-	Actor1259: v19
+	Actor1259: oilp
 		Owner: Neutral
 		Location: 142,39
-	Actor1260: v19
+	Actor1260: oilp
 		Owner: Neutral
 		Location: 129,39
-	Actor1261: v19
+	Actor1261: oilp
 		Owner: Neutral
 		Location: 133,43
-	Actor1262: v19
+	Actor1262: oilp
 		Owner: Neutral
 		Location: 127,44
-	Actor1263: v19
+	Actor1263: oilp
 		Owner: Neutral
 		Location: 142,52
-	Actor1264: v19
+	Actor1264: oilp
 		Owner: Neutral
 		Location: 147,42
 	Actor1265: oilb
 		Owner: Neutral
 		Location: 129,46
-	Actor1266: v19
+	Actor1266: oilp
 		Owner: Neutral
 		Location: 188,103
 	Actor1267: arco
@@ -3484,6 +3478,15 @@ Actors:
 	Actor1281: arco
 		Owner: Neutral
 		Location: 185,146
+	Actor1282: oilp.slow
+		Owner: Neutral
+		Location: 103,84
+	Actor1283: oilp.slow
+		Owner: Neutral
+		Location: 52,44
+	Actor1284: oilp.slow
+		Owner: Neutral
+		Location: 54,39
 
 Rules: briefing.yaml, rules.yaml, rules-lua.yaml, ai.yaml
 
