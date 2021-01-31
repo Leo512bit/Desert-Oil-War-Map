@@ -1184,10 +1184,14 @@ DTRK:
 	-DamageMultiplier@IRONCURTAIN:
 
 QTNK:
-	KillsSelf:
-		RequiresCondition: invulnerability
 	Chronoshiftable:
 		ExplodeInstead: true
+	Tooltip:
+		Name: M.A.D Tank
+		GenericName: Tank
+	MadTank:
+		DeployedCondition: deployed
+		BeginChargeSpeechNotification: AbombPrepping
 
  
 
@@ -1785,6 +1789,11 @@ HIND:
 		PipCount: 6
 		ReloadDelay: 8
 		AmmoCondition: ammo
+	Cargo:
+		Types: Infantry
+		MaxWeight: 3
+		PipCount: 3
+		AfterUnloadDelay: 20
 	SelectionDecorations:
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
@@ -2282,7 +2291,7 @@ AFLD:
 		Description: Paratroopers
 		LongDesc: A Badger drops a squad of infantry\nanywhere on the map.
 		DropItems: E1R1,E1R1,E1R1,E3R1,E3R1
-		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
+		ReinforcementsArrivedSpeechNotification: SovietReinforcementsArrived
 		SelectTargetSpeechNotification: SelectTarget
 		AllowImpassableCells: false
 		QuantizedFacings: 8
@@ -4876,7 +4885,7 @@ OILBisland:
 		IsPlayerPalette: True
 	UpdatesDerrickCount:
     
-isoil:
+ISOIL:
 	Inherits: ^TechBuilding
 	Tooltip:
 		Name: Oil Pump
@@ -5132,7 +5141,7 @@ ARCO.Husk:
 	Targetable:
 		TargetTypes: building-husk
 
-isoilhusk:
+ISOILHUSK:
 	Inherits: ^TechBuilding
 	RenderSprites:
 		Palette: player
