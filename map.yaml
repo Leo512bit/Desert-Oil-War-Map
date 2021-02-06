@@ -2,9 +2,9 @@ MapFormat: 11
 
 RequiresMod: ra
 
-Title: Desert Oil War *incomplete* R40
+Title: Desert Oil War *incomplete* R41
 
-Author: LeonardMT 
+Author: LeonardMT
 
 Tileset: DESERT
 
@@ -110,8 +110,7 @@ Players:
 	PlayerReference@Multi13:
 		Name: Multi13
 		Playable: True
-		LockFaction: True
-		Faction: russia
+		Faction: Random
 		Enemies: Creeps
 
 Actors:
@@ -2766,9 +2765,6 @@ Actors:
 	Actor1054: oilp
 		Owner: Neutral
 		Location: 189,55
-	Actor1055: mpspawn
-		Owner: Neutral
-		Location: 183,56
 	Actor1056: oilp
 		Owner: Neutral
 		Location: 188,56
@@ -3487,6 +3483,9 @@ Actors:
 	Actor1284: oilp.slow
 		Owner: Neutral
 		Location: 54,39
+	Actor1055: mpspawn
+		Owner: Neutral
+		Location: 183,53
 
 Rules: briefing.yaml, rules.yaml, rules-lua.yaml, ai.yaml
 
@@ -3497,3 +3496,5 @@ Weapons: weapons.yaml
 Voices: voices.yaml
 
 Music: music.yaml
+
+Notifications: notifications.yaml

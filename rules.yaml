@@ -113,17 +113,6 @@ Player:
 	LobbyPrerequisiteCheckbox@REUSABLEENGINEERS: #enable re-usable Engineers
         Enabled: true
         Locked: true
-	LobbyPrerequisiteCheckbox@Sand:
-		ID: sandy
-		Label: Sandstroms
-		Description: Doesn't do anything...yet! So disable it to prevent unexpected behavior.
-		Enabled: true
-		Locked: false
-		DisplayOrder: 8
-		Prerequisites: sand_on
-	GrantConditionOnPrerequisite@Sand:
-		Condition: sand_on
-		Prerequisites: sand_on
 	ScriptLobbyDropdown@difficulty:
 		ID: sandt
 		Label: SandstromsDelay
@@ -152,6 +141,14 @@ Player:
 		Locked: false
 		DisplayOrder: 14
 		Prerequisites: Superunits_Checkbox
+	LobbyPrerequisiteCheckbox@OILSILOS:
+		ID: oil-silo
+		Label: Oil Silos
+		Description: Oil Silos are necessary to collect income note: this will never work with bots
+		Enabled: false
+		Locked: false
+		DisplayOrder: 15
+		Prerequisites: global-oil-silos
 	ModularBot@RushAI:
 		Name: Oil AI
 	-ModularBot@NormalAI:
@@ -514,9 +511,18 @@ OILB:
 	CapturableProgressBar:
 	CapturableProgressBlink:
 	EngineerRepairable:
-	CashTrickler:
+	GrantConditionOnPrerequisite@OILSILOS:
+		Condition: global-oil-silos
+		Prerequisites: global-oil-silos
+	CashTrickler@nonsilo:
+		RequiresCondition: !global-oil-silos
 		Interval: 220
 		Amount: 100
+	CashTrickler@silo:
+		RequiresCondition: global-oil-silos
+		Interval: 220
+		Amount: 100
+		UseResourceStorage:	true
 	Tooltip:
 		Name: Oil Derrick
 	TooltipDescription@ally:
@@ -769,17 +775,20 @@ SILO:
 	Inherits: ^Building
 	Selectable:
 		Bounds: 24,24
+	GrantConditionOnPrerequisite@OILSILOS:
+		Condition: global-oil-silos
+		Prerequisites: global-oil-silos
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 35
-		Prerequisites: ~disabled
-		Description: Stores excess refined\nOre and Gems.
+		Prerequisites: ~global-oil-silos, ~techlevel.low
+		Description: Stores excess oil.
 	Valued:
 		Cost: 150
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, ThiefInfiltrate
 	Tooltip:
-		Name: Silo
+		Name: Oil Silo
 	-GivesBuildableArea:
 	-MustBeDestroyed:
 	Health:
@@ -799,7 +808,7 @@ SILO:
 		Sequence: stages
 	StoresResources:
 		PipCount: 5
-		Capacity: 3000
+		Capacity: 1500
 	-SpawnActorsOnSell:
 	Power:
 		Amount: -10
@@ -3486,7 +3495,7 @@ SAM:
 		InitialDelay: 125
 		CloakDelay: 75
 		IsPlayerPalette: true
-		PauseOnCondition: cloak-force-disabled || empdisable || build-incomplete || is-shooting
+		PauseOnCondition: cloak-force-disabled || build-incomplete || is-shooting
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Critical
@@ -4855,9 +4864,18 @@ OILBisland:
 	CapturableProgressBar:
 	CapturableProgressBlink:
 	EngineerRepairable:
-	CashTrickler:
+	GrantConditionOnPrerequisite@OILSILOS:
+		Condition: global-oil-silos
+		Prerequisites: global-oil-silos
+	CashTrickler@nonsilo:
+		RequiresCondition: !global-oil-silos
 		Interval: 220
 		Amount: 100
+	CashTrickler@silo:
+		RequiresCondition: global-oil-silos
+		Interval: 220
+		Amount: 100
+		UseResourceStorage:	true
 	Tooltip:
 		Name: Oil Derrick
 	TooltipDescription@ally:
@@ -4900,11 +4918,28 @@ ISOIL:
 	CapturableProgressBar:
 	CapturableProgressBlink:
 	EngineerRepairable:
-	CashTrickler:
+	GrantConditionOnPrerequisite@OILSILOS:
+		Condition: global-oil-silos
+		Prerequisites: global-oil-silos
+	CashTrickler@nonsilo:
+		RequiresCondition: !global-oil-silos
 		Interval: 295
 		Amount: 50
+	CashTrickler@silo:
+		RequiresCondition: global-oil-silos
+		Interval: 295
+		Amount: 50
+		UseResourceStorage:	true
 	GpsDot:
 		String: Oil
+	TooltipDescription@ally:
+		Description: Provides additional funds.
+		ValidStances: Ally
+	TooltipDescription@other:
+		Description: Capture to receive additional funds.
+		ValidStances: Neutral, Enemy
+	Explodes:
+		Weapon: BarrelExplode
 	RevealsShroud:
 		Range: 3c0
 	SpawnActorOnDeath:
@@ -5104,12 +5139,29 @@ ARCO:
 	EngineerRepairable:
 	OwnerLostAction:
 		Action: ChangeOwner
-	CashTrickler:
+	GrantConditionOnPrerequisite@OILSILOS:
+		Condition: global-oil-silos
+		Prerequisites: global-oil-silos
+	CashTrickler@nonsilo:
+		RequiresCondition: !global-oil-silos
 		Interval: 1000
 		Amount: 1500
+	CashTrickler@silo:
+		RequiresCondition: global-oil-silos
+		Interval: 1000
+		Amount: 1500
+		UseResourceStorage: False
 	Tooltip:
 		Name: High Tech Oil Pump
 		ShowOwnerRow: True
+	TooltipDescription@ally:
+		Description: Provides additional funds.
+		ValidStances: Ally
+	TooltipDescription@other:
+		Description: Capture to receive additional funds.
+		ValidStances: Neutral, Enemy
+	Explodes:
+		Weapon: BarrelExplode
 	GpsDot:
 		String: Oil
 	AppearsOnMapPreview:
@@ -5119,6 +5171,15 @@ ARCO:
 		Actor: ARCO.Husk
 		OwnerType: InternalName
 	UpdatesDerrickCount:
+
+BIO.Husk:
+	Interactable:
+		Bounds: 48,48
+	Building:
+		Footprint: xx xx
+		Dimensions: 2,2
+	Tooltip:
+		Name: Biological Lab (Destroyed)
 
 ARCO.Husk:
 	Inherits: ^TechBuilding
@@ -5198,9 +5259,18 @@ OILP:
 	CapturableProgressBar:
 	CapturableProgressBlink:
 	EngineerRepairable:
-	CashTrickler:
+	GrantConditionOnPrerequisite@OILSILOS:
+		Condition: global-oil-silos
+		Prerequisites: global-oil-silos
+	CashTrickler@nonsilo:
+		RequiresCondition: !global-oil-silos
 		Interval: 295
 		Amount: 50
+	CashTrickler@silo:
+		RequiresCondition: global-oil-silos
+		Interval: 295
+		Amount: 50
+		UseResourceStorage:	true
 	GpsDot:
 		String: Oil
 	RevealsShroud:
@@ -5208,6 +5278,14 @@ OILP:
 	SpawnActorOnDeath:
 		Actor: OILP.husk
 		OwnerType: InternalName
+	TooltipDescription@ally:
+		Description: Provides additional funds.
+		ValidStances: Ally
+	TooltipDescription@other:
+		Description: Capture to receive additional funds.
+		ValidStances: Neutral, Enemy
+	Explodes:
+		Weapon: BarrelExplode
 	OwnerLostAction:
 		Action: ChangeOwner
 	UpdatesDerrickCount:
@@ -5218,7 +5296,7 @@ HOSP.Husk:
 		Footprint: xx xx
 		Dimensions: 2,2
 	Tooltip:
-		Name: Husk (Hospital)
+		Name: Hospital (Destroyed)
 	WithSpriteBody:
 	CapturableProgressBar:
 	CapturableProgressBlink:
@@ -5288,13 +5366,101 @@ OILP.slow:
 	CapturableProgressBar:
 	CapturableProgressBlink:
 	EngineerRepairable:
-	CashTrickler:
+	GrantConditionOnPrerequisite@OILSILOS:
+		Condition: global-oil-silos
+		Prerequisites: global-oil-silos
+	CashTrickler@nonsilo:
+		RequiresCondition: !global-oil-silos
 		Interval: 500
 		Amount: 50
+	CashTrickler@silo:
+		RequiresCondition: global-oil-silos
+		Interval: 500
+		Amount: 50
+		UseResourceStorage:	true
 	GpsDot:
 		String: Oil
+	TooltipDescription@ally:
+		Description: Provides additional funds.
+		ValidStances: Ally
+	TooltipDescription@other:
+		Description: Capture to receive additional funds.
+		ValidStances: Neutral, Enemy
+	Explodes:
+		Weapon: BarrelExplode
 	RevealsShroud:
 		Range: 3c0
+	SpawnActorOnDeath:
+		Actor: OILP.slow.husk
+		OwnerType: InternalName
 	OwnerLostAction:
 		Action: ChangeOwner
 	UpdatesDerrickCount:
+
+OILP.slow.husk:
+	Inherits: ^TechBuilding
+	RenderSprites:
+		Palette: player
+	Tooltip:
+		Name: Husk (Slow Oil Pump)
+	WithSpriteBody:
+	WithIdleOverlay:
+		StartSequence: fire-start
+		Sequence: fire-loop
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	CaptureManager:
+	Capturable:
+		Types: building-husk
+	TransformOnCapture:
+		IntoActor: OILP.slow
+		ForceHealthPercentage: 50
+	Targetable:
+		TargetTypes: building-husk
+
+Katy:
+	Inherits: ^TrackedVehicle
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Valued:
+		Cost: 900
+	Tooltip:
+		Name: Katyusha Rocket Truck
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		BuildPaletteOrder: 250
+		Prerequisites: dome, fix, ~vehicles.soviet, ~techlevel.medium
+		Queue: Vehicle
+		Description: Long range, rapid firing, inaccurate, slow reloading rocket artillery.\n  Strong vs all Ground units.\n  Special Ability: No Contrails - Makes it harder for the enemy to know where you are and fire back 
+	Mobile:
+		Speed: 85
+		TurnSpeed: 3
+		Locomotor: lighttracked
+	Health:
+		HP: 10000
+	Armor:
+		Type: Light
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Turreted:
+		TurnSpeed: 255
+		Offset: -256,0,128
+	Armament@PRIMARY:
+		Weapon: Katyr
+		LocalOffset: 213,128,0, 213,-128,0
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: Katyr
+		LocalOffset: 213,-128,0, 213,128,0
+	AttackFrontal:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+	WithSpriteTurret:
+	WithTurretAimAnimation:
+		Sequence: aim
+

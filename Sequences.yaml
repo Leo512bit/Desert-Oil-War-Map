@@ -268,3 +268,50 @@ isoilhusk:
 		Length: *
 		Offset: 7,-15
 		ZOffset: 1
+
+oilp.slow.husk:
+	idle: v19
+		Start: 28
+	fire-start: flmspt
+		Length: *
+		Offset: 7,-15
+		ZOffset: 1
+	fire-loop: flmspt
+		Start: 50
+		Length: *
+		Offset: 7,-15
+		ZOffset: 1
+
+katy:
+	idle: mrls
+		Facings: 32
+		UseClassicFacingFudge: True
+	turret: mrls
+		Start: 64
+		Facings: 32
+		UseClassicFacingFudge: True
+	empty-aim: mrls
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	aim: mrls
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	msamnod: mwav-msam
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: mrlsicon
+	msamicon: nodmsamicon
+
+bio.husk:
+	idle: hosp
+		Start: 8
+	bib: mbHOSP
+		UseTilesetExtension: true
+		TilesetOverrides:
+			WINTER: TEMPERAT
+			JUNGLE: TEMPERAT
+			SNOW: TEMPERAT
+		Length: *
+		Offset: 0,1
