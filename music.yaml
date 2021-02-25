@@ -6,3 +6,6 @@ westop: We Will Stop Them
 score: Militant Force (Scores)
 	Hidden: false
 	VolumeModifier: 0.7
+SurfNoMercy: Surf No Mercy (Remix)
+	Extension: wav
+	VolumeModifier: 0.1

@@ -2,8 +2,13 @@ HeavyTurretGun:
 	Inherits: TurretGun
 	Range: 10c0
 	Versus:
-	Versus:
 		None: 999
+		Concrete: 250000
+	Warhead@1Dam: SpreadDamage
+		Damage: 6000
+		Versus:
+			None: 999
+			Concrete: 10000
 
 CydogJaw:
 	Inherits: DogJaw
@@ -506,22 +511,23 @@ Katyr:
 	ReloadDelay: 125
 	Range: 15c0
 	Burst: 20
+	Report: katyrocket1.aud, katyrocket2.aud, katyrocket3.aud
 	Versus:
 		None: 999
 		Wood: 74
 		Light: 34
 		Heavy: 100
 		Concrete: 50
-	ValidTargets: Air, Structure, Vehicle, Ship, Infantry, Ground, Water
+	ValidTargets: Structure, Vehicle, Ship, Infantry, Ground, Water
 	Projectile: Missile
 		Speed: 298
-		MinimumLaunchAngle: 1000
+		MinimumLaunchAngle: 10
 		Jammable: false
 		Inaccuracy:	3c0
 		TrailImage: smokey
 		Explosions: napalm
-		CruiseAltitude:	0c512
-		ContrailLength:	0
+		CruiseAltitude:	1c0
+		ContrailLength:	1
 		HorizontalRateOfTurn: 10
 		RangeLimit: 20c0
 	Warhead@1Dam: SpreadDamage
@@ -535,7 +541,6 @@ Katyr:
 	Warhead@4EffWater: CreateEffect
 		Explosions: large_splash
 
-
 TurretGun:
 	Inherits: ^Cannon
 	ReloadDelay: 30
@@ -544,3 +549,50 @@ TurretGun:
 	Warhead@1Dam: SpreadDamage
 		Versus:
 			None: 99999
+
+^TeslaWeapon:
+	ReloadDelay: 3
+	Range: 8c0
+	Report: tesla1.aud
+	Projectile: TeslaZap
+	Warhead@1Dam: SpreadDamage
+		Spread: 42
+		Damage: 10000
+		Versus:
+			None: 1000
+			Wood: 60
+		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
+
+TeslaZap:
+	Inherits: ^TeslaWeapon
+	ReloadDelay: 0
+	Range: 8c0
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			Wood: 60
+
+DepthCharge.boat:
+	Inherits: ^Artillery
+	-Report:
+	ReloadDelay: 20
+	Range: 5c0
+	ValidTargets: Underwater
+	Projectile: Bullet
+		Speed: 130
+		Image: BOMB
+		Inaccuracy: 128
+	Warhead@1Dam: SpreadDamage
+		Spread: 130
+		Damage: 80000
+		ValidTargets: Submarine
+		Versus:
+			Light: 750
+		DamageTypes: ExplosionDeath
+	Warhead@4EffWater: CreateEffect
+		Explosions: large_splash
+		ImpactSounds: h2obomb2.aud
+		ValidTargets: Water, Underwater
+	Warhead@3Eff: CreateEffect
+		Explosions: small_explosion
+		ImpactSounds: kaboom15.aud
+		ValidTargets: Submarine
