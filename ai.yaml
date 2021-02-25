@@ -1,12 +1,12 @@
 Player:
 	ModularBot@RushAI:
-		Name: Oil AI
+		Name: Oil AI (Type: Rush)
 		Type: rush
 	ModularBot@NormalAI:
-		Name: Normal AI
+		Name: Oil Bot Test 1 (Type: normal)
 		Type: normal
 	ModularBot@TurtleAI:
-		Name: Turtle AI
+		Name: Oil Bot Test 2 (Type: Turtle)
 		Type: turtle
 	ModularBot@NavalAI:
 		Name: Naval AI
@@ -77,7 +77,7 @@ Player:
 	HarvesterBotModule:
 		RequiresCondition: enable-naval-ai
 		HarvesterTypes: harv
-		RefineryTypes: proc
+		RefineryTypes: oilb, oilp
 	BaseBuilderBotModule@rush:
 		RequiresCondition: enable-rush-ai
 		MinimumExcessPower: 60
@@ -125,7 +125,7 @@ Player:
 		ExcessPowerIncrement: 40
 		ExcessPowerIncreaseThreshold: 4
 		ConstructionYardTypes: fact
-		RefineryTypes: proc
+		RefineryTypes: oilb, oilp
 		PowerTypes: powr,apwr
 		BarracksTypes: barr,tent
 		VehiclesFactoryTypes: weap
@@ -176,7 +176,7 @@ Player:
 		ExcessPowerIncrement: 50
 		ExcessPowerIncreaseThreshold: 4
 		ConstructionYardTypes: fact
-		RefineryTypes: proc
+		RefineryTypes: oilb, oilp
 		PowerTypes: powr,apwr
 		BarracksTypes: barr,tent
 		VehiclesFactoryTypes: weap
@@ -228,7 +228,7 @@ Player:
 		ExcessPowerIncrement: 40
 		ExcessPowerIncreaseThreshold: 4
 		ConstructionYardTypes: fact
-		RefineryTypes: proc
+		RefineryTypes: oilb, oilp
 		PowerTypes: powr,apwr
 		BarracksTypes: barr,tent
 		VehiclesFactoryTypes: weap
@@ -317,6 +317,7 @@ Player:
 	UnitBuilderBotModule@normal:
 		RequiresCondition: enable-normal-ai
 		UnitsToBuild:
+            e6: 5
 			e1: 65
 			e2: 15
 			e3: 30
@@ -358,6 +359,7 @@ Player:
 	UnitBuilderBotModule@turtle:
 		RequiresCondition: enable-turtle-ai
 		UnitsToBuild:
+            e6: 5
 			e1: 65
 			e2: 15
 			e3: 30
@@ -414,7 +416,7 @@ Player:
 		RequiresCondition: enable-rush-ai || enable-normal-ai || enable-turtle-ai || enable-naval-ai
 		CapturingActorTypes: e6
         CapturableStances: Neutral, Enemy
-		CapturableActorTypes: oilb,v19,v19.husk
+		CapturableActorTypes: oilb,oilp
 		CheckCaptureTargetsForVisibility: false
 		MaximumCaptureTargetOptions: 999
         MinimumCaptureDelay: 0

@@ -150,10 +150,12 @@ Player:
 		DisplayOrder: 15
 		Prerequisites: global-oil-silos
 	ModularBot@RushAI:
-		Name: Oil AI
-	-ModularBot@NormalAI:
+		Name: Oil AI (Type: Rush)
+	ModularBot@NormalAI:
+		Name: Oil Bot Test 1 (Type: normal)
+	ModularBot@TurtleAI:
+		Name: Oil Bot Test 2 (Type: Turtle)
 	-ModularBot@NavalAI:
-	-ModularBot@TurtleAI:
     
 HGUN:
 	Inherits: GUN
@@ -377,6 +379,11 @@ HGUN:
 		BaseName: cncplayerb
 		Alpha: 0.65
 		BasePalette: cncplayer
+	PaletteFromFile@chromeTD:
+		Name: chrometd
+		Filename: temperatcnc.pal
+		ShadowIndex: 3
+		AllowModifiers: false
 	PaletteFromRGBA@cloak:
 		Name: cloak
 		R: 0
@@ -443,7 +450,7 @@ HGUN:
 	KillsSelf:
 		RequiresCondition: invulnerability
 	Chronoshiftable:
-		ExplodeInstead: true
+		ExplodeInstead: false
         
 ^Husk:
 	Inherits: ^BasicHusk
@@ -518,6 +525,7 @@ OILB:
 		RequiresCondition: !global-oil-silos
 		Interval: 220
 		Amount: 100
+		UseResourceStorage:	false
 	CashTrickler@silo:
 		RequiresCondition: global-oil-silos
 		Interval: 220
@@ -1200,7 +1208,7 @@ QTNK:
 		GenericName: Tank
 	MadTank:
 		DeployedCondition: deployed
-		BeginChargeSpeechNotification: AbombPrepping
+			Notification: BuildingInfiltrated
 
  
 
@@ -3099,7 +3107,6 @@ GAP:
 		HasMinibib: true
 	CreatesShroud:
 		Range: 6c0
-		RequiresCondition: !disabled
 	RenderShroudCircle:
 	Power:
 		Amount: -60
@@ -3431,7 +3438,7 @@ PT:
 		MuzzleSequence: muzzle
 	Armament@SECONDARY:
 		Name: secondary
-		Weapon: DepthCharge
+		Weapon: DepthCharge.boat
 		MuzzleSequence: muzzle
 	AttackTurreted:
 	WithMuzzleOverlay:
@@ -3632,7 +3639,7 @@ NTNK:
 	Armor:
 		Type: Heavy
 	Mobile:
-		Speed: 318
+		Speed: 300
 		TurnSpeed: 100
 	RevealsShroud:
 		MinRange: 4c0
@@ -5432,13 +5439,14 @@ Katy:
 		BuildPaletteOrder: 250
 		Prerequisites: dome, fix, ~vehicles.soviet, ~techlevel.medium
 		Queue: Vehicle
+		IconPalette: chrometd
 		Description: Long range, rapid firing, inaccurate, slow reloading rocket artillery.\n  Strong vs all Ground units.\n  Special Ability: No Contrails - Makes it harder for the enemy to know where you are and fire back 
 	Mobile:
-		Speed: 85
-		TurnSpeed: 3
+		Speed: 100
+		TurnSpeed: 5
 		Locomotor: lighttracked
 	Health:
-		HP: 10000
+		HP: 15000
 	Armor:
 		Type: Light
 	RevealsShroud:
@@ -5452,15 +5460,31 @@ Katy:
 		Offset: -256,0,128
 	Armament@PRIMARY:
 		Weapon: Katyr
-		LocalOffset: 213,128,0, 213,-128,0
+		LocalOffset: 268,0,440
 	Armament@SECONDARY:
 		Name: secondary
 		Weapon: Katyr
-		LocalOffset: 213,-128,0, 213,128,0
+		LocalOffset: 268,0,440
 	AttackFrontal:
-		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
-	WithSpriteTurret:
-	WithTurretAimAnimation:
-		Sequence: aim
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
 
+HOOSP.Husk:
+	Inherits: ^TechBuilding
+	Building:
+		Footprint: xx xx
+		Dimensions: 2,2
+	Tooltip:
+		Name: Biological Laboratory (Destroyed)
+	WithSpriteBody:
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	CaptureManager:
+	Capturable:
+		Types: building-husk
+	TransformOnCapture:
+		IntoActor: bio
+		ForceHealthPercentage: 50
+	Targetable:
+		TargetTypes: building-husk

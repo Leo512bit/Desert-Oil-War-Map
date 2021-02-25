@@ -283,26 +283,10 @@ oilp.slow.husk:
 		ZOffset: 1
 
 katy:
-	idle: mrls
+	idle: katy
 		Facings: 32
 		UseClassicFacingFudge: True
-	turret: mrls
-		Start: 64
-		Facings: 32
-		UseClassicFacingFudge: True
-	empty-aim: mrls
-		Start: 32
-		Facings: 32
-		UseClassicFacingFudge: True
-	aim: mrls
-		Start: 32
-		Facings: 32
-		UseClassicFacingFudge: True
-	msamnod: mwav-msam
-		Facings: 32
-		UseClassicFacingFudge: True
-	icon: mrlsicon
-	msamicon: nodmsamicon
+	icon: katyicnh
 
 bio.husk:
 	idle: hosp
@@ -315,3 +299,22 @@ bio.husk:
 			SNOW: TEMPERAT
 		Length: *
 		Offset: 0,1
+
+gap.over:
+	idle: gap
+		Length: 32
+		Offset: 0,-14
+		Tick: 20
+	damaged-idle:
+		Start: 32
+		Length: 32
+		Tick: 20
+		Offset: 0,-14
+	make: gapmake
+		Length: *
+		Offset: 0,-14
+	bib: mbGAP
+		Length: *
+		UseTilesetExtension: true
+	icon: gapicon 
+
