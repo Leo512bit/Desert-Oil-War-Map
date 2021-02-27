@@ -1,12 +1,5 @@
 GenericVoice:
-	Variants:
-		allies: .v01,.v03
-		england: .v01,.v03
-		france: .v01,.v03
-		germany: .v01,.v03
-		soviet: .r01,.r03
-		russia: .r01,.r03
-		ukraine: .r01,.r03
+	DefaultVariant: .aud
 	Voices:
 		Select: await1,ready,report1,yessir1
         Move: ackno,affirm1,noprob,overout,ritaway,roger,ugotit
@@ -17,16 +10,9 @@ GenericVoice:
 	DisableVariants: Die, Burned, Zapped
 
 VehicleVoice:
-	Variants:
-		allies: .v00,.v02
-		england: .v00,.v02
-		france: .v00,.v02
-		germany: .v00,.v02
-		soviet: .r00,.r02
-		russia: .r00,.r02
-		ukraine: .r00,.r02
+	DefaultVariant: .aud
 	Voices:
-		Select: vehic1,yessir1,report1,await1
+		Select: done
 		Action: ackno,affirm1
 
 EngineerVoice:
@@ -141,3 +127,21 @@ StavrosVoice:
 		Die: dedman1,dedman2,dedman3,dedman4,dedman5,dedman7,dedman8
 		Burned: dedman10
 		Zapped: dedman6
+
+NewVehicleVoice:
+	DefaultVariant: .aud
+	Voices:
+		Select: await1,ready,report1,yessir1,vehic1,vehic2,yessir2,yessir3,report2,report3,await2,await3
+		Action: ackno,affirm1,done,noprob,overout,ritaway,roger,ugotit,ackno2,affirm2,affirm3
+		Die: madexplo,kaboom15,kaboom12,kaboom1,kaboom30
+
+GenericVoice:
+	DefaultVariant: .aud
+	Voices:
+		Select: await1,ready,report1,yessir1,vehic1,yessir3,report2,report3,await2,await3
+        Move: ackno,affirm1,done,noprob,overout,ritaway,roger,ugotit,ackno2,affirm2,affirm3
+		Action: ackno,affirm1,done,noprob,overout,ritaway,roger,ugotit,ackno2,affirm2,affirm3
+		Die: dedman1,dedman2,dedman3,dedman4,dedman5,dedman7,dedman8
+		Burned: dedman10
+		Zapped: dedman6
+	DisableVariants: Die, Burned, Zapped

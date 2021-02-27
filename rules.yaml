@@ -231,7 +231,7 @@ HGUN:
 		LoseNotification: UnitLost
 	MustBeDestroyed:
 	Voiced:
-		VoiceSet: VehicleVoice
+		VoiceSet: NewVehicleVoice
 	Parachutable:
 		FallRate: 26
 		KilledOnImpassableTerrain: true
@@ -4150,6 +4150,7 @@ WOOD:
 		BuildPaletteOrder: 20
 		Prerequisites: fact, ~structures.soviet, ~techlevel.low
 		Queue: Defense
+		IconPalette: chrometd
 		Description: Stops infantry and light vehicles.\nCan be crushed by tanks.
 	Armor:
 		Type: Wood
@@ -4567,7 +4568,7 @@ E3:
 	Valued:
 		Cost: 525
 	Tooltip:
-		Name: Rocket Soldier
+		Name: Anti-tank/Anti-aircraft Rocket Soldier
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
@@ -5488,3 +5489,77 @@ HOOSP.Husk:
 		ForceHealthPercentage: 50
 	Targetable:
 		TargetTypes: building-husk
+
+E11:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 30
+		Prerequisites: ~barracks, ~techlevel.infonly ~disabled
+		Description: Anti-tan infantry.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Selectable:
+		Class: E3
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Anti-tank Rocket Soldier
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 4500
+	Armament@PRIMARY:
+		Weapon: Pistol
+		LocalOffset: 0,0,555
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: IDragon
+		LocalOffset: 0,0,555
+	TakeCover:
+		ProneOffset: 384,0,-395
+	WithInfantryBody:
+		DefaultAttackSequence: shoot
+	Explodes:
+		Weapon: UnitExplodeSmall
+		EmptyWeapon: UnitExplodeSmall
+		DamageSource: Killer
+		Chance: 50
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded
+	AutoTarget:
+		ScanRadius: 5
+
+ATR:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Anti-Tank Rifle
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 31
+		Prerequisites: ~barracks, ~techlevel.infonly ~disabled
+		Description: Anti-Tank Rifle infantry unit.\n  Strong vs Vehicles  \n  Weak vs Aircraft, Infantry
+	Health:
+		HP: 8000
+	RevealsShroud:
+		Range: 4c0
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: Vehicle
+	TakeCover:
+		ProneOffset: 384,0,-395
+	Armament@PRIMARY:
+		Weapon: ATRifle
+	Armament@GARRISONED:
+		Name: garrisoned
+		Weapon: ATRifle 
+		MuzzleSequence: garrison-muzzle
+	WithInfantryBody:
+		DefaultAttackSequence: shoot
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded

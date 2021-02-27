@@ -151,6 +151,7 @@ SuperTusk:
 		Explosions: med_explosion_air
 		ImpactSounds: kaboom25.aud
 		ValidTargets: Air
+
 Dragon:
 	Inherits: ^AntiGroundMissile
 	Projectile: Missile
@@ -495,9 +496,10 @@ Stinger:
 	ReloadDelay: 60
 	Range: 5c512
 	Report: cannon2.aud
-	InvalidTargets: Underwater
+	InvalidTargets: Underwater, water
 	Projectile: Bullet
 		Speed: 426
+		InvalidTargets: Underwater, water
 	Warhead@1Dam: SpreadDamage
 		Damage: 2500
 		Versus:
@@ -505,11 +507,13 @@ Stinger:
 			Wood: 72
 			Light: 72
 			Concrete: 48
+		InvalidTargets: Underwater, water
 
 Katyr:
 	Inherits: ^AntiGroundMissile
 	ReloadDelay: 125
 	Range: 15c0
+	MinRange: 5c0
 	Burst: 20
 	Report: katyrocket1.aud, katyrocket2.aud, katyrocket3.aud
 	Versus:
@@ -531,7 +535,7 @@ Katyr:
 		HorizontalRateOfTurn: 10
 		RangeLimit: 20c0
 	Warhead@1Dam: SpreadDamage
-		Spread: 128
+		Spread: 168
 		Damage: 5000
 		Versus:
 			None: 999
@@ -581,9 +585,10 @@ DepthCharge.boat:
 		Speed: 130
 		Image: BOMB
 		Inaccuracy: 128
+		ValidTargets: water
 	Warhead@1Dam: SpreadDamage
-		Spread: 130
-		Damage: 80000
+		Spread: 330
+		Damage: 8000
 		ValidTargets: Submarine
 		Versus:
 			Light: 750
@@ -596,3 +601,48 @@ DepthCharge.boat:
 		Explosions: small_explosion
 		ImpactSounds: kaboom15.aud
 		ValidTargets: Submarine
+
+ATRifle:
+	ReloadDelay: 30
+	Range: 3c0
+	Report: mine1.aud
+	Projectile: InstantHit
+		Blockable: true
+	Warhead@1Dam: SpreadDamage
+		Spread: 128
+		Damage: 2500
+		Versus:
+			None: 999
+			Wood: 40
+			Light: 40
+			Heavy: 70
+			Concrete: 30
+		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
+	 	ValidTargets: Structure, Vehicle, Ship, Infantry
+	Warhead@2Eff: CreateEffect
+		Explosions: piffs
+		ValidTargets: Ground, Ship, Air, Trees
+	Warhead@3EffWater: CreateEffect
+		Explosions: water_piffs
+
+Pistol:
+	Inherits: ^LightMG
+	ReloadDelay: 7
+	Range: 3c0
+	Report: gun27.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 1000
+		Versus:
+			None: 90
+    InvalidTargets: Vehicle, Ship, Structure
+	Warhead@2Eff: CreateEffect
+		Explosions: piff
+	Warhead@3EffWater: CreateEffect
+		Explosions: water_piff
+
+IDragon:
+	Inherits: ^AntiGroundMissile
+	Projectile: Missile
+		TrailImage: smokey
+	Damage: 3000
+		InvalidTargets: Air, Infantry
