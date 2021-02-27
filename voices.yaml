@@ -135,7 +135,7 @@ NewVehicleVoice:
 		Action: ackno,affirm1,done,noprob,overout,ritaway,roger,ugotit,ackno2,affirm2,affirm3
 		Die: madexplo,kaboom15,kaboom12,kaboom1,kaboom30
 
-GenericVoice:
+NewGenericVoice:
 	DefaultVariant: .aud
 	Voices:
 		Select: await1,ready,report1,yessir1,vehic1,yessir3,report2,report3,await2,await3
