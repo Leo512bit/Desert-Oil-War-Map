@@ -231,7 +231,7 @@ HGUN:
 		LoseNotification: UnitLost
 	MustBeDestroyed:
 	Voiced:
-		VoiceSet: VehicleVoice
+		VoiceSet: NewVehicleVoice
 	Parachutable:
 		FallRate: 26
 		KilledOnImpassableTerrain: true
@@ -316,7 +316,7 @@ HGUN:
 		ExcludeTilesets: INTERIOR
 		Categories: Naval
 	Voiced:
-		VoiceSet: VehicleVoice
+		VoiceSet: NewVehicleVoice
 	WithFacingSpriteBody:
 	HitShape:
 	GrantConditionOnDamageState@HEAVY:
@@ -335,6 +335,8 @@ HGUN:
 ^Plane:
 	Inherits: ^NeutralPlane
 	Inherits@2: ^GainsExperience
+	Voiced:
+		VoiceSet: NewVehicleVoice
 	Repairable:
 		RepairActors: fix, mfix.deployed
 	GrantConditionOnDamageState@DAMAGED:
@@ -352,6 +354,244 @@ HGUN:
 	SpeedMultiplier@CRITICALDAMAGE:
 		RequiresCondition: critical-damage
 		Modifier: 50      
+
+^Infantry:
+	Inherits@1: ^ExistsInWorld
+	Inherits@2: ^GainsExperience
+	Inherits@3: ^InfantryExperienceHospitalOverrides
+	Inherits@4: ^SpriteActor
+	Inherits@bounty: ^GlobalBounty
+	Inherits@selection: ^SelectableCombatUnit
+	Huntable:
+	OwnerLostAction:
+		Action: Kill
+		DeathTypes: DefaultDeath
+	DrawLineToTarget:
+	Health:
+		HP: 2500
+	Armor:
+		Type: None
+	RevealsShroud:
+		Range: 4c0
+	Mobile:
+		Speed: 56
+		Locomotor: foot
+	SelectionDecorations:
+	WithSpriteControlGroupDecoration:
+	Selectable:
+		Bounds: 18,20,0,-6
+		DecorationBounds: 12,18,0,-8
+	Targetable:
+		RequiresCondition: !parachute
+		TargetTypes: Ground, Infantry, Disguise
+	Targetable@HEAL:
+		RequiresCondition: !parachute && damaged
+		TargetTypes: Heal
+	GrantConditionOnDamageState@DAMAGED:
+		Condition: damaged
+		ValidDamageStates: Light, Medium, Heavy, Critical
+	QuantizeFacingsFromSequence:
+		Sequence: stand
+	WithInfantryBody:
+	WithDeathAnimation:
+		DeathTypes:
+			DefaultDeath: 1
+			BulletDeath: 2
+			SmallExplosionDeath: 3
+			ExplosionDeath: 4
+			FireDeath: 5
+			ElectricityDeath: 6
+		CrushedSequence: die-crushed
+	AttackMove:
+	Passenger:
+		CargoType: Infantry
+		CargoCondition: disable-experience
+	GainsExperienceMultiplier:
+		Modifier: 0
+		RequiresCondition: disable-experience
+	HiddenUnderFog:
+	ActorLostNotification:
+	GpsDot:
+		String: Infantry
+	Crushable:
+		CrushSound: squishy2.aud
+	Guard:
+	Guardable:
+	Tooltip:
+		GenericName: Soldier
+	SelfHealing@HOSPITAL:
+		Step: 500
+		Delay: 100
+		HealIfBelow: 100
+		DamageCooldown: 125
+		RequiresCondition: hospitalheal
+	GrantConditionOnPrerequisite@HOSPITAL:
+		Condition: hospital
+		Prerequisites: hosp
+	GrantConditionOnDamageState@HOSPITAL:
+		Condition: damaged
+		ValidDamageStates: Light, Medium, Heavy, Critical
+	GrantCondition@HOSPITAL:
+		RequiresCondition: hospital && damaged
+		Condition: hospitalheal
+	WithDecoration@REDCROSS:
+		Image: pips
+		Sequence: medic
+		ReferencePoint: Bottom, Right
+		RequiresCondition: hospitalheal
+		BlinkInterval: 32
+		BlinkPattern: Off, On
+	DeathSounds@NORMAL:
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath
+	DeathSounds@BURNED:
+		Voice: Burned
+		DeathTypes: FireDeath
+	DeathSounds@ZAPPED:
+		Voice: Zapped
+		DeathTypes: ElectricityDeath
+	Parachutable:
+		FallRate: 26
+		KilledOnImpassableTerrain: true
+		GroundCorpseSequence: corpse
+		GroundImpactSound: squishy2.aud
+		WaterImpactSound: splash9.aud
+		WaterCorpseSequence: small_splash
+		ParachutingCondition: parachute
+	Cloneable:
+		Types: Infantry
+	Voiced:
+		VoiceSet: NewGenericVoice
+	WithParachute:
+		ShadowImage: parach-shadow
+		ShadowSequence: idle
+		Image: parach
+		Sequence: idle
+		OpeningSequence: open
+		Offset: 0,0,427
+		RequiresCondition: parachute
+	HitShape:
+		Type: Circle
+			Radius: 128
+	MapEditorData:
+		Categories: Infantry
+	EdibleByLeap:
+	DetectCloaked:
+		CloakTypes: Cloak
+		Range: 1c0
+	GrantConditionOnDamageState@HEAVY:
+		Condition: heavy-damage
+		ValidDamageStates: Heavy
+	GrantConditionOnDamageState@CRITICAL:
+		Condition: critical-damage
+		ValidDamageStates: Critical
+	SpeedMultiplier@HEAVYDAMAGE:
+		RequiresCondition: heavy-damage
+		Modifier: 75
+	SpeedMultiplier@CRITICALDAMAGE:
+		RequiresCondition: critical-damage
+		Modifier: 50   
+	Repairable:
+		RepairActors: barr
+
+^GainsExperience:
+	GainsExperience:
+		LevelUpNotification: LevelUp
+		Conditions:
+			200: rank-veteran
+			400: rank-veteran
+			800: rank-veteran
+			1600: rank-veteran
+		LevelUpImage: crate-effects
+	GrantCondition@RANK-ELITE:
+		RequiresCondition: rank-veteran >= 4
+		Condition: rank-elite
+	DamageMultiplier@RANK-1:
+		RequiresCondition: rank-veteran == 1
+		Modifier: 75
+	DamageMultiplier@RANK-2:
+		RequiresCondition: rank-veteran == 2
+		Modifier: 70
+	DamageMultiplier@RANK-3:
+		RequiresCondition: rank-veteran == 3
+		Modifier: 65
+	DamageMultiplier@RANK-ELITE:
+		RequiresCondition: rank-elite
+		Modifier: 55
+	FirepowerMultiplier@RANK-1:
+		RequiresCondition: rank-veteran == 1
+		Modifier: 125
+	FirepowerMultiplier@RANK-2:
+		RequiresCondition: rank-veteran == 2
+		Modifier: 130
+	FirepowerMultiplier@RANK-3:
+		RequiresCondition: rank-veteran == 3
+		Modifier: 140
+	FirepowerMultiplier@RANK-ELITE:
+		RequiresCondition: rank-elite
+		Modifier: 150
+	SpeedMultiplier@RANK-1:
+		RequiresCondition: rank-veteran == 1
+		Modifier: 115
+	SpeedMultiplier@RANK-2:
+		RequiresCondition: rank-veteran == 2
+		Modifier: 120
+	SpeedMultiplier@RANK-3:
+		RequiresCondition: rank-veteran == 3
+		Modifier: 130
+	SpeedMultiplier@RANK-ELITE:
+		RequiresCondition: rank-elite
+		Modifier: 150
+	ReloadDelayMultiplier@RANK-1:
+		RequiresCondition: rank-veteran == 1
+		Modifier: 95
+	ReloadDelayMultiplier@RANK-2:
+		RequiresCondition: rank-veteran == 2
+		Modifier: 80
+	ReloadDelayMultiplier@RANK-3:
+		RequiresCondition: rank-veteran == 3
+		Modifier: 75
+	ReloadDelayMultiplier@RANK-ELITE:
+		RequiresCondition: rank-elite
+		Modifier: 65
+	SelfHealing@ELITE:
+		Step: 0
+		PercentageStep: 5
+		Delay: 100
+		HealIfBelow: 100
+		DamageCooldown: 125
+		RequiresCondition: rank-elite
+	WithDecoration@RANK-1:
+		Image: rank
+		Sequence: rank-veteran-1
+		Palette: effect
+		ReferencePoint: Bottom, Right
+		ValidStances: Ally, Neutral
+		RequiresCondition: rank-veteran == 1
+		ZOffset: 256
+	WithDecoration@RANK-2:
+		Image: rank
+		Sequence: rank-veteran-2
+		Palette: effect
+		ReferencePoint: Bottom, Right
+		ValidStances: Ally, Neutral
+		RequiresCondition: rank-veteran == 2
+		ZOffset: 256
+	WithDecoration@RANK-3:
+		Image: rank
+		Sequence: rank-veteran-3
+		Palette: effect
+		ReferencePoint: Bottom, Right
+		ValidStances: Ally, Neutral
+		RequiresCondition: rank-veteran == 3
+		ZOffset: 256
+	WithDecoration@RANK-ELITE:
+		Image: rank
+		Sequence: rank-elite
+		Palette: effect
+		ReferencePoint: Bottom, Right
+		ValidStances: Ally, Enemy, Neutral
+		RequiresCondition: rank-elite
+		ZOffset: 256
         
 ^Palettes:
 	PaletteFromFile@cnc:
@@ -4150,6 +4390,7 @@ WOOD:
 		BuildPaletteOrder: 20
 		Prerequisites: fact, ~structures.soviet, ~techlevel.low
 		Queue: Defense
+		IconPalette: chrometd
 		Description: Stops infantry and light vehicles.\nCan be crushed by tanks.
 	Armor:
 		Type: Wood
@@ -4321,7 +4562,7 @@ MNLY:
 	RenderSprites:
 		Image: MNLY
 	Rearmable:
-		RearmActors: fix
+		RearmActors: fix, mfix.deployed
 	Targetable:
 		TargetTypes: Ground, Vehicle, Mine
         
@@ -4567,7 +4808,7 @@ E3:
 	Valued:
 		Cost: 525
 	Tooltip:
-		Name: Rocket Soldier
+		Name: Anti-tank/Anti-aircraft Rocket Soldier
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
@@ -5488,3 +5729,174 @@ HOOSP.Husk:
 		ForceHealthPercentage: 50
 	Targetable:
 		TargetTypes: building-husk
+
+E11:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 30
+		Prerequisites: ~barracks, ~techlevel.infonly ~disabled
+		Description: Anti-tan infantry.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Selectable:
+		Class: E3
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Anti-tank Rocket Soldier
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 4500
+	Armament@PRIMARY:
+		Weapon: Pistol
+		LocalOffset: 0,0,555
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: IDragon
+		LocalOffset: 0,0,555
+	TakeCover:
+		ProneOffset: 384,0,-395
+	WithInfantryBody:
+		DefaultAttackSequence: shoot
+	Explodes:
+		Weapon: UnitExplodeSmall
+		EmptyWeapon: UnitExplodeSmall
+		DamageSource: Killer
+		Chance: 50
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded
+	AutoTarget:
+		ScanRadius: 5
+
+ATR:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Anti-Tank Rifle
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 31
+		Prerequisites: ~barracks, ~techlevel.infonly ~disabled
+		Description: Anti-Tank Rifle infantry unit.\n  Strong vs Vehicles  \n  Weak vs Aircraft, Infantry
+	Health:
+		HP: 8000
+	RevealsShroud:
+		Range: 4c0
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: Vehicle
+	TakeCover:
+		ProneOffset: 384,0,-395
+	Armament@PRIMARY:
+		Weapon: ATRifle
+	Armament@GARRISONED:
+		Name: garrisoned
+		Weapon: ATRifle 
+		MuzzleSequence: garrison-muzzle
+	WithInfantryBody:
+		DefaultAttackSequence: shoot
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded
+
+BARR:
+	Inherits: ^Building
+	Inherits@shape: ^2x2Shape
+	Selectable:
+		Bounds: 48,48
+	HitShape:
+		UseTargetableCellsOffsets: false
+		TargetableOffsets: 0,0,0, 490,-470,0, 355,512,0, -355,-512,0, -630,512,0
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 30
+		Prerequisites: anypower, ~structures.soviet, ~techlevel.infonly
+		Description: Trains infantry.
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Soviet Barracks
+	Building:
+		Footprint: xx xx ==
+		Dimensions: 2,3
+		LocalCenterOffset: 0,-512,0
+	Health:
+		HP: 60000
+	Armor:
+		Type: Wood
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	WithBuildingBib:
+	RallyPoint:
+	Exit@1:
+		RequiresCondition: !being-captured
+		SpawnOffset: -170,810,0
+		ExitCell: 1,2
+		ProductionTypes: Soldier, Infantry
+	Exit@2:
+		RequiresCondition: !being-captured
+		SpawnOffset: -725,640,0
+		ExitCell: 0,2
+		ProductionTypes: Soldier, Infantry
+	Production:
+		Produces: Infantry, Soldier
+	GrantExternalConditionToProduced:
+		Condition: produced
+	PrimaryBuilding:
+		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
+	ProductionBar:
+		ProductionType: Infantry
+	ProvidesPrerequisite:
+		Prerequisite: barracks
+	ProvidesPrerequisite@soviet:
+		Factions: soviet, russia, ukraine
+		Prerequisite: infantry.soviet
+	ProvidesPrerequisite@sovietvanilla:
+		Factions: soviet
+		Prerequisite: infantry.sovietvanilla
+	ProvidesPrerequisite@russia:
+		Factions: russia
+		Prerequisite: infantry.russia
+	ProvidesPrerequisite@ukraine:
+		Factions: ukraine
+		Prerequisite: infantry.ukraine
+	ProvidesPrerequisite@sovietstructure:
+		RequiresPrerequisites: structures.soviet
+		Prerequisite: infantry.soviet
+	ProvidesPrerequisite@sovietvanillastructure:
+		RequiresPrerequisites: structures.sovietvanilla
+		Prerequisite: infantry.sovietvanilla
+	ProvidesPrerequisite@russianstructure:
+		RequiresPrerequisites: structures.russia
+		Prerequisite: infantry.russia
+	ProvidesPrerequisite@ukrainianstructure:
+		RequiresPrerequisites: structures.ukraine
+		Prerequisite: infantry.ukraine
+	Power:
+		Amount: -20
+	ProvidesPrerequisite@buildingname:
+	InfiltrateForSupportPower:
+		Proxy: barracks.upgraded
+		Types: SpyInfiltrate
+	Targetable:
+		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
+	WithDecoration@primary:
+		RequiresSelection: true
+		Image: pips
+		Sequence: tag-primary
+		ReferencePoint: Top
+		ZOffset: 256
+		RequiresCondition: primary
+	RepairsUnits:
+		HpPerStep: 500
+		Interval: 10
