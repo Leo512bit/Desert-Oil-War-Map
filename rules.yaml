@@ -15,9 +15,9 @@ World:
 	CrateSpawner:
 		DeliveryAircraft: badr
 		QuantizedFacings: 16
-		Minimum: 1
-		Maximum: 3
-		SpawnInterval: 3000
+		Minimum: 2
+		Maximum: 5
+		SpawnInterval: 1500
 		WaterChance: 20
 		InitialSpawnDelay: 1500
 		CheckboxDisplayOrder: 1
@@ -507,16 +507,16 @@ HGUN:
 		Condition: rank-elite
 	DamageMultiplier@RANK-1:
 		RequiresCondition: rank-veteran == 1
-		Modifier: 75
+		Modifier: 80
 	DamageMultiplier@RANK-2:
 		RequiresCondition: rank-veteran == 2
 		Modifier: 70
 	DamageMultiplier@RANK-3:
 		RequiresCondition: rank-veteran == 3
-		Modifier: 65
+		Modifier: 50
 	DamageMultiplier@RANK-ELITE:
 		RequiresCondition: rank-elite
-		Modifier: 55
+		Modifier: 35
 	FirepowerMultiplier@RANK-1:
 		RequiresCondition: rank-veteran == 1
 		Modifier: 125
@@ -528,7 +528,7 @@ HGUN:
 		Modifier: 140
 	FirepowerMultiplier@RANK-ELITE:
 		RequiresCondition: rank-elite
-		Modifier: 150
+		Modifier: 160
 	SpeedMultiplier@RANK-1:
 		RequiresCondition: rank-veteran == 1
 		Modifier: 115
@@ -543,16 +543,28 @@ HGUN:
 		Modifier: 150
 	ReloadDelayMultiplier@RANK-1:
 		RequiresCondition: rank-veteran == 1
-		Modifier: 95
+		Modifier: 80
 	ReloadDelayMultiplier@RANK-2:
 		RequiresCondition: rank-veteran == 2
-		Modifier: 80
+		Modifier: 75
 	ReloadDelayMultiplier@RANK-3:
 		RequiresCondition: rank-veteran == 3
-		Modifier: 75
+		Modifier: 60
 	ReloadDelayMultiplier@RANK-ELITE:
 		RequiresCondition: rank-elite
-		Modifier: 65
+		Modifier: 40
+	RangeMultiplier@RANK-3:
+		RequiresCondition: rank-veteran == 3
+		Modifier: 120
+	RangeMultiplier@RANK-ELITE:
+		RequiresCondition: rank-elite
+		Modifier: 160
+	RevealsShroudMultiplier@RANK-3:
+		RequiresCondition: rank-veteran == 3
+		Modifier: 110
+	RevealsShroudMultiplier@RANK-ELITE:
+		RequiresCondition: rank-elite
+		Modifier: 150
 	SelfHealing@ELITE:
 		Step: 0
 		PercentageStep: 5
@@ -592,6 +604,41 @@ HGUN:
 		ValidStances: Ally, Enemy, Neutral
 		RequiresCondition: rank-elite
 		ZOffset: 256
+
+^Crate:
+	Inherits@1: ^SpriteActor
+	Interactable:
+		Bounds: 24,24
+	HiddenUnderFog:
+	Tooltip:
+		Name: Crate
+		GenericName: Crate
+		ShowOwnerRow: false
+	Crate:
+		Lifetime: 180
+		TerrainTypes: Clear, Rough, Road, Ore, Beach, Water
+	RenderSprites:
+		Palette: effect
+		Image: scrate
+	WithCrateBody:
+		XmasImages: xcratea, xcrateb, xcratec, xcrated
+		LandSequence: land
+		WaterSequence: water
+	Parachutable:
+		FallRate: 26
+		KilledOnImpassableTerrain: false
+		ParachutingCondition: parachute
+	Passenger:
+	WithParachute:
+		Image: parach
+		Sequence: idle
+		OpeningSequence: open
+		ShadowImage: parach-shadow
+		ShadowSequence: idle
+		RequiresCondition: parachute
+	ConditionManager:
+	MapEditorData:
+		Categories: System
         
 ^Palettes:
 	PaletteFromFile@cnc:
@@ -2567,7 +2614,7 @@ AFLD:
 		OrderName: UkraineParabombs
 		Prerequisites: aircraft.soviet
 		Icon: parabombs
-		ChargeInterval: 7500
+		ChargeInterval: 8500
 		Description: Parabombs
 		LongDesc: A squad of Badgers drop parachuted\nbombs on your target.
 		SelectTargetSpeechNotification: SelectTarget
@@ -3769,8 +3816,8 @@ IRON:
 		Queue: Defense
 		BuildPaletteOrder: 130
 		Prerequisites: stek, ~structures.soviet, ~techlevel.high
-		BuildLimit: 3
-		Description: Makes a group of units invulnerable\nfor a short time.\nRequires power to operate.\nMaximum 3 can be built.\n  Special Ability: Invulnerability
+		BuildLimit: 1
+		Description: Makes a group of units invulnerable\nfor a short time.\nRequires power to operate.\nMaximum 3 can be built.\n  Special Ability: Invulnerability, Advanced Invulnerability
 	Valued:
 		Cost: 1500
 	Tooltip:
@@ -3799,13 +3846,14 @@ IRON:
 		RequiresCondition: !disabled
 	WithBuildingBib:
 		HasMinibib: true
-	GrantExternalConditionPower@IRONCURTAIN:
+	GrantExternalConditionPower@ADVIRONCURTAIN:
 		PauseOnCondition: disabled
 		Icon: invuln
-		ChargeInterval: 3000
-		Description: Invulnerability
-		LongDesc: Makes a group of units invulnerable\nfor 20 seconds.
-		Duration: 500
+		ChargeInterval: 4500
+		Description: Advanced Invulnerability
+		LongDesc: Makes a large group of units invulnerable\nfor 1 minute.
+		Duration: 1500
+		Range: 3
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
 		BeginChargeSpeechNotification: IronCurtainCharging
@@ -3821,9 +3869,6 @@ IRON:
 		Amount: -200
 	MustBeDestroyed:
 		RequiredForShortGame: false
-	ProvidesPrerequisite@russia:
-		Factions: russia
-		Prerequisite: vehicles.upgraded
 
 PDOX:
 	Buildable:
@@ -3840,23 +3885,20 @@ PDOX:
 		PauseOnCondition: disabled
 		Prerequisites: stek
 		Icon: chrono
-		ChargeInterval: 6450
+		ChargeInterval: 7500
 		Description: Advanced Chronoshift
-		LongDesc: Teleports a large group of units across\nthe map for 20 seconds.
+		LongDesc: Teleports a large group of units across\nthe map for 3 minutes.
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
 		BeginChargeSpeechNotification: ChronosphereCharging
 		EndChargeSpeechNotification: ChronosphereReady
-		Duration: 400
+		Duration: 4500
 		KillCargo: true
         DisplayTimerStances: Ally
 		DisplayRadarPing: True
 		Range: 2
 		SupportPowerPaletteOrder: 30
 		AllowMultiple: True
-	ProvidesPrerequisite@russia:
-		Factions: russia
-		Prerequisite: barracks.upgraded
 
 NTNK:
 	Inherits: ^TrackedVehicle
@@ -3879,7 +3921,7 @@ NTNK:
 	Armor:
 		Type: Heavy
 	Mobile:
-		Speed: 300
+		Speed: 270
 		TurnSpeed: 100
 	RevealsShroud:
 		MinRange: 4c0
@@ -5899,4 +5941,199 @@ BARR:
 		RequiresCondition: primary
 	RepairsUnits:
 		HpPerStep: 500
-		Interval: 10
+		Interval: 1
+
+V2RL:
+	Inherits: ^Vehicle
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: dome, ~vehicles.soviet, ~techlevel.medium
+		Description:  Extreme-range rocket artillery.\n  Strong vs Infantry, Buildings\n  Weak vs Vehicles, Aircraft
+	Valued:
+		Cost: 900
+	Tooltip:
+		Name: V2 Rocket Launcher
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 20000
+	Armor:
+		Type: Light
+	Mobile:
+		Speed: 85
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Armament:
+		Weapon: SCUD
+		ReloadingCondition: reloading
+	AutoTarget:
+		ScanRadius: 10
+	AttackFrontal:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+	WithFacingSpriteBody:
+		RequiresCondition: !reloading
+		Name: loaded
+	WithFacingSpriteBody@EMPTY:
+		RequiresCondition: reloading
+		Sequence: empty-idle
+		Name: reloading
+	SelectionDecorations:
+	Explodes:
+		Weapon: V2Explode
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
+	Selectable:
+		DecorationBounds: 28,28
+
+CRATE:
+	Inherits: ^Crate
+	GiveMcvCrateAction:
+		SelectionShares: 1
+		NoBaseSelectionShares: 100
+		Units: mcv
+	GiveCashCrateAction:
+		Amount: 2000
+		SelectionShares: 50
+		Sequence: dollar
+		UseCashTick: true
+	LevelUpCrateAction:
+		SelectionShares: 40
+	ExplodeCrateAction@fire:
+		Weapon: CrateNapalm
+		SelectionShares: 5
+	ExplodeCrateAction@boom:
+		Weapon: CrateExplosion
+		SelectionShares: 5
+	HideMapCrateAction:
+		SelectionShares: 5
+		Sequence: hide-map
+	HealUnitsCrateAction:
+		Sound: heal2.aud
+		SelectionShares: 2
+		Sequence: heal
+	RevealMapCrateAction:
+		SelectionShares: 1
+		Sequence: reveal-map
+	DuplicateUnitCrateAction:
+		SelectionShares: 10
+		MaxAmount: 5
+		MinAmount: 2
+		MaxDuplicateValue: 1500
+	GiveUnitCrateAction@jeep:
+		SelectionShares: 6
+		Units: jeep
+		ValidFactions: soviet, russia, ukraine
+		Prerequisites: techlevel.low
+	GiveUnitCrateAction@1tnk:
+		SelectionShares: 6
+		Units: 1tnk
+		ValidFactions: soviet, russia, ukraine
+		Prerequisites: techlevel.low
+	GiveUnitCrateAction@apc:
+		SelectionShares: 6
+		Units: apc
+		ValidFactions: soviet, russia, ukraine
+		Prerequisites: techlevel.low
+	GiveUnitCrateAction@ftrk:
+		SelectionShares: 6
+		Units: ftrk
+		ValidFactions: soviet, russia, ukraine
+		Prerequisites: techlevel.low
+	GiveUnitCrateAction@v2rl:
+		SelectionShares: 5
+		Units: v2rl
+		ValidFactions: soviet, russia, ukraine
+		Prerequisites: techlevel.medium
+	GiveUnitCrateAction@2tnk:
+		SelectionShares: 4
+		Units: 2tnk
+		ValidFactions: soviet, russia, ukraine
+		Prerequisites: techlevel.medium
+	GiveUnitCrateAction@3tnk:
+		SelectionShares: 4
+		Units: 3tnk
+		ValidFactions: soviet, russia, ukraine
+		Prerequisites: techlevel.medium
+	GiveUnitCrateAction@squadlight:
+		SelectionShares: 10
+		Units: e1,e1,e1,e3,e3
+		ValidFactions: soviet, russia, ukraine
+	GiveUnitCrateAction@squadheavyallies:
+		SelectionShares: 7
+		Units: e1,e1,e1,e1,e3,e3,e3,e6,medi
+		ValidFactions: soviet, russia, ukraine
+		TimeDelay: 4500
+	GiveUnitCrateAction@squadheavysoviet:
+		SelectionShares: 7
+		Units: e1,e1,e4,e4,e3,e3,e3,e6
+		ValidFactions: soviet, russia, ukraine
+		TimeDelay: 4500
+	GrantExternalConditionCrateAction@invuln:
+		SelectionShares: 5
+		Sequence: invuln
+		Sound: ironcur9.aud
+		Condition: invulnerability
+		Duration: 600
+	GiveUnitCrateAction@arty:
+		SelectionShares: 5
+		Units: arty
+		ValidFactions: soviet, russia, ukraine
+	GiveUnitCrateAction@mrj:
+		SelectionShares: 2
+		Units: mrj
+		ValidFactions: soviet, russia, ukraine
+	GiveUnitCrateAction@squad1:
+		SelectionShares: 2
+		Units: e1,e1,e1,e1,e1
+	GiveUnitCrateAction@squad2:
+		SelectionShares: 2
+		Units: e1,e1,e1,e1,e2
+	GiveUnitCrateAction@squad3:
+		SelectionShares: 2
+		Units: e1,e1,e1,e1,e3
+	GiveUnitCrateAction@squad4:
+		SelectionShares: 2
+		Units: e1,e1,e1,e1,e6
+	GiveUnitCrateAction@squad5:
+		SelectionShares: 2
+		Units: e1,e1,e1,e2,e6
+	GiveUnitCrateAction@squad6:
+		SelectionShares: 2
+		Units: e1,e1,e1,e3,e6
+	GiveUnitCrateAction@squad7:
+		SelectionShares: 2
+		Units: e1,e1,e2,e3,e6
+	GiveUnitCrateAction@squad8:
+		SelectionShares: 2
+		Units: e1,e1,e1,e6,e6
+	GiveUnitCrateAction@squad9:
+		SelectionShares: 2
+		Units: e1,e1,e1,e3,e3
+	GiveUnitCrateAction@squad10:
+		SelectionShares: 2
+		Units: e1,e1,e1,e2,e2
+	GiveUnitCrateAction@2mcv:
+		SelectionShares: 1
+		Units: mcv,mcv
+		NoBaseSelectionShares: 95
+	ExplodeCrateAction@timequake:
+		Weapon: TimeQuake
+		SelectionShares: 3
+		Sequence: timequake
+	ExplodeCrateAction@ore:
+		Weapon: OreExplosion
+		SelectionShares: 2
+	ExplodeCrateAction@gem:
+		Weapon: GemExplosion
+		SelectionShares: 1
+	ExplodeCrateAction@atomic:
+		Weapon: atomic
+		SelectionShares: 1
