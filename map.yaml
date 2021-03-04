@@ -2,7 +2,7 @@ MapFormat: 11
 
 RequiresMod: ra
 
-Title: Desert Oil War *incomplete* R43
+Title: Desert Oil War *incomplete* R45
 
 Author: LeonardMT
 
@@ -14,9 +14,9 @@ Bounds: 1,1,200,200
 
 Visibility: Lobby
 
-Categories: Oil Only (Conquest)
-
 LockPreview: True
+
+Categories: Oil Only (Conquest)
 
 Players:
 	PlayerReference@Neutral:
@@ -110,7 +110,8 @@ Players:
 	PlayerReference@Multi13:
 		Name: Multi13
 		Playable: True
-		Faction: Random
+		LockFaction: True
+		Faction: russia
 		Enemies: Creeps
 
 Actors:
@@ -218,27 +219,12 @@ Actors:
 	Actor40: gmine
 		Owner: Neutral
 		Location: 117,167
-	Actor50: hgun
-		Owner: Creeps
-		TurretFacing: 96
-		Location: 113,164
-		Stance: AttackAnything
-	Actor51: hgun
-		Owner: Creeps
-		TurretFacing: 96
-		Location: 117,164
-		Stance: AttackAnything
 	Actor52: hgun
 		Owner: Creeps
 		TurretFacing: 96
 		Location: 120,168
 		Stance: AttackAnything
 		Health: 45
-	Actor53: hgun
-		Owner: Creeps
-		TurretFacing: 96
-		Location: 112,171
-		Stance: AttackAnything
 	Actor54: msub
 		Owner: Creeps
 		Location: 121,164
@@ -571,9 +557,10 @@ Actors:
 		FreeActor: True
 		Health: 100
 	Actor215: agun
-		Owner: Neutral
 		TurretFacing: 96
 		Location: 114,166
+		Stance: AttackAnything
+		Owner: Creeps
 	Actor216: tc01
 		Owner: Neutral
 		Location: 24,143
@@ -956,56 +943,11 @@ Actors:
 		Facing: 96
 		DeployState: Deployed
 		Location: 106,49
-	Actor345: dtrk
-		Owner: Neutral
-		Facing: 96
-		DeployState: Deployed
-		Location: 103,50
 	Actor348: dtrk
 		Owner: Neutral
 		Facing: 96
 		DeployState: Deployed
 		Location: 106,50
-	Actor349: dtrk
-		Owner: Neutral
-		Facing: 96
-		DeployState: Deployed
-		Location: 99,49
-	Actor350: dtrk
-		Owner: Neutral
-		Facing: 96
-		DeployState: Deployed
-		Location: 100,49
-	Actor351: dtrk
-		Owner: Neutral
-		Facing: 96
-		DeployState: Deployed
-		Location: 101,49
-	Actor352: dtrk
-		Owner: Neutral
-		Facing: 96
-		DeployState: Deployed
-		Location: 102,49
-	Actor356: dtrk
-		Owner: Neutral
-		Facing: 96
-		DeployState: Deployed
-		Location: 102,50
-	Actor358: dtrk
-		Owner: Neutral
-		Facing: 96
-		DeployState: Deployed
-		Location: 99,51
-	Actor359: dtrk
-		Owner: Neutral
-		Facing: 96
-		DeployState: Deployed
-		Location: 100,51
-	Actor360: dtrk
-		Owner: Neutral
-		Facing: 96
-		DeployState: Deployed
-		Location: 101,51
 	Actor406: dtrk
 		Owner: Neutral
 		Facing: 96
@@ -1182,9 +1124,6 @@ Actors:
 	Actor460: t09
 		Owner: Neutral
 		Location: 111,59
-	Actor461: tc01
-		Owner: Neutral
-		Location: 99,51
 	Actor462: t08
 		Owner: Neutral
 		Location: 100,49
@@ -3074,9 +3013,6 @@ Actors:
 	Actor1144: wood
 		Owner: Neutral
 		Location: 114,76
-	Actor1145: wood
-		Owner: Neutral
-		Location: 114,77
 	Actor1146: wood
 		Owner: Neutral
 		Location: 114,78
@@ -3321,9 +3257,6 @@ Actors:
 	Actor1231: oilb
 		Owner: Neutral
 		Location: 169,73
-	Actor1232: oilb
-		Owner: Neutral
-		Location: 181,73
 	Actor1233: oilb
 		Owner: Neutral
 		Location: 176,79
@@ -3336,9 +3269,6 @@ Actors:
 	Actor1236: oilb
 		Owner: Neutral
 		Location: 194,53
-	Actor1237: oilb
-		Owner: Neutral
-		Location: 184,58
 	Actor1238: oilb
 		Owner: Neutral
 		Location: 186,49
@@ -3408,15 +3338,6 @@ Actors:
 	Actor1260: oilp
 		Owner: Neutral
 		Location: 129,39
-	Actor1261: oilp
-		Owner: Neutral
-		Location: 133,43
-	Actor1262: oilp
-		Owner: Neutral
-		Location: 127,44
-	Actor1263: oilp
-		Owner: Neutral
-		Location: 142,52
 	Actor1264: oilp
 		Owner: Neutral
 		Location: 147,42
@@ -3483,9 +3404,151 @@ Actors:
 	Actor1284: oilp.slow
 		Owner: Neutral
 		Location: 54,39
+	Actor1285: e3r1
+		Owner: Neutral
+		Facing: 96
+		TurretFacing: 96
+		SubCell: 3
+		Location: 112,77
+	Actor1291: spen
+		Location: 18,29
+		Owner: Multi0
+	Actor1145: gun
+		Location: 112,171
+		TurretFacing: 189
+		Stance: AttackAnything
+		Owner: Creeps
+	Actor1232: oilb
+		Owner: Neutral
+		Location: 183,75
 	Actor1055: mpspawn
 		Owner: Neutral
 		Location: 183,53
+	Actor1261: oilp
+		Owner: Neutral
+		Location: 133,43
+	Actor1262: oilp
+		Owner: Neutral
+		Location: 127,44
+	Actor1237: tc01
+		Owner: Neutral
+		Location: 41,68
+	Actor1263: t08
+		Owner: Neutral
+		Location: 43,65
+	Actor1286: t08
+		Owner: Neutral
+		Location: 44,68
+	Actor1287: tc01
+		Owner: Neutral
+		Location: 44,66
+	Actor1288: t09
+		Owner: Neutral
+		Location: 43,66
+	Actor1289: t04
+		Owner: Neutral
+		Location: 40,69
+	Actor1290: t08
+		Owner: Neutral
+		Location: 39,70
+	Actor1292: tc01
+		Owner: Neutral
+		Location: 35,69
+	Actor1293: t08
+		Owner: Neutral
+		Location: 36,70
+	Actor1294: tc01.husk
+		Owner: Neutral
+		Location: 40,68
+	Actor1295: tc01
+		Owner: Neutral
+		Location: 42,67
+	Actor1296: tc01
+		Owner: Neutral
+		Location: 43,63
+	Actor1297: t04
+		Owner: Neutral
+		Location: 44,64
+	Actor1298: t09
+		Owner: Neutral
+		Location: 45,68
+	Actor1299: t09
+		Owner: Neutral
+		Location: 43,63
+	Actor1300: t04.husk
+		Owner: Neutral
+		Location: 45,65
+	Actor1301: t09.husk
+		Owner: Neutral
+		Location: 39,71
+	Actor1302: tc01
+		Owner: Neutral
+		Location: 32,67
+	Actor1303: t08
+		Owner: Neutral
+		Location: 33,69
+	Actor1304: t08
+		Owner: Neutral
+		Location: 33,65
+	Actor1305: tc01
+		Owner: Neutral
+		Location: 33,65
+	Actor1306: ctflag
+		Owner: Neutral
+		Location: 32,67
+	Actor1307: boxes06
+		Owner: Neutral
+		Location: 36,62
+	Actor1308: fcom
+		Owner: Neutral
+		Location: 46,69
+	Actor1309: fcom
+		Owner: Neutral
+		Location: 88,50
+	Actor1310: hosp.husk
+		Owner: Neutral
+		Location: 113,51
+	Actor1311: ammobox2
+		Owner: Neutral
+		Location: 90,50
+	Actor1312: ammobox2
+		Owner: Neutral
+		Location: 90,51
+	Actor1313: ammobox2
+		Owner: Neutral
+		Location: 90,52
+	Actor1314: tanktrap2
+		Owner: Neutral
+		Location: 62,54
+	Actor1315: oilp.slow
+		Owner: Neutral
+		Location: 44,70
+	Actor1316: oilp.slow
+		Owner: Neutral
+		Location: 40,71
+	Actor1317: arco
+		Owner: Neutral
+		Location: 45,65
+	Actor1318: tc01
+		Owner: Neutral
+		Location: 44,71
+	Actor1319: t08
+		Owner: Neutral
+		Location: 44,69
+	Actor1320: tc01
+		Owner: Neutral
+		Location: 46,68
+	Actor1321: t08
+		Owner: Neutral
+		Location: 44,72
+	Actor1322: tc01
+		Owner: Neutral
+		Location: 99,51
+	Actor1323: dtrk
+		Owner: Neutral
+		Facing: 96
+		Location: 104,53
+		DeployState: Deployed
 
 Rules: briefing.yaml, rules.yaml, rules-lua.yaml, ai.yaml
 
