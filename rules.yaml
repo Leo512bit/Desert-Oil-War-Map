@@ -64,7 +64,7 @@ World:
 		ClassName: Light Support
 		Factions: soviet, russia, ukraine
 		BaseActor: mcv
-		SupportActors: e1,e1,e1,e3,e3,apc,ftrk,e6
+		SupportActors: e1,e1,e1,e3,e3,apc,ftrk,e6,1tnk,1tnk
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5
 	MPStartUnits@heavyallies:
@@ -80,7 +80,7 @@ World:
 		ClassName: Heavy Support
 		Factions: soviet, russia, ukraine
 		BaseActor: mcv
-		SupportActors: e1,e1,e1,e3,e3,apc,ftrk,3tnk,3tnk,e6
+		SupportActors: e1,e1,e1,e3,e3,apc,ftrk,3tnk,3tnk,e6,1tnk,2tnk,2tnk,2tnk.4tnk
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5
 	MPStartLocations:
@@ -149,6 +149,77 @@ Player:
 		Locked: false
 		DisplayOrder: 15
 		Prerequisites: global-oil-silos
+	ClassicProductionQueue@Building:
+		Type: Building
+		DisplayOrder: 0
+		LowPowerModifier: 300
+		ReadyAudio: ConstructionComplete
+		BlockedAudio: NoBuild
+		LimitedAudio: BuildingInProgress
+		QueuedAudio: Building
+		OnHoldAudio: OnHold
+		CancelledAudio: Cancelled
+		SpeedUp: True
+		BuildTimeSpeedReduction: 100, 85, 75, 65, 60, 55, 50
+	ClassicProductionQueue@Defense:
+		Type: Defense
+		DisplayOrder: 1
+		LowPowerModifier: 300
+		ReadyAudio: ConstructionComplete
+		BlockedAudio: NoBuild
+		LimitedAudio: BuildingInProgress
+		QueuedAudio: Building
+		OnHoldAudio: OnHold
+		CancelledAudio: Cancelled
+		BuildTimeSpeedReduction: 100, 85, 75, 65, 60, 55, 50
+		SpeedUp: True
+	ClassicProductionQueue@Vehicle:
+		Type: Vehicle
+		DisplayOrder: 3
+		LowPowerModifier: 300
+		ReadyAudio: UnitReady
+		BlockedAudio: NoBuild
+		LimitedAudio: BuildingInProgress
+		QueuedAudio: Building
+		OnHoldAudio: OnHold
+		CancelledAudio: Cancelled
+		SpeedUp: True
+		BuildTimeSpeedReduction: 100, 75, 60, 50, 45, 30
+	ClassicProductionQueue@Infantry:
+		Type: Infantry
+		DisplayOrder: 2
+		LowPowerModifier: 300
+		ReadyAudio: UnitReady
+		BlockedAudio: NoBuild
+		LimitedAudio: BuildingInProgress
+		QueuedAudio: Training
+		OnHoldAudio: OnHold
+		CancelledAudio: Cancelled
+		SpeedUp: True
+		BuildTimeSpeedReduction: 100, 75, 60, 50, 45, 30
+	ClassicProductionQueue@Ship:
+		Type: Ship
+		DisplayOrder: 5
+		LowPowerModifier: 300
+		ReadyAudio: UnitReady
+		BlockedAudio: NoBuild
+		LimitedAudio: BuildingInProgress
+		QueuedAudio: Building
+		OnHoldAudio: OnHold
+		CancelledAudio: Cancelled
+		SpeedUp: True
+	ClassicProductionQueue@Aircraft:
+		Type: Aircraft
+		DisplayOrder: 4
+		LowPowerModifier: 300
+		ReadyAudio: UnitReady
+		BlockedAudio: NoBuild
+		LimitedAudio: BuildingInProgress
+		QueuedAudio: Building
+		OnHoldAudio: OnHold
+		CancelledAudio: Cancelled
+		SpeedUp: True
+		BuildTimeSpeedReduction: 100, 75, 60, 50, 45, 30
 	ModularBot@RushAI:
 		Name: Oil AI (Type: Rush)
 	ModularBot@NormalAI:
@@ -160,7 +231,8 @@ Player:
 HGUN:
 	Inherits: GUN
 	Buildable:
-		Prerequisites: ~vehicles.soviet, ~techlevel.medium
+		Queue: Defense
+		Prerequisites: weap, ~techlevel.medium
 	Valued:
 		Cost: 2800
 	Tooltip:
@@ -680,7 +752,134 @@ HGUN:
 	PaletteFromFile@egopall:
 		Name: egopall
 		Filename: egopal.pal
-
+	PaletteFromFile@terrain-snow:
+		Name: terrain
+		Tileset: SNOW
+		Filename: snow.pal
+		ShadowIndex: 3, 4
+	PaletteFromFile@terrain-interior:
+		Name: terrain
+		Tileset: INTERIOR
+		Filename: interior.pal
+		ShadowIndex: 3, 4
+	PaletteFromFile@terrain-temperat:
+		Name: terrain
+		Tileset: TEMPERAT
+		Filename: temperat.pal
+		ShadowIndex: 3, 4
+	PaletteFromFile@terrain-desert:
+		Name: terrain
+		Tileset: DESERT
+		Filename: desert.pal
+		ShadowIndex: 3, 4
+	PaletteFromFile@player:
+		Name: player
+		Filename: temperat.pal
+		ShadowIndex: 4
+	PaletteFromFile@chrome:
+		Name: chrome
+		Filename: temperat.pal
+		ShadowIndex: 3
+		AllowModifiers: false
+	PaletteFromFile@cursor:
+		Name: cursor
+		Filename: temperat.pal
+		AllowModifiers: false
+		CursorPalette: true
+	PaletteFromFile@effect:
+		Name: effect
+		Filename: temperat.pal
+		ShadowIndex: 4
+	PaletteFromFile@colorpicker:
+		Name: colorpicker
+		Filename: temperat.pal
+		ShadowIndex: 4
+		AllowModifiers: false
+	PaletteFromFile@desert:
+		Name: desert
+		Filename: desert.pal
+		ShadowIndex: 4
+	PaletteFromRGBA@shadow:
+		Name: shadow
+		R: 0
+		G: 0
+		B: 0
+		A: 140
+	PaletteFromRGBA@submerged:
+		Name: submerged
+		R: 0
+		G: 0
+		B: 0
+		A: 140
+	PaletteFromRGBA@highlight:
+		Name: highlight
+		R: 255
+		G: 255
+		B: 255
+		A: 128
+	PaletteFromRGBA@moveflash:
+		Name: moveflash
+		R: 255
+		G: 255
+		B: 255
+		A: 64
+	PaletteFromRGBA@invuln:
+		Name: invuln
+		R: 128
+		G: 0
+		B: 0
+		A: 128
+	PaletteFromRGBA@invuln2:
+		Name: invuln2
+		R: 0
+		G: 0
+		B: 128
+		A: 128
+	PaletteFromRGBA@disabled:
+		Name: disabled
+		R: 0
+		G: 0
+		B: 0
+		A: 180
+	ShroudPalette@shroud:
+		Name: shroud
+	ShroudPalette@fog:
+		Name: fog
+		Fog: true
+	PlayerColorPalette:
+		BasePalette: player
+		RemapIndex: 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95
+	PaletteFromPlayerPaletteWithAlpha@cloak:
+		BaseName: cloak
+		BasePalette: player
+		Alpha: 0.55
+	PlayerHighlightPalette:
+	MenuPaletteEffect:
+	RotationPaletteEffect@defaultwater:
+		Palettes: terrain
+		ExcludeTilesets: DESERT
+	RotationPaletteEffect@actorswater:
+		Palettes: player, effect
+	RotationPaletteEffect@desertwater:
+		Palettes: terrain
+		Tilesets: DESERT
+		RotationBase: 32
+	RotationPaletteEffect@desertwater-actor:
+		Palettes: desert
+		RotationBase: 32
+	LightPaletteRotator:
+		ExcludePalettes: terrain, effect, desert
+	ChronoshiftPaletteEffect:
+	FlashPaletteEffect@NUKE:
+		Type: Nuke
+	PaletteFromPaletteWithAlpha@placelinesegment:
+		Name: placelinesegment
+		BasePalette: terrain
+		Alpha: 0.65
+	PaletteFromPlayerPaletteWithAlpha@placebuilding:
+		BaseName: placebuilding
+		BasePalette: player
+		Alpha: 0.65
 
 5TNK:
 	Inherits: ^TrackedVehicle
@@ -723,8 +922,8 @@ HGUN:
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	Explodes:
-		Weapon: MiniNuke
-		EmptyWeapon: MiniNuke
+		Weapon: MicroNuke
+		EmptyWeapon: MicroNuke
 	SpawnActorOnDeath:
 		Actor: 4TNK.Husk
 	SelfHealing:
@@ -766,6 +965,9 @@ HGUN:
 		GenericName: Destroyed Vehicle
 	BodyOrientation:
 		UseClassicFacingFudge: True
+	Crushable:
+		CrushClasses: heavywall
+		CrushedByFriendlies: true
 
 5TNK.Husk:
 	Inherits: ^Husk
@@ -1193,6 +1395,7 @@ PROC:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Buildable:
 		Queue: Vehicle
+		BuildDurationModifier: 31
 		BuildPaletteOrder: 120
 		Prerequisites: ~vehicles.soviet, ~techlevel.low
 		Description: Fast tank, good for scouting.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
@@ -2744,6 +2947,7 @@ BRIK:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 120
+		BuildDurationModifier: 31
 		Prerequisites: ~vehicles.soviet, ~techlevel.low
 		Description: Fast tank, good for scouting.\n  Strong vs Infantry, Light armor\n  Weak vs  Tanks, Aircraft
 	Valued:
@@ -2799,6 +3003,7 @@ BRIK:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Buildable:
 		Queue: Vehicle
+		BuildDurationModifier: 40
 		BuildPaletteOrder: 220
 		Prerequisites: fix, ~vehicles.soviet, ~techlevel.medium
 		Description: Secondary Soviet Main Battle Tank.\n  Strong vs Infantry, Vehicles\n  Weak vs  Aircraft
@@ -3166,7 +3371,7 @@ GUN:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 70
-		Prerequisites: ~vehicles.soviet, ~structures.soviet, ~techlevel.medium
+		Prerequisites: barr, ~techlevel.medium
 		Description: Anti-Armor base defense.\nCan detect cloaked units.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 800
@@ -3312,6 +3517,11 @@ PBOX:
 		Amount: -20
 	DetectCloaked:
 		Range: 6c0
+	HitShape@BOTTOM:
+		TargetableOffsets: -768,0,0
+		Type: Rectangle
+			TopLeft: -512, 598
+			BottomRight: 512, 1110
 
 AGUN:
 	Inherits: ^Defense
@@ -3817,7 +4027,7 @@ IRON:
 		BuildPaletteOrder: 130
 		Prerequisites: stek, ~structures.soviet, ~techlevel.high
 		BuildLimit: 1
-		Description: Makes a group of units invulnerable\nfor a short time.\nRequires power to operate.\nMaximum 3 can be built.\n  Special Ability: Invulnerability, Advanced Invulnerability
+		Description: Makes a group of units invulnerable\nfor a short time.\nRequires power to operate.\nMaximum 1 can be built.\n  Special Ability: Invulnerability, Advanced Invulnerability
 	Valued:
 		Cost: 1500
 	Tooltip:
@@ -3939,8 +4149,8 @@ NTNK:
 		MuzzleSequence: muzzle
 	AttackTurreted:
 	Explodes:
-		Weapon: MiniNuke
-		EmptyWeapon: MiniNuke
+		Weapon: MicroNuke
+		EmptyWeapon: MicroNuke
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
@@ -4510,7 +4720,7 @@ WOOD:
 		Queue: Vehicle
 		BuildPaletteOrder: 320
 		Prerequisites: fix, stek, ~vehicles.soviet, ~techlevel.high
-		Description: Big and slow tank, with anti-air capability.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Nothing
+		Description: Big and slow tank, with anti-air capability.\nCan crush concrete walls and husks.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Nothing
 	Valued:
 		Cost: 1500
 	Tooltip:
@@ -6137,3 +6347,301 @@ CRATE:
 	ExplodeCrateAction@atomic:
 		Weapon: atomic
 		SelectionShares: 1
+
+^DTree:
+	Inherits@1: ^SpriteActor
+	Inherits@shape: ^1x1Shape
+	Interactable:
+	Tooltip:
+		Name:  Tree (Burnt)
+		ShowOwnerRow: false
+	WithSpriteBody:
+	Building:
+		Footprint: x
+		Dimensions: 1,1
+	AppearsOnRadar:
+	RadarColorFromTerrain:
+		Terrain: Tree
+	AppearsOnMapPreview:
+		Terrain: Tree
+	Health:
+		HP: 50000
+	Armor:
+		Type: Wood
+	Targetable:
+		TargetTypes: Trees
+	HiddenUnderShroud:
+	ScriptTriggers:
+	MapEditorData:
+		ExcludeTilesets: INTERIOR
+		Categories: Tree
+	RenderSprites:
+		Palette: terrain
+	RequiresSpecificOwners:
+		ValidOwnerNames: Neutral
+
+T08.Husk:
+	Inherits: ^DTree
+	Building:
+		Footprint: x_
+		Dimensions: 2,1
+	Health:
+		HP: 50000
+	Armor:
+		Type: Wood
+	Targetable:
+		TargetTypes: Trees
+	WithDeathAnimation:
+		DeathSequence: dead
+		DeathSequencePalette: cncplayer
+		UseDeathTypeSuffix: false
+
+T04.Husk:
+	Inherits: ^DTree
+	Building:
+		Footprint: __ x_
+		Dimensions: 2,2
+	MapEditorData:
+		ExcludeTilesets: TEMPERAT, SNOW, INTERIOR
+	Health:
+		HP: 50000
+	Armor:
+		Type: Wood
+	Targetable:
+		TargetTypes: Trees
+	WithDeathAnimation:
+		DeathSequence: dead
+		DeathSequencePalette: cncplayer
+		UseDeathTypeSuffix: false
+
+T09.Husk:
+	Inherits: ^DTree
+	MapEditorData:
+		ExcludeTilesets: TEMPERAT, SNOW, INTERIOR
+	Health:
+		HP: 50000
+	Armor:
+		Type: Wood
+	Targetable:
+		TargetTypes: Trees
+	WithDeathAnimation:
+		DeathSequence: dead
+		DeathSequencePalette: cncplayer
+		UseDeathTypeSuffix: false
+
+TC01.Husk:
+	Inherits: ^DTree
+	Building:
+		Footprint: ___ xx_
+		Dimensions: 3,2
+	MapEditorData:
+		ExcludeTilesets: INTERIOR
+	Health:
+		HP: 50000
+	Armor:
+		Type: Wood
+	Targetable:
+		TargetTypes: Trees
+	WithDeathAnimation:
+		DeathSequence: dead
+		DeathSequencePalette: cncplayer
+		UseDeathTypeSuffix: false
+
+UnkillT04:
+	Inherits: ^TreeHusk
+	Building:
+		Footprint: __ x_
+		Dimensions: 2,2
+	MapEditorData:
+		ExcludeTilesets: TEMPERAT, SNOW, INTERIOR
+
+UnkillT08:
+	Inherits: ^TreeHusk
+	Building:
+		Footprint: x_
+		Dimensions: 2,1
+
+UnkillT09:
+	Inherits: ^TreeHusk
+	MapEditorData:
+		ExcludeTilesets: TEMPERAT, SNOW, INTERIOR
+
+UnkillTC01:
+	Inherits: ^TreeHusk
+	Building:
+		Footprint: ___ xx_
+		Dimensions: 3,2
+	MapEditorData:
+		ExcludeTilesets: INTERIOR
+
+SHOK:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 130
+		Prerequisites: ~barr, stek, tsla, ~infantry.russia, ~techlevel.high
+		Description: Elite infantry with portable Tesla coils.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft
+	Valued:
+		Cost: 350
+	Tooltip:
+		Name: Shock Trooper
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 5000
+	Mobile:
+		Voice: Move
+	RevealsShroud:
+		Range: 5c0
+	Armament@PRIMARY:
+		Weapon: PortaTesla
+		LocalOffset: 427,0,341
+	Armament@GARRISONED:
+		Name: garrisoned
+		Weapon: PortaTesla
+	TakeCover:
+		ProneOffset: 227,0,-245
+	AttackFrontal:
+		Voice: Attack
+	AttackMove:
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Guard:
+		Voice: Move
+	Explodes:
+		Weapon: UnitExplodeSmall
+		EmptyWeapon: UnitExplodeSmall
+		DamageSource: Killer
+		Chance: 50
+	WithInfantryBody:
+		DefaultAttackSequence: shoot
+		RequiresCondition: !parachute
+	WithInfantryBody@PARACHUTE:
+		StandSequences: parachute
+		RequiresCondition: parachute
+	Voiced:
+		VoiceSet: ShokVoice
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded
+
+FTNK:
+	Inherits: ^TrackedVehicle
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 220
+		Prerequisites: fix, ~vehicles.soviet, ~techlevel.medium
+		Description: Secondary Soviet Main Battle Equipped with a Flamethrower instead of a Cannon\nMust be reloaded.\n  Strong vs Infantry, Vehicles\n  Weak vs  Aircraft
+	Valued:
+		Cost: 820
+	Tooltip:
+		Name: Flame Tank
+		GenericName: Tank
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 45000
+	Armor:
+		Type: Heavy
+	Mobile:
+		Speed: 85
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Turreted:
+		TurnSpeed: 5
+	Armament:
+		Weapon: tankflamer
+		Recoil: 0
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		PauseOnCondition: !ammo
+	AttackTurreted:
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	SpawnActorOnDeath:
+		Actor: FTNK.Husk
+	SelectionDecorations:
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
+	Selectable:
+		DecorationBounds: 28,28
+	AmmoPool:
+		Ammo: 160
+		PipCount: 4
+		ReloadDelay: 1
+		AmmoCondition: ammo
+	RenderSprites:
+		Image: 2TNK
+	Rearmable:
+		RearmActors: fix, mfix.deployed
+	Explodes:
+		Weapon: ArtilleryExplode
+		EmptyWeapon: UnitExplodeSmall
+		LoadedChance: 100
+
+FTNK.Husk:
+	Inherits: ^Husk
+	Tooltip:
+		Name: Husk (Flame Tank)
+	ThrowsParticle@turret:
+		Anim: turret
+	TransformOnCapture:
+		IntoActor: ftnk
+	InfiltrateForTransform:
+		IntoActor: ftnk
+	RenderSprites:
+		Image: 2tnk.destroyed
+
+FTRK:
+	Inherits: ^Vehicle
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 130
+		Prerequisites: ~vehicles.soviet, ~techlevel.low
+		Description: Mobile Anti-Air unit with mounted Flak cannon.\n  Strong vs Aircraft\n  Weak vs Infantry, Light armor, Tanks
+	Valued:
+		Cost: 600
+	Tooltip:
+		Name: Mobile Flak
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 15000
+	Armor:
+		Type: Light
+	Mobile:
+		TurnSpeed: 10
+		Speed: 118
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Turreted:
+		TurnSpeed: 10
+		Offset: -298,0,298
+	Armament:
+		Weapon: FLAK-23-AA
+		Recoil: 85
+		LocalOffset: 512,0,192
+		MuzzleSequence: muzzle
+	AttackTurreted:
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	SelectionDecorations:
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
+	Selectable:
+		DecorationBounds: 28,28

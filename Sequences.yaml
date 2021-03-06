@@ -476,3 +476,52 @@ atr:
 		Stride: 6
 		Facings: 8
 	icon: e1icon
+
+unkilltc01:
+	Defaults: tc01
+		UseTilesetExtension: true
+		TilesetOverrides:
+			INTERIOR: TEMPERAT
+	idle:
+		Start: 1
+	dead:
+		Start: 2
+		Length: 8
+		Tick: 80
+
+unkillt09:
+	Defaults: t09
+		AddExtension: false
+	idle: t09.des
+		Start: 1
+	dead: t09.des
+		Start: 2
+		Length: 8
+		Tick: 80
+
+unkillt08:
+	Defaults: t08
+		UseTilesetExtension: true
+		TilesetOverrides:
+			INTERIOR: TEMPERAT
+	idle:
+		Start: 1
+	dead:
+		Start: 2
+		Length: 8
+		Tick: 80
+
+unkillt04:
+	Defaults: t04.des
+		AddExtension: false
+	idle:
+		Start: 1
+	dead: t04.des
+		Start: 2
+		Length: 8
+		Tick: 80
+
+ftnk:
+	muzzle: gunfire2
+		Length: 5
+	icon: 2tnkicon
