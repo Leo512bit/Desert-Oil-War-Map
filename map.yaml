@@ -2,7 +2,7 @@ MapFormat: 11
 
 RequiresMod: ra
 
-Title: Desert Oil War *incomplete* R45
+Title: Desert Oil War *incomplete* R46
 
 Author: LeonardMT
 
@@ -14,9 +14,9 @@ Bounds: 1,1,200,200
 
 Visibility: Lobby
 
-LockPreview: True
-
 Categories: Oil Only (Conquest)
+
+LockPreview: True
 
 Players:
 	PlayerReference@Neutral:
@@ -749,22 +749,22 @@ Actors:
 	Actor289: oilp
 		Owner: Neutral
 		Location: 80,80
-	Actor290: tc01
+	rfdsfasdf: UnkillTC01
 		Owner: Neutral
 		Location: 107,51
-	Actor292: tc01
+	asdfasdf: UnkillTC01
 		Owner: Neutral
 		Location: 110,51
-	Actor293: t08
+	adsfasdgds: UnkillT08
 		Owner: Neutral
 		Location: 107,53
-	Actor295: t09
+	unkilvasdvcvadvl12: UnkillT09
 		Owner: Neutral
 		Location: 110,52
-	Actor296: tc01
+	adsfsgrev: UnkillTC01
 		Owner: Neutral
 		Location: 105,54
-	Actor297: t08
+	whqayfge7: UnkillT08
 		Owner: Neutral
 		Location: 111,55
 	Actor298: dtrk
@@ -787,7 +787,7 @@ Actors:
 		Facing: 132
 		DeployState: Deployed
 		Location: 109,53
-	Actor291: tc01
+	dfghdftrbhb09: UnkillTC01
 		Owner: Neutral
 		Location: 109,53
 	Actor303: dtrk
@@ -928,7 +928,7 @@ Actors:
 		Facing: 96
 		DeployState: Deployed
 		Location: 103,49
-	Actor342: dtrk
+	iuyhhdhhhhhhhhhhhhhcccccc2223rfqa: dtrk
 		Owner: Neutral
 		Facing: 96
 		DeployState: Deployed
@@ -1097,40 +1097,37 @@ Actors:
 		Facing: 77
 		Stance: AttackAnything
 		Owner: Creeps
-	Actor407: tc01
+	vvvvvvvvvvvvvvvvvvvvvvvvvvv: UnkillTC01
 		Owner: Neutral
 		Location: 103,49
-	Actor408: tc01
+	vvvvvvvvvvvvvv: UnkillTC01
 		Owner: Neutral
 		Location: 109,57
-	Actor411: tc01
+	bbbbbbbbbbbb: UnkillTC01
 		Owner: Neutral
 		Location: 107,54
-	Actor412: t08
+	Actor412: UnkillT08
 		Owner: Neutral
 		Location: 108,56
-	Actor449: t08
+	aaaaaaaaaaaaaasssssssssssssss: UnkillT08
 		Owner: Neutral
 		Location: 106,57
-	Actor450: t08
+	unkill9: UnkillT08
 		Owner: Neutral
 		Location: 108,49
-	Actor458: tc01
+	sdfgdfgggweertyugffd: UnkillTC01
 		Owner: Neutral
 		Location: 105,49
-	Actor459: t09
+	tw54tewsgsfgdsfgds: UnkillT09
 		Owner: Neutral
 		Location: 109,55
-	Actor460: t09
-		Owner: Neutral
-		Location: 111,59
-	Actor462: t08
+	gsfdghbbherer: UnkillT09
 		Owner: Neutral
 		Location: 100,49
-	Actor463: t08
+	ergerrrrrrrrrrrrrrr: UnkillT09
 		Owner: Neutral
 		Location: 97,48
-	Actor464: tc01
+	gggggggsssssss: UnkillTC01
 		Owner: Neutral
 		Location: 107,46
 	Actor472: minv
@@ -1396,19 +1393,19 @@ Actors:
 	Actor575: t08
 		Owner: Neutral
 		Location: 61,59
-	Actor576: tc01
+	awefasdfasadff: UnkillTC01
 		Owner: Neutral
 		Location: 112,56
-	Actor577: t08
+	ytuhdbgnttsdf: UnkillT08
 		Owner: Neutral
 		Location: 113,57
-	Actor578: t09
+	asdfasdfasaaaaaaa: UnkillT09
 		Owner: Neutral
 		Location: 100,54
-	Actor579: t04
+	fsdfsfsssssssssfffffffffffrrrr: UnkillT04
 		Owner: Neutral
 		Location: 100,49
-	Actor581: t04
+	sdfartegtgh5sffsd: t04
 		Owner: Neutral
 		Location: 66,58
 	Actor582: t09
@@ -2734,7 +2731,7 @@ Actors:
 	Actor486: minv
 		Owner: Creeps
 		Location: 84,79
-	Actor580: t04
+	dfgdsfggggw3rrrr: UnkillT04
 		Owner: Neutral
 		Location: 102,50
 	Actor1038: oilbisland
@@ -3410,9 +3407,6 @@ Actors:
 		TurretFacing: 96
 		SubCell: 3
 		Location: 112,77
-	Actor1291: spen
-		Location: 18,29
-		Owner: Multi0
 	Actor1145: gun
 		Location: 112,171
 		TurretFacing: 189
@@ -3541,7 +3535,7 @@ Actors:
 	Actor1321: t08
 		Owner: Neutral
 		Location: 44,72
-	Actor1322: tc01
+	sfdgggggggggggggeeeeeeeeeeerttttttttttt: UnkillTC01
 		Owner: Neutral
 		Location: 99,51
 	Actor1323: dtrk
@@ -3549,6 +3543,12 @@ Actors:
 		Facing: 96
 		Location: 104,53
 		DeployState: Deployed
+	Actor1322: wood
+		Owner: Neutral
+		Location: 114,77
+	Actor1325: unkillt09
+		Owner: Neutral
+		Location: 111,59
 
 Rules: briefing.yaml, rules.yaml, rules-lua.yaml, ai.yaml
 
