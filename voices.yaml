@@ -4,8 +4,8 @@ GenericVoice:
 		Select: await1,ready,report1,yessir1
         Move: ackno,affirm1,noprob,overout,ritaway,roger,ugotit
 		Action: ackno,affirm1,noprob,overout,ritaway,roger,ugotit
-		Die: dedman1,dedman2,dedman3,dedman4,dedman5,dedman7,dedman8
-		Burned: dedman10
+		Die: dedman1,dedman2,dedman3,dedman4,dedman5,dedman7,dedman8,nuyell5,nuyell3,nuyell1
+		Burned: dedman10,yell1,nuyell4
 		Zapped: dedman6
 	DisableVariants: Die, Burned, Zapped
 
@@ -141,7 +141,7 @@ NewGenericVoice:
 		Select: await1,ready,report1,yessir1,vehic1,yessir3,report2,report3,await2,await3
         Move: ackno,affirm1,done,noprob,overout,ritaway,roger,ugotit,ackno2,affirm2,affirm3
 		Action: ackno,affirm1,done,noprob,overout,ritaway,roger,ugotit,ackno2,affirm2,affirm3
-		Die: dedman1,dedman2,dedman3,dedman4,dedman5,dedman7,dedman8
-		Burned: dedman10
+		Die: dedman1,dedman2,dedman3,dedman4,dedman5,dedman7,dedman8,nuyell5,nuyell3,nuyell1
+		Burned: dedman10,yell1,nuyell4
 		Zapped: dedman6
 	DisableVariants: Die, Burned, Zapped

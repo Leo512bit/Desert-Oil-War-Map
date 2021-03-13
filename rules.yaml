@@ -80,7 +80,7 @@ World:
 		ClassName: Heavy Support
 		Factions: soviet, russia, ukraine
 		BaseActor: mcv
-		SupportActors: e1,e1,e1,e3,e3,apc,ftrk,3tnk,3tnk,e6,1tnk,2tnk,2tnk,2tnk.4tnk
+		SupportActors: e1,e1,e1,e3,e3,apc,ftrk,3tnk,3tnk,e6,1tnk,2tnk,2tnk,2tnk,4tnk
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5
 	MPStartLocations:
@@ -270,6 +270,9 @@ HGUN:
 	Targetable:
 		RequiresCondition: !parachute
 		TargetTypes: Ground, Vehicle
+	Targetable@AIR:
+		RequiresCondition: parachute
+		TargetTypes: air
 	Targetable@REPAIR:
 		RequiresCondition: !parachute && damaged
 		TargetTypes: Repair
@@ -281,6 +284,8 @@ HGUN:
 	Chronoshiftable:
 	Passenger:
 		CargoType: Vehicle
+		Weight: 3
+		PipType: Gray
 	AttackMove:
 	HiddenUnderFog:
 	ActorLostNotification:
@@ -315,7 +320,7 @@ HGUN:
 	WithParachute:
 		ShadowImage: parach-shadow
 		ShadowSequence: idle
-		Image: parach
+		Image: maxichute
 		Sequence: idle
 		OpeningSequence: open
 		Offset: 0,0,200
@@ -937,7 +942,13 @@ HGUN:
 		RequiresCondition: invulnerability
 	Chronoshiftable:
 		ExplodeInstead: false
-        
+	Passenger:
+		CargoType: Vehicle
+		Weight: 4
+	RenderSprites:
+		Image: 5tnk
+		Scale: 1.2
+		
 ^Husk:
 	Inherits: ^BasicHusk
 	Husk:
@@ -1411,7 +1422,7 @@ PROC:
 	Armor:
 		Type: Heavy
 	Mobile:
-		Speed: 118
+		Speed: 128
 	RevealsShroud:
 		MinRange: 4c0
 		Range: 5c0
@@ -1445,6 +1456,9 @@ PROC:
 	SpeedMultiplier@CRITICALDAMAGE:
 		RequiresCondition: critical-damage
 		Modifier: 50
+	Passenger:
+		CargoType: Vehicle
+		Weight: 2
         
 2TNK:
 	Inherits: ^TrackedVehicle
@@ -1581,6 +1595,9 @@ JEEP:
 		MaxWeight: 1
 		PipCount: 1
 		LoadingCondition: notmobile
+	Passenger:
+		CargoType: Vehicle
+		Weight: 2
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 
@@ -1617,6 +1634,9 @@ MGG:
 	RenderShroudCircle:
 	SpawnActorOnDeath:
 		Actor: MGG.Husk
+	Passenger:
+		CargoType: Vehicle
+		Weight: 2
 
 MRJ:
 	Inherits: ^Vehicle
@@ -1654,6 +1674,9 @@ MRJ:
 		Range: 5c0
 		DeflectionStances: Neutral, Enemy
 	RenderJammerCircle:
+	Passenger:
+		CargoType: Vehicle
+		Weight: 2
 
 DTRK:
 	Inherits: ^Vehicle
@@ -1689,6 +1712,9 @@ DTRK:
 	GrantConditionOnDeploy:
 		DeployedCondition: triggered
 	-DamageMultiplier@IRONCURTAIN:
+	Passenger:
+		CargoType: Vehicle
+		Weight: 2
 
 QTNK:
 	Chronoshiftable:
@@ -1699,6 +1725,9 @@ QTNK:
 	MadTank:
 		DeployedCondition: deployed
 			Notification: BuildingInfiltrated
+	Passenger:
+		CargoType: Vehicle
+		Weight: 4
 
  
 
@@ -1710,7 +1739,7 @@ CTNK:
 		Queue: Vehicle
 		BuildPaletteOrder: 330
 		Prerequisites: stek, ~vehicles.soviet, ~techlevel.high
-		Description: Armed with anti-ground missiles.\nTeleports to areas within range.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft\n  Special ability: Can teleport
+		Description: Armed with anti-ground missiles.\nTeleports to areas within range.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft\n  Special ability: Can teleport, does not return on a chronoshift
 	Valued:
 		Cost: 1350
 	Tooltip:
@@ -1747,6 +1776,8 @@ CTNK:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 30,30
+	Chronoshiftable:
+		ReturnToOrigin: false
 
 STNK:
 	Inherits: ^Vehicle
@@ -1913,7 +1944,7 @@ MSUB:
 		ForceFireIgnoresActors: True
 	SelectionDecorations:
 	AutoTarget:
-		InitialStance: HoldFire
+		InitialStance: ReturnFire
 		InitialStanceAI: ReturnFire
 	DetectCloaked:
 		CloakTypes: Underwater
@@ -2172,6 +2203,10 @@ CA:
 		Turret: secondary
 	Selectable:
 		DecorationBounds: 44,44
+	AutoTarget:
+		InitialStance: ReturnFire
+		InitialStanceAI: ReturnFire
+		ScanOnIdle: true
 
 MIG:
 	Inherits: ^Plane
@@ -2206,7 +2241,7 @@ MIG:
 	AttackAircraft:
 		FacingTolerance: 20
 		PersistentTargeting: false
-		OpportunityFire: False
+		OpportunityFire: true
 	Aircraft:
 		CruiseAltitude: 2560
 		InitialFacing: 192
@@ -2215,8 +2250,9 @@ MIG:
 		RepulsionSpeed: 40
 		MaximumPitch: 56
 	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
+		InitialStance: AttackAnything
+		InitialStanceAI: AttackAnything
+		ScanOnIdle: true
 	AmmoPool:
 		Ammo: 8
 		AmmoCondition: ammo
@@ -2270,7 +2306,7 @@ HIND:
 		PauseOnCondition: !ammo
 	Armament@SECONDARY:
 		Name: secondary
-		Weapon: HellfireAG
+		Weapon: HellfireAA.hind
 		LocalOffset: 85,213,-85, 85,-213,-85
 		MuzzleSequence: muzzle
 		PauseOnCondition: !ammo
@@ -2278,13 +2314,14 @@ HIND:
 		FacingTolerance: 20
 		PersistentTargeting: false
 		AttackType: Hover
-		OpportunityFire: False
+		OpportunityFire: true
 	Aircraft:
 		TurnSpeed: 4
 		Speed: 112
 	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
+		InitialStance: AttackAnything
+		InitialStanceAI: AttackAnything
+		ScanOnIdle: true
 	WithIdleOverlay@ROTORAIR:
 		Sequence: rotor
 		RequiresCondition: airborne
@@ -2313,6 +2350,7 @@ HIND:
 		DecorationBounds: 38,32
 	Rearmable:
 		RearmActors: hpad, carr.deployed
+	Chronoshiftable:
 
 HELI:
 	Inherits: ^Helicopter
@@ -2715,7 +2753,7 @@ AFLD:
 		Queue: Building
 		BuildPaletteOrder: 130
 		Prerequisites: dome, ~structures.soviet, ~techlevel.medium, ~!structures.ukraine
-		Description: Produces and reloads aircraft.\n  Special Ability: Spy Plane\n  Special Ability: Paratroopers\n  Special Ability: Parabombs
+		Description: Produces and reloads aircraft.\n  Special Ability: Spy Plane\n  Special Ability: Paratroopers\n  Special Ability: Parabombs\n  Special Ability: Carpet Comb\n  Special Ability: Paratanks
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -2837,6 +2875,80 @@ AFLD:
 		SupportPowerPaletteOrder: 40
 		AllowMultiple: False
         DisplayTimerStances: Ally
+	AirstrikePower@Carpetbomb:
+		OrderName: Carpetbomb
+		Prerequisites: aircraft.soviet
+		Icon: parabombs
+		ChargeInterval: 10500
+		Description: Carpet Comb
+		LongDesc: A large squad of high altitude Badgers\ncarpet bombs your target.\n Easy to shoot down\nEasy for enemy units to get out of harm's way
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitType: hbbadr
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPoster: pbmbicon
+		SquadSize: 5
+		SquadOffset: -1536,1536,600
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+		SupportPowerPaletteOrder: 40
+		AllowMultiple: False
+        DisplayTimerStances: Ally
+	AirstrikePower@StrategicBombing:
+		OrderName: StrategicBombing
+		Prerequisites: aircraft.soviet
+		Icon: parabombs
+		ChargeInterval: 11500
+		Description: Strategic Bombing
+		LongDesc: Twin strategic bombers drops 2 devastating bombs with high damage but a small bast radius on a spific target\n Hard to shoot down\n Note: It can be hard to aim this Airstrike you will want to set the target it 5 tiles (tanks) ahead of your real target
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitType: badribomber
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPoster: pbmbicon
+		SquadSize: 2
+		SquadOffset: -1536,1536,5
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+		SupportPowerPaletteOrder: 40
+		AllowMultiple: False
+        DisplayTimerStances: Ally
+	ParatroopersPower@Paratanks:
+		OrderName: Paratanks
+		Prerequisites: ~afld, player.germany
+		Icon: para1tnkicon
+		ChargeInterval: 8000
+		Description: Paratanks
+		LongDesc: A squad of Badgers drops a squad of two Light\nand a Medium Tank anywhere on the map.
+		DropItems: 1TNK, 2TNK, 1TNK
+		ReinforcementsArrivedSpeechNotification: SovietReinforcementsArrived
+		SelectTargetSpeechNotification: SelectTarget
+		AllowImpassableCells: false
+		QuantizedFacings: 8
+		CameraActor: camera.paradrop
+		UnitType: badr.hd
+		DisplayBeacon: true
+		SquadOffset: 1792,1792,0
+		BeaconPoster: pinficon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+		SquadSize: 3
+		SupportPowerPaletteOrder: 4
+		AllowMultiple: False
+    	DisplayTimerStances: Ally
 	ProductionBar:
 		ProductionType: Aircraft
 	SupportPowerChargeBar:
@@ -2962,7 +3074,7 @@ BRIK:
 	Armor:
 		Type: Heavy
 	Mobile:
-		Speed: 118
+		Speed: 128
 	RevealsShroud:
 		MinRange: 4c0
 		Range: 5c0
@@ -2996,6 +3108,9 @@ BRIK:
 	SpeedMultiplier@CRITICALDAMAGE:
 		RequiresCondition: critical-damage
 		Modifier: 50
+	Passenger:
+		CargoType: Vehicle
+		Weight: 2
 
 2TNK:
 	Inherits: ^TrackedVehicle
@@ -3254,7 +3369,7 @@ CTNK:
 		Queue: Vehicle
 		BuildPaletteOrder: 330
 		Prerequisites: stek, ~vehicles.soviet, ~techlevel.high
-		Description: Armed with anti-ground missiles.\nTeleports to areas within range.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft\n  Special ability: Can teleport
+		Description: Armed with anti-ground missiles.\nTeleports to areas within range.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft\n  Special ability: Can teleport, does not return on a chronoshift
 	Valued:
 		Cost: 1350
 	Tooltip:
@@ -3293,6 +3408,8 @@ CTNK:
 		DecorationBounds: 30,30
 	SpawnActorOnDeath:
 		Actor: CTNK.Husk
+	Chronoshiftable:
+		ReturnToOrigin: false
         
 CTNK.Husk:
 	Inherits: ^Husk
@@ -3919,7 +4036,7 @@ PT:
 		Type: Heavy
 	Mobile:
 		TurnSpeed: 7
-		Speed: 128
+		Speed: 118
 	RevealsShroud:
 		MinRange: 5c0
 		Range: 7c0
@@ -3947,6 +4064,10 @@ PT:
 	RenderDetectionCircle:
 	Selectable:
 		DecorationBounds: 36,36
+	AutoTarget:
+		InitialStance: AttackAnything
+		InitialStanceAI: AttackAnything
+		ScanOnIdle: true
 
 SAM:
 	Inherits: ^Defense
@@ -4161,6 +4282,9 @@ NTNK:
 		RequiresCondition: invulnerability
 	Chronoshiftable:
 		ExplodeInstead: true
+	Passenger:
+		CargoType: Vehicle
+		Weight: 2
 
 NTNK.Husk:
 	Inherits: ^Husk
@@ -4663,7 +4787,7 @@ WOOD:
 		Prerequisites: fix, ~vehicles.soviet, ~techlevel.medium
 		Description: Soviet Main Battle Tank, with dual cannons\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
-		Cost: 850
+		Cost: 1150
 	Tooltip:
 		Name: Heavy Tank
 		GenericName: Tank
@@ -4722,7 +4846,7 @@ WOOD:
 		Prerequisites: fix, stek, ~vehicles.soviet, ~techlevel.high
 		Description: Big and slow tank, with anti-air capability.\nCan crush concrete walls and husks.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Nothing
 	Valued:
-		Cost: 1500
+		Cost: 2000
 	Tooltip:
 		Name: Mammoth Tank
 		GenericName: Tank
@@ -4771,6 +4895,9 @@ WOOD:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 44,38,0,-4
+	Passenger:
+		CargoType: Vehicle
+		Weight: 4
         
 MNLY:
 	Inherits: ^TrackedVehicle
@@ -4817,6 +4944,9 @@ MNLY:
 		RearmActors: fix, mfix.deployed
 	Targetable:
 		TargetTypes: Ground, Vehicle, Mine
+	Passenger:
+		CargoType: Vehicle
+		Weight: 2
         
 7TNK:
 	Inherits: ^TrackedVehicle
@@ -5003,6 +5133,9 @@ MFIX.Deployed:
 		TargetableOffsets: 840,0,0, 598,-640,0, 598,640,0, -1060,0,0, -768,-640,0, -768,640,0
 		Type: Polygon
 			Points: -1536,-300, -640,-811, 640,-811, 1536,-300, 1536,555, 640,1110, -640,1110, -1536,555
+	Passenger:
+		CargoType: Vehicle
+		Weight: 4
             
 MFIX:
 	Inherits: ^Vehicle
@@ -5032,6 +5165,9 @@ MFIX:
 	Transforms:
 		IntoActor: mfix.deployed
 		Offset: 0,0
+	Passenger:
+		CargoType: Vehicle
+		Weight: 4
         
 7TNK.Husk:
 	Inherits: ^Husk
@@ -5249,7 +5385,7 @@ YAK:
 	AttackAircraft:
 		FacingTolerance: 20
 		PersistentTargeting: false
-		OpportunityFire: False
+		OpportunityFire: true
 	Aircraft:
 		CruiseAltitude: 2560
 		InitialFacing: 192
@@ -5258,8 +5394,9 @@ YAK:
 		RepulsionSpeed: 40
 		MaximumPitch: 56
 	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
+		InitialStance: Defend
+		InitialStanceAI: Defend
+		ScanOnIdle: true
 	AmmoPool:
 		Ammo: 18
 		PipCount: 6
@@ -6645,3 +6782,401 @@ FTRK:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
+
+TRAN:
+	Inherits: ^Helicopter
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 10
+		Prerequisites: ~hpad, ~techlevel.medium
+		Description: Fast Infantry Transport Helicopter.\n  Unarmed
+	Valued:
+		Cost: 900
+	Tooltip:
+		Name: Chinook
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 20000
+	RevealsShroud:
+		MinRange: 6c0
+		Range: 8c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 6c0
+		Type: GroundPosition
+	Aircraft:
+		TurnSpeed: 5
+		Speed: 128
+		AltitudeVelocity: 0c58
+	WithIdleOverlay@ROTOR1AIR:
+		Offset: 597,0,213
+		Sequence: rotor
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTOR1GROUND:
+		Offset: 597,0,213
+		Sequence: slow-rotor
+		RequiresCondition: !airborne
+	WithIdleOverlay@ROTOR2AIR:
+		Offset: -597,0,341
+		Sequence: rotor2
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTOR2GROUND:
+		Offset: -597,0,341
+		Sequence: slow-rotor2
+		RequiresCondition: !airborne
+	Cargo:
+		Types: Infantry, Vehicle
+		MaxWeight: 8
+		PipCount: 8
+		AfterUnloadDelay: 40
+	SpawnActorOnDeath:
+		Actor: TRAN.Husk
+	SelectionDecorations:
+	Selectable:
+		DecorationBounds: 40,36
+	Chronoshiftable:
+
+SS:
+	Inherits: ^Ship
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Buildable:
+		Queue: Ship
+		BuildAtProductionType: Submarine
+		BuildPaletteOrder: 30
+		Prerequisites: ~spen, ~techlevel.low
+		Description: Submerged anti-ship unit\narmed with torpedoes.\nCan detect other submarines.\n  Strong vs Naval units\n  Weak vs Ground units, Aircraft\n  Special Ability: Submerge
+	Valued:
+		Cost: 950
+	Tooltip:
+		Name: Submarine
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 25000
+	Armor:
+		Type: Light
+	Mobile:
+		TurnSpeed: 4
+		Speed: 71
+	RevealsShroud:
+		MinRange: 5c0
+		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+	Targetable:
+		TargetTypes: Ground, Water, Ship, Submarine, Repair
+		RequiresCondition: !underwater
+	Targetable@UNDERWATER:
+		TargetTypes: Underwater, Submarine
+		RequiresCondition: underwater
+	Cloak:
+		CloakTypes: Underwater
+		InitialDelay: 0
+		CloakDelay: 50
+		CloakSound: subshow1.aud
+		UncloakSound: subshow1.aud
+		CloakedCondition: underwater
+		Palette: submerged
+		PauseOnCondition: cloak-force-disabled
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: Critical
+	Armament:
+		Weapon: TorpTube
+		LocalOffset: 0,-171,0, 0,171,0
+		FireDelay: 2
+	AttackFrontal:
+	SelectionDecorations:
+	AutoTarget:
+		InitialStance: AttackAnything
+		InitialStanceAI: AttackAnything
+		ScanOnIdle: true
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: Water, Underwater
+	AutoTargetPriority@ATTACKANYTHING:
+		ValidTargets: Water, Underwater
+	DetectCloaked:
+		CloakTypes: Underwater
+		Range: 4c0
+	RenderDetectionCircle:
+	Explodes:
+		Weapon: UnitExplodeSubmarine
+		EmptyWeapon: UnitExplodeSubmarine
+	-MustBeDestroyed:
+	Selectable:
+		DecorationBounds: 38,38
+
+MCV:
+	Inherits: ^Vehicle
+	Inherits@selection: ^SelectableSupportUnit
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 210
+		Prerequisites: fix, ~techlevel.medium
+		BuildDurationModifier: 50
+		Description: Deploys into another Construction Yard.\n  Unarmed
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Mobile Construction Vehicle
+	Selectable:
+		DecorationBounds: 42,42
+	SelectionDecorations:
+	Health:
+		HP: 60000
+	Armor:
+		Type: Light
+	Mobile:
+		Speed: 71
+		Locomotor: heavywheeled
+	RevealsShroud:
+		Range: 4c0
+	Transforms:
+		IntoActor: fact
+		Offset: -1,-1
+		Facing: 96
+		TransformSounds: placbldg.aud, build5.aud
+		NoTransformNotification: BuildingCannotPlaceAudio
+	MustBeDestroyed:
+		RequiredForShortGame: true
+	BaseBuilding:
+	SpawnActorOnDeath:
+		Actor: MCV.Husk
+	TransferTimedExternalConditionOnTransform:
+		Condition: invulnerability
+	Passenger:
+		CargoType: Vehicle
+		Weight: 4
+
+APC:
+	Inherits: ^TrackedVehicle
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 120
+		Prerequisites: ~vehicles.soviet, ~techlevel.low
+		Description: Tough infantry transport.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
+	Valued:
+		Cost: 850
+	Tooltip:
+		Name: Armored Personnel Carrier
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 35000
+	Armor:
+		Type: Heavy
+	Mobile:
+		Speed: 142
+		PauseOnCondition: notmobile || being-captured
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Armament:
+		Weapon: M60mg
+		LocalOffset: 85,0,171
+		MuzzleSequence: muzzle
+	AttackFrontal:
+	WithMuzzleOverlay:
+	Cargo:
+		Types: Infantry
+		MaxWeight: 5
+		PipCount: 5
+		LoadingCondition: notmobile
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
+	Passenger:
+		CargoType: Vehicle
+		Weight: 2
+
+TRUK:
+	Inherits: ^Vehicle
+	Inherits@selection: ^SelectableSupportUnit
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 410
+		Prerequisites: ~techlevel.low
+		Description: Transports cash to other players.\n  Unarmed
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Supply Truck
+	Health:
+		HP: 11000
+	Armor:
+		Type: Light
+	Mobile:
+		Speed: 128
+	RevealsShroud:
+		Range: 4c0
+	DeliversCash:
+		Payload: 500
+		PlayerExperience: 50
+	SpawnActorOnDeath:
+		Actor: moneycrate
+	Passenger:
+		CargoType: Vehicle
+		Weight: 2
+
+TIMECRATE:
+	Inherits: ^Crate
+	Tooltip:
+		Name: quake
+	ExplodeCrateAction@timequake:
+		Weapon: TimeQuake
+		SelectionShares: 100
+		Sequence: timequake
+
+MONEYCRATE:
+	Inherits: ^Crate
+	Tooltip:
+		Name: Money Crate
+	GiveCashCrateAction:
+		Amount: 500
+		SelectionShares: 1
+		UseCashTick: true
+		Sequence: dollar
+	RenderSprites:
+		Image: wcrate
+
+LST:
+	Inherits: ^Ship
+	Buildable:
+		Queue: Ship
+		BuildPaletteOrder: 10
+		Prerequisites: ~techlevel.low
+		Description: General-purpose naval transport.\nCan carry infantry and tanks.\n  Unarmed
+	Valued:
+		Cost: 700
+	Tooltip:
+		Name: Transport
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 35000
+	Armor:
+		Type: Heavy
+	Mobile:
+		Locomotor: lcraft
+		Speed: 113
+		PauseOnCondition: notmobile
+	RevealsShroud:
+		MinRange: 5c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+	SelectionDecorations:
+	WithLandingCraftAnimation:
+		OpenTerrainTypes: Clear, Rough, Road, Ore, Gems, Beach
+	Cargo:
+		Types: Infantry, Vehicle
+		MaxWeight: 10
+		PipCount: 10
+		PassengerFacing: 0
+		LoadingCondition: notmobile
+	-Chronoshiftable:
+	Selectable:
+		DecorationBounds: 36,36
+
+BADR.hd:
+	Inherits: BADR
+	Health:
+		HP: 30500
+	Aircraft:
+		CruiseAltitude: 3500
+		TurnSpeed: 5
+		Speed: 150
+		Repulsable: False
+		MaximumPitch: 56
+	RenderSprites:
+		Image: BADR
+
+hbbadr:
+	Inherits: ^NeutralPlane
+	AttackBomber:
+	Armament:
+		Weapon: ParaBomb
+	Health:
+		HP: 40000
+	Aircraft:
+		CruiseAltitude: 4060
+		TurnSpeed: 5
+		Speed: 120
+		Repulsable: False
+		MaximumPitch: 56
+	AmmoPool:
+		Ammo: 15
+	-Selectable:
+	SelectionDecorations:
+		RenderSelectionBars: False
+	-Voiced:
+	Tooltip:
+		Name: Badger
+	Contrail@1:
+		Offset: -432,560,0
+	Contrail@2:
+		Offset: -432,-560,0
+	SpawnActorOnDeath:
+		Actor: BADR.Husk
+	SmokeTrailWhenDamaged@0:
+		Offset: -432,560,0
+		Interval: 2
+	SmokeTrailWhenDamaged@1:
+		Offset: -432,-560,0
+		Interval: 2
+	-EjectOnDeath:
+	-MapEditorData:
+	RejectsOrders:
+	RenderSprites:
+		Image: badr
+	GivesExperience:
+		Experience: 1000
+	Interactable:
+
+BADRIBomber:
+	Inherits: ^NeutralPlane
+	AttackBomber:
+	Armament:
+		Weapon: SParaBomb
+	Health:
+		HP: 200000
+	Aircraft:
+		CruiseAltitude: 2000
+		TurnSpeed: 7
+		Speed: 500
+		Repulsable: False
+		MaximumPitch: 56
+	AmmoPool:
+		Ammo: 1
+	-Selectable:
+	SelectionDecorations:
+		RenderSelectionBars: False
+	-Voiced:
+	Tooltip:
+		Name: Strategic Bomber
+	Contrail@1:
+		Offset: -725,683,0
+	Contrail@2:
+		Offset: -725,-683,0
+	SpawnActorOnDeath:
+		Actor: U2.Husk
+	SmokeTrailWhenDamaged:
+		Offset: -1c43,0,0
+		Interval: 2
+	-EjectOnDeath:
+	MapEditorData:
+	RejectsOrders:
+	RenderSprites:
+		Image: u2
+	GivesExperience:
+		Experience: 1000
+	Interactable:

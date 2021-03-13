@@ -525,3 +525,51 @@ ftnk:
 	muzzle: gunfire2
 		Length: 5
 	icon: 2tnkicon
+
+icon:
+	abomb: atomicon
+	invuln: infxicon
+	chrono: warpicon
+	spyplane: smigicon
+	paratroopers: pinficon
+	gps: gpssicon
+	parabombs: pbmbicon
+	sonar: sonricon
+	pbmbicon: pbmbicon
+	para1tnkicon: para1tnkicon
+
+beacon:
+	Defaults:
+		ZOffset: 2535
+	arrow: mouse
+		Start: 5
+		Offset: 1,-12
+	circles: fpls
+		Length: *
+		ZOffset: 2047
+	atomicon: lores|atomicon
+		Length: *
+		Offset: 0,-42
+	droptanks: lores|1tnkbcon
+		Length: *
+		Offset: 0,-42
+	pbmbicon: lores|pbmbicon
+		Length: *
+		Offset: 0,-42
+	camicon: lores|camicon
+		Length: *
+		Offset: 0,-42
+	pinficon: lores|pinficon
+		Length: *
+		Offset: 0,-42
+	clock: beaconclock
+		Length: *
+		Offset: 0,-42
+
+#for paratanks
+maxichute:
+	open:
+		ZOffset: 512
+	idle:
+		Length: 20
+		ZOffset: 512

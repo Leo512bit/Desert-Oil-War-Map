@@ -128,9 +128,9 @@ ChainGun:
 SuperTusk:
 	Inherits: ^AntiGroundMissile
 	ReloadDelay: 60
-	Range: 6c512
+	Range: 8c0
 	Burst: 12
-	ValidTargets: Air, Infantry
+	ValidTargets: Air, Structure, Vehicle, Ship, Infantry, Ground
 	Projectile: Missile
 		Speed: 341
 		HorizontalRateOfTurn: 15
@@ -141,7 +141,7 @@ SuperTusk:
 		Versus:
 			None: 100
 			Light: 60
-			Heavy: 24
+			Heavy: 35
 			Concrete: 50
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@3Eff: CreateEffect
@@ -653,6 +653,7 @@ TimeQuake:
 	Warhead@1Dam: HealthPercentageDamage
 		Spread: 100c0
 		Damage: 33
+ 		ValidTargets: Air, Structure, Vehicle, Ship, Infantry, Ground, Trees
 	Warhead@Shake: ShakeScreen
 		Duration: 10
 		Intensity: 3
@@ -781,3 +782,122 @@ MicroNuke:
 		InvalidTargets: Vehicle, Structure, Wall, Trees
 		Size: 4
 		Delay: 15
+
+MammothTusk:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 60
+	Range: 8c0
+	Burst: 2
+	ValidTargets: Air, Structure, Vehicle, Ship, Infantry, Ground
+	Projectile: Missile
+		Speed: 341
+		HorizontalRateOfTurn: 15
+		RangeLimit: 9c614
+	Warhead@1Dam: SpreadDamage
+		Spread: 256
+		Damage: 5000
+		Versus:
+			None: 999
+			Light: 60
+			Heavy: 35
+			Concrete: 50
+		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
+	Warhead@3Eff: CreateEffect
+		ImpactSounds: kaboom12.aud
+		ValidTargets: Ground, Trees
+	Warhead@5EffAir: CreateEffect
+		Explosions: med_explosion_air
+		ImpactSounds: kaboom25.aud
+		ValidTargets: Air
+
+HellfireAA.hind:
+	Inherits: ^AntiAirMissile
+	ReloadDelay: 60
+	MinRange: 1c256
+	Burst: 4
+	ValidTargets: Structure, Vehicle, Ship, Air
+	BurstDelays: 10
+	Projectile: Missile
+		Speed: 192
+		Inaccuracy: 128
+		HorizontalRateOfTurn: 10
+		RangeLimit: 5c0
+	Warhead@1Dam: SpreadDamage
+		Damage: 4000
+		ValidTargets: Structure, Vehicle, Ship, Air
+		Versus:
+			Wood: 125
+			Light: 75
+			Heavy: 225
+			Concrete: 100
+	Warhead@3Eff: CreateEffect
+		Explosions: med_explosion_air
+
+SParaBomb:
+	ReloadDelay: 50
+	Range: 5c0
+	Report: chute1.aud
+	Projectile: GravityBomb
+		Image: PARABOMB
+		OpenSequence: open
+		Velocity: 0, 0, -65
+		Acceleration: 0, 0, -2
+		Shadow: False
+	Warhead@1Dam: SpreadDamage
+		Spread: 768
+		Damage: 300000
+		Versus:
+			None: 999
+			Wood: 50
+			Light: 90
+			Heavy: 225
+			Concrete: 90
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: artillery_explosion
+		ImpactSounds: kaboom15.aud
+		ValidTargets: Ground, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: small_splash
+		ImpactSounds: splash9.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure
+	Warhead@Shake: ShakeScreen
+		Duration: 2
+		Intensity: 5
+		Multiplier: 1,1
+
+CParaBomb:
+	ReloadDelay: 0
+	Range: 3c0
+	Report: chute1.aud
+	Projectile: GravityBomb
+		Image: PARABOMB
+		OpenSequence: open
+		Velocity: 0, 0, -30
+		Acceleration: 0, 0, 0
+		Shadow: False
+	Warhead@1Dam: SpreadDamage
+		Spread: 778
+		Damage: 30500
+		Versus:
+			None: 999
+			Wood: 35
+			Light: 75
+			Concrete: 25
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: artillery_explosion
+		ImpactSounds: kaboom15.aud
+		ValidTargets: Ground, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: small_splash
+		ImpactSounds: splash9.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure
