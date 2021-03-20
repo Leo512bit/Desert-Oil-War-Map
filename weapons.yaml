@@ -189,10 +189,12 @@ Dragon:
 
 90mm:
 	Inherits: ^Cannon
+	ReloadDelay: 40
 	Warhead@1Dam: SpreadDamage
 		Versus:
-			None: 200
-			Heavy: 115
+			None: 999
+			Wood: 80
+			Heavy: 120
 
 105mm:
 	Inherits: ^Cannon
@@ -542,7 +544,7 @@ Katyr:
 		Versus:
 			None: 999
 	Warhead@3Eff: CreateEffect
-		Explosions: napalm
+		Explosions: napalm, large_napalm, small_napalm, fball1
 		ImpactSounds: firebl3.aud
 	Warhead@4EffWater: CreateEffect
 		Explosions: large_splash
@@ -612,20 +614,24 @@ ATRifle:
 		Blockable: true
 	Warhead@1Dam: SpreadDamage
 		Spread: 128
-		Damage: 2500
+		Damage: 3000
 		Versus:
 			None: 999
 			Wood: 40
 			Light: 40
-			Heavy: 70
+			Heavy: 100
 			Concrete: 30
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 	 	ValidTargets: Structure, Vehicle, Ship, Infantry
 	Warhead@2Eff: CreateEffect
-		Explosions: piffs
+		Explosions: piff
 		ValidTargets: Ground, Ship, Air, Trees
-	Warhead@3EffWater: CreateEffect
-		Explosions: water_piffs
+	Warhead@3Eff: CreateEffect
+		Explosions: small_explosion
+		ValidTargets: Vehicle, Ship
+	Warhead@4EffWater: CreateEffect
+		Explosions: water_piff
+		ValidTargets: Water
 
 Pistol:
 	Inherits: ^LightMG
