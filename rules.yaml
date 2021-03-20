@@ -115,10 +115,10 @@ Player:
         Locked: true
 	ScriptLobbyDropdown@difficulty:
 		ID: sandt
-		Label: SandstromsDelay
+		Label: SandstormsDelay
 		Description: Doesn't do anything...yet! So disable it to prevent unexpected behavior.
 		Values:
-			None: No Sandstroms
+			None: No Sandstorms
 			0min: No Delay
 			5min: 5min Delay
 			10min: 10min Delay
@@ -252,6 +252,8 @@ HGUN:
 	Inherits@1: ^ExistsInWorld
 	Inherits@2: ^IronCurtainable
 	Inherits@3: ^SpriteActor
+	Inherits@4: ^InfantryExperienceHospitalOverrides
+	Inherits@5: ^GainsExperience
 	Inherits@bounty: ^GlobalBounty
 	Inherits@selection: ^SelectableCombatUnit
 	Huntable:
@@ -342,6 +344,28 @@ HGUN:
 	SpeedMultiplier@CRITICALDAMAGE:
 		RequiresCondition: critical-damage
 		Modifier: 50
+	SelfHealing@HOSPITAL:
+		Step: 5
+		Delay: 75
+		HealIfBelow: 100
+		DamageCooldown: 125
+		RequiresCondition: hospitalheal
+	GrantConditionOnPrerequisite@HOSPITAL:
+		Condition: hospital
+		Prerequisites: tentfix
+	GrantConditionOnDamageState@HOSPITAL:
+		Condition: damaged
+		ValidDamageStates: Light, Medium, Heavy, Critical
+	GrantCondition@HOSPITAL:
+		RequiresCondition: hospital && damaged
+		Condition: hospitalheal
+	WithDecoration@REDCROSS:
+		Image: tech
+		Sequence: repair
+		ReferencePoint: Bottom, Right
+		RequiresCondition: hospitalheal
+		BlinkInterval: 32
+		BlinkPattern: Off, On
         
 ^Ship:
 	Inherits@1: ^ExistsInWorld
@@ -2753,7 +2777,7 @@ AFLD:
 		Queue: Building
 		BuildPaletteOrder: 130
 		Prerequisites: dome, ~structures.soviet, ~techlevel.medium, ~!structures.ukraine
-		Description: Produces and reloads aircraft.\n  Special Ability: Spy Plane\n  Special Ability: Paratroopers\n  Special Ability: Parabombs\n  Special Ability: Carpet Comb\n  Special Ability: Paratanks
+		Description: Produces and reloads aircraft.\n  Special Ability: Spy Plane\n  Special Ability: Paratroopers\n  Special Ability: Parabombs\n  Special Ability: Carpet Bomb\n  Special Ability: Paratanks
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -2878,9 +2902,9 @@ AFLD:
 	AirstrikePower@Carpetbomb:
 		OrderName: Carpetbomb
 		Prerequisites: aircraft.soviet
-		Icon: parabombs
+		Icon: badricon
 		ChargeInterval: 10500
-		Description: Carpet Comb
+		Description: Carpet Bomb
 		LongDesc: A large squad of high altitude Badgers\ncarpet bombs your target.\n Easy to shoot down\nEasy for enemy units to get out of harm's way
 		SelectTargetSpeechNotification: SelectTarget
 		CameraActor: camera
@@ -2901,7 +2925,7 @@ AFLD:
         DisplayTimerStances: Ally
 	AirstrikePower@StrategicBombing:
 		OrderName: StrategicBombing
-		Prerequisites: aircraft.soviet
+		Prerequisites: aircraft.soviet, stek
 		Icon: parabombs
 		ChargeInterval: 11500
 		Description: Strategic Bombing
@@ -2925,7 +2949,7 @@ AFLD:
         DisplayTimerStances: Ally
 	ParatroopersPower@Paratanks:
 		OrderName: Paratanks
-		Prerequisites: ~afld, player.germany
+		Prerequisites: aircraft.soviet, stek
 		Icon: para1tnkicon
 		ChargeInterval: 8000
 		Description: Paratanks
@@ -7180,3 +7204,41 @@ BADRIBomber:
 	GivesExperience:
 		Experience: 1000
 	Interactable:
+
+TENTFIX:
+	Inherits: ^TechBuilding
+	Inherits@shape: ^2x2Shape
+	OwnerLostAction:
+		Action: ChangeOwner
+	Selectable:
+		Priority: 0
+		Bounds: 48,48
+	Building:
+		Footprint: xx xx
+		Dimensions: 2,2
+	Health:
+		HP: 80000
+	CaptureManager:
+	Capturable:
+		Types: building
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	EngineerRepairable:
+	Tooltip:
+		Name: Vehicle Maintenance Outpost
+	TooltipDescription@ally:
+		Description: Provides vehicles with self-healing.
+		ValidStances: Ally
+	TooltipDescription@other:
+		Description: Capture to enable self-healing for vehicles.
+		ValidStances: Neutral, Enemy
+	RevealsShroud:
+		Range: 4c0
+	WithBuildingBib:
+		HasMinibib: true
+	ProvidesPrerequisite@buildingname:
+	AppearsOnMapPreview:
+	GpsDot:
+		String: Hospital
+	RenderSprites:
+		Image: tent

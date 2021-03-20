@@ -537,6 +537,7 @@ icon:
 	sonar: sonricon
 	pbmbicon: pbmbicon
 	para1tnkicon: para1tnkicon
+	badricon: badricon
 
 beacon:
 	Defaults:
@@ -573,3 +574,134 @@ maxichute:
 	idle:
 		Length: 20
 		ZOffset: 512
+
+explosion:
+	Defaults:
+		Length: *
+		ZOffset: 2047
+	piff: piff
+	piffs: piffpiff
+	water_piff: wpiff
+	water_piffs: wpifpif
+	small_explosion: veh-hit3
+	med_explosion: veh-hit2
+	flak_explosion_ground: flak
+	small_explosion_air: flak
+		ZOffset: 511 # only used by AA weapons, so a high ZOffset to overlay buildings isn't needed
+	med_explosion_air: veh-hit1
+		ZOffset: 511 # only used by AA weapons, so a high ZOffset to overlay buildings isn't needed
+	large_splash: h2o_exp1
+	napalm: napalm2
+	building_napalm: napalm2
+		FlipX: true
+	nuke: atomsfx
+	med_splash: h2o_exp2
+	self_destruct: art-exp1
+	artillery_explosion: art-exp1
+	building: fball1
+		Offset: 0,-9
+	small_splash: h2o_exp3
+	large_explosion: frag1
+		Offset: -2,0
+	small_napalm: napalm1
+	offseted_napalm: napalm1 # Used for E4 Explosion
+		Offset: 0, -6
+	large_napalm: napalm3
+	fball1: fball1
+	corpse: corpse1
+		ZOffset: -512
+		Tick: 1600
+		UseTilesetExtension: true
+		TilesetOverrides:
+			DESERT: TEMPERAT
+			INTERIOR: TEMPERAT
+
+ATR:
+	stand:
+		Facings: 8
+	stand2:
+		Start: 8
+		Facings: 8
+	run:
+		Start: 16
+		Length: 6
+		Facings: 8
+		Tick: 100
+	shoot:
+		Start: 256
+		Length: 16
+		Facings: 8
+	prone-stand:
+		Start: 208
+		Stride: 4
+		Facings: 8
+	prone-stand2:
+		Start: 208
+		Stride: 4
+		Facings: 8
+	prone-run:
+		Start: 208
+		Length: 4
+		Facings: 8
+		Tick: 100
+	liedown:
+		Start: 192
+		Length: 2
+		Facings: 8
+	standup:
+		Start: 240
+		Length: 2
+		Facings: 8
+	prone-shoot:
+		Start: 256
+		Length: 16
+		Facings: 8
+	idle1:
+		Start: 384
+		Length: 14
+		Tick: 120
+	idle2:
+		Start: 399
+		Length: 16
+		Tick: 120
+	die1:
+		Start: 416
+		Length: 8
+	die2:
+		Start: 424
+		Length: 8
+	die3:
+		Start: 432
+		Length: 8
+	die4:
+		Start: 440
+		Length: 12
+	die5:
+		Start: 452
+		Length: 18
+	die6: electro
+		Frames: 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+		Length: *
+		UseTilesetExtension: true
+		TilesetOverrides:
+			DESERT: TEMPERAT
+			INTERIOR: TEMPERAT
+	die-crushed: corpse1
+		Length: 6
+		Tick: 1600
+		ZOffset: -511
+		UseTilesetExtension: true
+		TilesetOverrides:
+			DESERT: TEMPERAT
+			INTERIOR: TEMPERAT
+	garrison-muzzle: minigun
+		Length: 3
+		Stride: 6
+		Facings: 8
+	icon: snipericon
+
+tech:
+	heal: newpips
+		Start: 3
+	repair: newpips
+		Start: 4
