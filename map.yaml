@@ -2,7 +2,7 @@ MapFormat: 11
 
 RequiresMod: ra
 
-Title: Desert Oil War *incomplete* R47.3 Hotfix
+Title: Desert Oil War *incomplete* R48 alpha
 
 Author: LeonardMT
 
@@ -152,7 +152,7 @@ Actors:
 		Location: 6,150
 		SubCell: 3
 		Owner: Neutral
-		Facing: 186
+		Facing: 928
 	Actor27: sbag
 		Owner: Neutral
 		Location: 3,149
@@ -183,89 +183,75 @@ Actors:
 	Actor40: gmine
 		Owner: Neutral
 		Location: 117,167
-	Actor52: hgun
-		Owner: Creeps
-		TurretFacing: 96
-		Location: 120,168
-		Stance: AttackAnything
-		Health: 45
 	Actor54: msub
 		Owner: Creeps
 		Location: 121,164
 		Stance: AttackAnything
 		Health: 100
-		Facing: 224
+		Facing: 512
 	Actor55: dd
 		Owner: Creeps
 		Location: 123,162
-		TurretFacing: 217
-		Facing: 217
+		Facing: 400
 		Stance: AttackAnything
 	Actor56: dd
 		Owner: Creeps
 		Location: 125,164
-		Facing: 220
-		TurretFacing: 195
+		Facing: 448
 		Stance: AttackAnything
 	Actor57: pt
 		Owner: Creeps
 		Location: 127,161
-		Facing: 230
-		TurretFacing: 197
+		Facing: 608
 		Health: 100
 		Stance: AttackAnything
 	Actor58: ss
 		Owner: Creeps
 		Location: 129,160
 		Stance: AttackAnything
-		Facing: 217
+		Facing: 400
 	Actor60: pt
 		Owner: Creeps
 		Health: 100
 		Stance: AttackAnything
 		Location: 118,159
-		TurretFacing: 222
-		Facing: 255
+		Facing: 1008
 	Actor61: dd
 		Owner: Creeps
 		Stance: AttackAnything
 		Location: 114,160
-		TurretFacing: 0
-		Facing: 255
+		Facing: 1008
 	Actor62: msub
 		Owner: Creeps
 		Stance: AttackAnything
 		Health: 100
 		Location: 112,162
-		Facing: 255
+		Facing: 1008
 	Actor63: dd
 		Owner: Creeps
 		Stance: AttackAnything
 		Location: 116,162
-		TurretFacing: 230
-		Facing: 255
+		Facing: 1008
 	Actor64: ss
 		Owner: Creeps
 		Location: 116,158
-		Facing: 255
+		Facing: 1008
 		Stance: AttackAnything
 	Actor67: mrj
 		Owner: Creeps
-		Facing: 96
+		Facing: 512
 		Location: 117,167
 	Actor73: 4tnk
 		Owner: Creeps
 		Location: 196,160
 		Health: 100
-		Facing: 201
-		TurretFacing: 226
+		Facing: 144
 		Stance: AttackAnything
 	Actor75: stnk
 		Owner: Creeps
 		Location: 197,161
 		Stance: AttackAnything
-		TurretFacing: 232
-		Facing: 232
+		Facing: 640
 	Actor124: oilb
 		Owner: Neutral
 		Location: 79,82
@@ -391,11 +377,6 @@ Actors:
 		Location: 111,165
 		FreeActor: True
 		Health: 100
-	Actor215: agun
-		TurretFacing: 96
-		Location: 114,166
-		Stance: AttackAnything
-		Owner: Creeps
 	Actor216: tc01
 		Owner: Neutral
 		Location: 24,143
@@ -512,18 +493,18 @@ Actors:
 		Location: 82,77
 	Actor259: chan
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 96,78
 		SubCell: 3
 	Actor260: chan
 		Owner: Neutral
 		SubCell: 1
 		Location: 94,82
-		Facing: 132
+		Facing: 64
 	Actor261: dtrk
 		Owner: Neutral
 		Location: 83,71
-		Facing: 148
+		Facing: 320
 	Actor262: gmine
 		Owner: Neutral
 		Location: 116,169
@@ -605,21 +586,21 @@ Actors:
 	Actor298: dtrk
 		Owner: Neutral
 		Location: 111,53
-		Facing: 132
+		Facing: 64
 		DeployState: Deployed
 	Actor299: dtrk
 		Owner: Neutral
-		Facing: 132
+		Facing: 64
 		DeployState: Deployed
 		Location: 110,53
 	Actor294: dtrk
 		Owner: Neutral
-		Facing: 132
+		Facing: 64
 		DeployState: Deployed
 		Location: 108,53
 	Actor300: dtrk
 		Owner: Neutral
-		Facing: 132
+		Facing: 64
 		DeployState: Deployed
 		Location: 109,53
 	dfghdftrbhb09: UnkillTC01
@@ -627,51 +608,51 @@ Actors:
 		Location: 109,53
 	Actor303: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 111,54
 		DeployState: Deployed
 	Actor304: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 108,54
 		DeployState: Deployed
 	Actor305: 2tnk.husk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 76,80
 		Health: 100
 	Actor306: tran.husk2
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 83,81
 		Health: 100
 	Actor307: tran.husk1
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 77,79
 	Actor308: 4tnk.husk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 90,81
 	Actor309: 2tnk.husk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 88,74
 	Actor310: mgg.husk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 90,75
 	Actor312: 2tnk.husk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 99,82
 	Actor313: 2tnk.husk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 98,84
 	Actor314: 3tnk.husk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 88,82
 	Actor315: oilp
 		Owner: Neutral
@@ -708,94 +689,92 @@ Actors:
 		Owner: Creeps
 	Actor327: e6
 		Owner: Neutral
-		Facing: 96
-		TurretFacing: 96
+		Facing: 512
 		SubCell: 1
 		Location: 95,82
 	Actor328: e6
 		Owner: Neutral
-		Facing: 96
-		TurretFacing: 96
+		Facing: 512
 		SubCell: 1
 		Location: 73,85
 	Actor332: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		DeployState: Deployed
 		Location: 110,50
 	Actor333: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		DeployState: Deployed
 		Location: 107,55
 	Actor334: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		DeployState: Deployed
 		Location: 108,55
 	Actor335: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		DeployState: Deployed
 		Location: 109,55
 	Actor336: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		DeployState: Deployed
 		Location: 110,55
 	Actor337: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		DeployState: Deployed
 		Location: 107,56
 	Actor338: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		DeployState: Deployed
 		Location: 108,56
 	Actor339: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		DeployState: Deployed
 		Location: 109,56
 	Actor341: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		DeployState: Deployed
 		Location: 103,49
 	iuyhhdhhhhhhhhhhhhhcccccc2223rfqa: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		DeployState: Deployed
 		Location: 104,49
 	Actor343: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		DeployState: Deployed
 		Location: 105,49
 	Actor344: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		DeployState: Deployed
 		Location: 106,49
 	Actor348: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		DeployState: Deployed
 		Location: 106,50
 	Actor406: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		DeployState: Deployed
 		Location: 109,57
 	Actor410: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		DeployState: Deployed
 		Location: 110,57
 	Actor414: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		DeployState: Deployed
 		Location: 111,57
 	Actor424: t04.husk
@@ -836,11 +815,11 @@ Actors:
 		Location: 70,76
 	Actor437: harv.emptyhusk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 86,73
 	Actor438: mgg.husk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 82,79
 	Actor439: oilp.husk
 		Owner: Neutral
@@ -851,33 +830,28 @@ Actors:
 		Health: 46
 	Actor441: 4tnk
 		Owner: Creeps
-		Facing: 96
+		Facing: 512
 		Location: 93,87
-		TurretFacing: 106
 		Stance: AttackAnything
 	Actor442: 4tnk
 		Owner: Creeps
 		Location: 90,87
-		Facing: 193
-		TurretFacing: 159
+		Facing: 16
 		Stance: AttackAnything
 	Actor443: 1tnk
 		Owner: Creeps
 		Location: 94,88
-		Facing: 77
-		TurretFacing: 41
+		Facing: 208
 		Stance: AttackAnything
 	Actor444: 2tnk
 		Owner: Creeps
 		Location: 89,88
-		Facing: 65
-		TurretFacing: 174
+		Facing: 16
 		Stance: AttackAnything
 	Actor445: 3tnk
 		Owner: Creeps
 		Location: 92,89
-		Facing: 64
-		TurretFacing: 37
+		Facing: 0
 		Stance: AttackAnything
 	Actor446: flare
 		Owner: Creeps
@@ -885,51 +859,44 @@ Actors:
 	Actor452: dd
 		Owner: Creeps
 		Location: 91,92
-		Facing: 56
-		TurretFacing: 0
+		Facing: 896
 		Stance: AttackAnything
 	Actor453: pt
 		Owner: Creeps
 		Location: 95,91
-		Facing: 57
-		TurretFacing: 51
+		Facing: 912
 		Stance: AttackAnything
 	Actor451: ca
 		Owner: Creeps
 		Location: 92,96
-		Facing: 59
-		TurretFacing: 33
+		Facing: 944
 		Stance: AttackAnything
 	Actor454: lst
 		Owner: Creeps
 		Location: 97,90
-		Facing: 96
+		Facing: 512
 	Actor456: e1r1
 		Owner: Creeps
 		SubCell: 3
 		Stance: AttackAnything
 		Location: 98,87
-		TurretFacing: 75
-		Facing: 75
+		Facing: 176
 	Actor457: e1r1
 		Owner: Creeps
 		SubCell: 3
 		Stance: AttackAnything
 		Location: 98,88
-		TurretFacing: 69
-		Facing: 69
+		Facing: 80
 	Actor455: e1r1
 		Owner: Creeps
 		SubCell: 3
 		Stance: AttackAnything
 		Location: 98,86
-		TurretFacing: 75
-		Facing: 75
+		Facing: 176
 	Actor447: gnrl
 		SubCell: 3
 		Location: 97,87
-		TurretFacing: 77
-		Facing: 77
+		Facing: 208
 		Stance: AttackAnything
 		Owner: Creeps
 	vvvvvvvvvvvvvvvvvvvvvvvvvvv: UnkillTC01
@@ -1001,8 +968,7 @@ Actors:
 	Actor448: spy
 		SubCell: 3
 		Location: 95,87
-		TurretFacing: 190
-		Facing: 190
+		Facing: 992
 		Stance: AttackAnything
 		Owner: Neutral
 	Actor501: minv
@@ -1157,20 +1123,18 @@ Actors:
 		Health: 100
 	Actor556: jeep
 		Location: 66,71
-		Facing: 61
-		TurretFacing: 48
+		Facing: 976
 		Owner: Creeps
 		Stance: ReturnFire
 	Actor557: 1tnk
 		Location: 63,70
-		Facing: 190
-		TurretFacing: 174
+		Facing: 992
 		Owner: Creeps
 		Health: 96
 		Stance: ReturnFire
 	Actor558: c9
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		SubCell: 3
 		Location: 65,71
 	Actor559: utilpol1
@@ -1309,32 +1273,26 @@ Actors:
 		Location: 138,71
 	Actor603: hbox
 		Owner: Creeps
-		TurretFacing: 96
 		Location: 131,63
 		Stance: AttackAnything
 	Actor604: hbox
 		Owner: Creeps
-		TurretFacing: 96
 		Location: 131,66
 		Stance: AttackAnything
 	Actor605: hbox
 		Owner: Creeps
-		TurretFacing: 96
 		Location: 131,70
 		Stance: AttackAnything
 	Actor606: hbox
 		Owner: Creeps
-		TurretFacing: 96
 		Location: 136,63
 		Stance: AttackAnything
 	Actor607: hbox
 		Owner: Creeps
-		TurretFacing: 96
 		Location: 136,66
 		Stance: AttackAnything
 	Actor608: hbox
 		Owner: Creeps
-		TurretFacing: 96
 		Location: 136,70
 		Stance: AttackAnything
 	Actor596: proc
@@ -1513,34 +1471,19 @@ Actors:
 		Location: 79,150
 		Health: 40
 		Stance: AttackAnything
-		TurretFacing: 162
 	Actor684: ftur
 		Owner: Creeps
-		TurretFacing: 96
 		Location: 79,153
 		Stance: AttackAnything
 	Actor685: pbox
 		Owner: Creeps
-		TurretFacing: 96
 		Location: 79,151
 		Stance: AttackAnything
 	Actor686: pbox
 		Owner: Creeps
-		TurretFacing: 96
 		Location: 79,152
 		Health: 40
 		Stance: AttackAnything
-	Actor687: hgun
-		Owner: Creeps
-		Location: 79,149
-		Health: 39
-		TurretFacing: 67
-		Stance: AttackAnything
-	Actor688: gun
-		Owner: Creeps
-		Location: 79,154
-		Stance: AttackAnything
-		TurretFacing: 153
 	Actor689: sbag
 		Owner: Creeps
 		Location: 78,149
@@ -1635,14 +1578,13 @@ Actors:
 		SubCell: 3
 		Location: 107,135
 		Health: 100
-		Facing: 250
+		Facing: 928
 		Owner: Neutral
 	Actor719: e1
 		Owner: Creeps
 		SubCell: 3
 		Location: 106,136
-		TurretFacing: 208
-		Facing: 208
+		Facing: 256
 		Stance: AttackAnything
 	Actor720: utilpol1
 		Owner: Neutral
@@ -1772,55 +1714,45 @@ Actors:
 		Owner: Creeps
 		SubCell: 3
 		Location: 194,182
-		TurretFacing: 0
-		Facing: 255
+		Facing: 1008
 		Stance: AttackAnything
 	Actor762: shok
 		Owner: Creeps
 		SubCell: 3
 		Location: 192,182
-		TurretFacing: 250
-		Facing: 250
+		Facing: 928
 		Stance: AttackAnything
 	Actor763: e4
 		Owner: Creeps
 		SubCell: 3
 		Location: 186,189
-		TurretFacing: 204
-		Facing: 204
+		Facing: 192
 		Stance: AttackAnything
 	Actor764: e4
 		Owner: Creeps
-		Facing: 96
-		TurretFacing: 96
+		Facing: 512
 		SubCell: 3
 		Location: 194,189
 	Actor765: e4
 		Owner: Creeps
 		SubCell: 3
 		Location: 194,187
-		TurretFacing: 174
-		Facing: 174
+		Facing: 736
 		Stance: AttackAnything
 	Actor766: e4
 		Owner: Creeps
 		SubCell: 3
 		Location: 190,191
 		Facing: 0
-		TurretFacing: 0
 		Stance: AttackAnything
 	Actor767: pt
 		Owner: Creeps
 		Location: 196,178
-		Facing: 255
-		TurretFacing: 30
-		Stance: AttackAnything
+		Facing: 1008
 	Actor769: pt
 		Owner: Creeps
 		Location: 190,178
-		Facing: 1
-		TurretFacing: 221
-		Stance: AttackAnything
+		Facing: 16
 	Actor768: fcom
 		Owner: Neutral
 		Location: 149,184
@@ -1832,7 +1764,7 @@ Actors:
 		Location: 96,77
 	Actor778: mcv.husk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 95,73
 		Health: 100
 	Actor779: tc01
@@ -2030,7 +1962,7 @@ Actors:
 		Location: 63,44
 	Actor894: c10
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		SubCell: 3
 		Location: 63,46
 	Actor895: v25
@@ -2093,52 +2025,52 @@ Actors:
 		Location: 57,45
 	Actor916: c10
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		SubCell: 3
 		Location: 56,44
 	Actor917: c5
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 56,41
 		SubCell: 3
 	Actor918: c2
 		Owner: Neutral
 		SubCell: 3
-		Facing: 96
+		Facing: 512
 		Location: 72,44
 	Actor919: c3
 		Owner: Neutral
 		SubCell: 3
-		Facing: 96
+		Facing: 512
 		Location: 69,47
 	Actor920: tecn
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		SubCell: 1
 		Location: 62,48
 	Actor921: c8
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 59,49
 		SubCell: 1
 	Actor922: c6
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		SubCell: 3
 		Location: 55,46
 	Actor923: c3
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		SubCell: 3
 		Location: 52,47
 	Actor924: c5
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		SubCell: 3
 		Location: 54,43
 	Actor925: c8
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		SubCell: 3
 		Location: 60,43
 	Actor926: fcom
@@ -2233,11 +2165,11 @@ Actors:
 		Location: 91,140
 	Actor1187: harv.fullhusk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 87,86
 	Actor1188: mcv.husk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 84,84
 	Actor959: tanktrap1
 		Owner: Neutral
@@ -3097,15 +3029,9 @@ Actors:
 		Location: 54,39
 	Actor1285: e3r1
 		Owner: Neutral
-		Facing: 96
-		TurretFacing: 96
+		Facing: 512
 		SubCell: 3
 		Location: 112,77
-	Actor1145: gun
-		Location: 112,171
-		TurretFacing: 189
-		Stance: AttackAnything
-		Owner: Creeps
 	Actor1232: oilb
 		Owner: Neutral
 		Location: 183,75
@@ -3231,7 +3157,7 @@ Actors:
 		Location: 99,51
 	Actor1323: dtrk
 		Owner: Neutral
-		Facing: 96
+		Facing: 512
 		Location: 104,53
 		DeployState: Deployed
 	Actor1322: wood
@@ -3426,6 +3352,9 @@ Actors:
 	Actor1050: tentfix
 		Owner: Neutral
 		Location: 92,14
+	Actor1055: v26
+		Owner: Neutral
+		Location: 72,26
 
 Rules: briefing.yaml, rules.yaml, rules-lua.yaml, ai.yaml
 

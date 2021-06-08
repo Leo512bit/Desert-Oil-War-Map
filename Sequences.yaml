@@ -70,7 +70,7 @@ wood:
 		Length: 16
 	icon: woodicnh.tem
 		AddExtension: False
-    
+	
 7tnk:
 	idle: t72
 		Facings: 32
@@ -81,7 +81,7 @@ wood:
 	muzzle: gunfire2
 		Length: 5
 	icon: t72icon
- 
+
 7tnk.destroyed:
 	idle: t72
 		Facings: 32
@@ -106,15 +106,15 @@ carr.deployed:
 		Start: 0
 		Length: 9
 		Tick: 100
-		ZOffset: -1023	
+		ZOffset: -1023
 	icon: carricon
-    
+	
 mfix:
 	idle: mcv
 		Facings: 32
 		UseClassicFacingFudge: True
 	icon: fixicon
-    
+	
 mfix.deployed:
 	idle: fix
 		Offset: 0,1
@@ -142,7 +142,7 @@ mfix.deployed:
 		Offset: 0,-4
 		UseTilesetExtension: true
 	icon: fixicon
-    
+	
 oilbisland:
 	Defaults:
 		Offset: 0,-6
@@ -157,11 +157,11 @@ oilbisland:
 		UseTilesetExtension: true
 		TilesetOverrides:
 			INTERIOR: TEMPERAT
-            
+			
 isoil:
 	idle: v19
 		Length: 14
-        
+		
 deado:
 	idle: v19
 		Start: 28
@@ -174,7 +174,7 @@ deado:
 		Length: *
 		Offset: 7,-15
 		ZOffset: 1
-        
+		
 ttnk.destroyed:
 	idle: ttnk
 		Facings: 32
@@ -187,7 +187,7 @@ ttnk.destroyed:
 		Facings: 32
 		ZOffset: -512
 	icon: ttnkicon
-    
+	
 ctnk.destroyed:
 	idle: ctnk
 		Facings: 32
@@ -243,7 +243,7 @@ OILPslowhusk:
 oilp:
 	idle: v19
 		Length: 14
-        
+		
 oilp.husk:
 	idle: v19
 		Start: 28
@@ -317,7 +317,7 @@ gap.over:
 	bib: mbGAP
 		Length: *
 		UseTilesetExtension: true
-	icon: gapicon 
+	icon: gapicon
 
 e11:
 	stand:
@@ -705,3 +705,26 @@ tech:
 		Start: 3
 	repair: newpips
 		Start: 4
+
+crate-effects:
+	Defaults:
+		ZOffset: 2047
+		Length: *
+	speed: speed
+	dollar: dollar
+	reveal-map: earth
+	hide-map: empulse
+	fpower: fpower
+	gps: gpsbox
+	invuln: invulbox
+	heal: invun
+	nuke: missile2
+	parabombs: parabox
+	sonarboxxxxx: sonarbox
+	stealth: stealth2
+	timequake: tquake
+	armor: armor
+	chrono: chronbox
+	airstrike: deviator
+	levelup: levelup
+		Tick: 200

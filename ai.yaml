@@ -284,7 +284,7 @@ Player:
 	UnitBuilderBotModule@rush:
 		RequiresCondition: enable-rush-ai
 		UnitsToBuild:
-            e6: 5
+			e6: 5
 			e1: 65
 			e2: 15
 			e3: 30
@@ -306,7 +306,7 @@ Player:
 			dog: 4
 			jeep: 4
 			ftrk: 4
-            harv: 0
+			harv: 0
 	SquadManagerBotModule@normal:
 		RequiresCondition: enable-normal-ai
 		SquadSize: 40
@@ -317,7 +317,7 @@ Player:
 	UnitBuilderBotModule@normal:
 		RequiresCondition: enable-normal-ai
 		UnitsToBuild:
-            e6: 5
+			e6: 5
 			e1: 65
 			e2: 15
 			e3: 30
@@ -359,7 +359,7 @@ Player:
 	UnitBuilderBotModule@turtle:
 		RequiresCondition: enable-turtle-ai
 		UnitsToBuild:
-            e6: 5
+			e6: 5
 			e1: 65
 			e2: 15
 			e3: 30
@@ -415,8 +415,8 @@ Player:
 	CaptureManagerBotModule@engineer:
 		RequiresCondition: enable-rush-ai || enable-normal-ai || enable-turtle-ai || enable-naval-ai
 		CapturingActorTypes: e6
-        CapturableStances: Neutral, Enemy
+		CapturableRelationships: Neutral, Enemy
 		CapturableActorTypes: oilb,oilp
 		CheckCaptureTargetsForVisibility: false
 		MaximumCaptureTargetOptions: 999
-        MinimumCaptureDelay: 0
+		MinimumCaptureDelay: 0

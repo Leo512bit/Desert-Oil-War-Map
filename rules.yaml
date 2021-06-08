@@ -25,13 +25,22 @@ World:
 	SmudgeLayer@SCORCH:
 		Type: Scorch
 		Sequence: scorches
-		SmokePercentage: 50
+		SmokeChance: 50
+		SmokeImage: smoke_m
+		SmokeSequences: idle
+		SmokeChance: 25
+		SmokeImage: smoke_m
+		SmokeSequences: idle
 	SmudgeLayer@CRATER:
 		Type: Crater
 		Sequence: craters
+		SmokeChance: 25
+		SmokeImage: smoke_m
+		SmokeSequences: idle
+		SmokeChance: 25
+		SmokeImage: smoke_m
+		SmokeSequences: idle
 	ResourceLayer:
-	ResourceRenderer:
-		RenderTypes: Ore, Gems
 	ResourceClaimLayer:
 	WarheadDebugOverlay:
 	SpawnMapActors:
@@ -86,7 +95,7 @@ World:
 	MPStartLocations:
 		SeparateTeamSpawnsCheckboxDisplayOrder: 6
 	SpawnMPUnits:
-        StartingUnitsClass: None
+    StartingUnitsClass: None
 		DropdownDisplayOrder: 1
 	PathFinder:
 	ValidateOrder:
@@ -108,11 +117,78 @@ World:
 			3: WarningThreeMinutesRemaining
 			2: WarningTwoMinutesRemaining
 			1: WarningOneMinuteRemaining
-            
+	Locomotor@FOOT:
+		Name: foot
+		Crushes: mine, crate
+		SharesCell: true
+		TerrainSpeeds:
+			Clear: 90
+			Rough: 80
+			Road: 150
+			Bridge: 100
+			Ore: 80
+			Gems: 80
+			Beach: 80
+	Locomotor@WHEELED:
+		Name: wheeled
+		Crushes: mine, crate
+		TerrainSpeeds:
+			Clear: 80
+			Rough: 40
+			Road: 150
+			Bridge: 100
+			Ore: 70
+			Gems: 70
+			Beach: 40
+	Locomotor@HEAVYWHEELED:
+		Name: heavywheeled
+		Crushes: wall, mine, crate, infantry
+		TerrainSpeeds:
+			Clear: 80
+			Rough: 40
+			Road: 160
+			Bridge: 100
+			Ore: 70
+			Gems: 70
+			Beach: 40
+	Locomotor@LIGHTTRACKED:
+		Name: lighttracked
+		Crushes: wall, mine, crate
+		TerrainSpeeds:
+			Clear: 80
+			Rough: 70
+			Road: 170
+			Bridge: 100
+			Ore: 70
+			Gems: 70
+			Beach: 70
+	Locomotor@TRACKED:
+		Name: tracked
+		Crushes: wall, infantry, mine, crate
+		TerrainSpeeds:
+			Clear: 80
+			Rough: 70
+			Road: 150
+			Bridge: 100
+			Ore: 70
+			Gems: 70
+			Beach: 70
+	Locomotor@HEAVYTRACKED:
+		Name: heavytracked
+		Crushes: wall, infantry, mine, crate, heavywall
+		TerrainSpeeds:
+			Clear: 80
+			Rough: 70
+			Road: 160
+			Bridge: 100
+			Ore: 70
+			Gems: 70
+			Beach: 70
+
 Player:
 	LobbyPrerequisiteCheckbox@REUSABLEENGINEERS: #enable re-usable Engineers
-        Enabled: true
-        Locked: true
+		Enabled: true
+		Locked: true
 	ScriptLobbyDropdown@difficulty:
 		ID: sandt
 		Label: SandstormsDelay
@@ -227,67 +303,128 @@ Player:
 	ModularBot@TurtleAI:
 		Name: Oil Bot Test 2 (Type: Turtle)
 	-ModularBot@NavalAI:
-    
-HGUN:
-	Inherits: GUN
-	Buildable:
-		Queue: Defense
-		Prerequisites: weap, ~techlevel.medium
-	Valued:
-		Cost: 2800
-	Tooltip:
-		Name: Heavy Turret Prototype
-	Health:
-		HP: 350000
+
+^NeutralPlane:
+	Inherits@1: ^ExistsInWorld
+	Inherits@4: ^SpriteActor
+	Inherits@bounty: ^GlobalBounty
+	Inherits@selection: ^SelectableCombatUnit
+	Inherits@handicaps: ^PlayerHandicaps
+	Huntable:
+	OwnerLostAction:
+		Action: Kill
 	Armor:
-		Type: Heavy
-	RevealsShroud:
-		Range: 8c0
-	Armament:
-		Weapon: HeavyTurretGun
-	RenderSprites:
-		Image: GUN
-        
+		Type: Light
+	UpdatesPlayerStatistics:
+	AppearsOnRadar:
+		UseLocation: true
+	Selectable:
+		Bounds: 24,24
+	Aircraft:
+		AirborneCondition: airborne
+	Targetable@GROUND:
+		RequiresCondition: !airborne
+		TargetTypes: GroundActor, Vehicle
+	Targetable@AIRBORNE:
+		RequiresCondition: airborne
+		TargetTypes: AirborneActor
+	Targetable@REPAIR:
+		RequiresCondition: !airborne && damaged
+		TargetTypes: Repair
+	GrantConditionOnDamageState@DAMAGED:
+		Condition: damaged
+		ValidDamageStates: Light, Medium, Heavy, Critical
+	HiddenUnderFog:
+		Type: GroundPosition
+	AttackMove:
+	Guard:
+	Guardable:
+	ActorLostNotification:
+		Notification: AirUnitLost
+	ProximityCaptor:
+		Types: Plane
+	EjectOnDeath:
+		PilotActor: E1
+		SuccessRate: 50
+		EjectOnGround: false
+		EjectInAir: true
+		AllowUnsuitableCell: true
+		ChuteSound: chute1.aud
+	GpsDot:
+		String: Plane
+	Tooltip:
+		GenericName: Plane
+	WithShadow:
+		Offset: 43, 128, 0
+		ZOffset: -129
+	WithFacingSpriteBody:
+	MustBeDestroyed:
+	Voiced:
+		VoiceSet: NewVehicleVoice
+	HitShape:
+	MapEditorData:
+		Categories: Aircraft
+	SpawnActorOnDeath:
+		RequiresCondition: airborne
+	Explodes:
+		Weapon: UnitExplode
+		RequiresCondition: !airborne
+	Repairable:
+		RepairActors: fix, mfix.deployed
+	CaptureManager:
+	Capturable:
+		Types: aircraft
+		RequiresCondition: !airborne
+	CaptureNotification:
+		Notification: UnitStolen
+		LoseNotification: UnitLost
+	GrantConditionOnDamageState@HEAVY:
+		Condition: heavy-damage
+		ValidDamageStates: Heavy
+	GrantConditionOnDamageState@CRITICAL:
+		Condition: critical-damage
+		ValidDamageStates: Critical
+	SpeedMultiplier@HEAVYDAMAGE:
+		RequiresCondition: heavy-damage
+		Modifier: 75
+	SpeedMultiplier@CRITICALDAMAGE:
+		RequiresCondition: critical-damage
+		Modifier: 50
+
 ^Vehicle:
 	Inherits@1: ^ExistsInWorld
 	Inherits@2: ^IronCurtainable
-	Inherits@3: ^SpriteActor
+	Inherits@3: ^ClassicFacingSpriteActor
 	Inherits@4: ^InfantryExperienceHospitalOverrides
 	Inherits@5: ^GainsExperience
 	Inherits@bounty: ^GlobalBounty
 	Inherits@selection: ^SelectableCombatUnit
+	Inherits@handicaps: ^PlayerHandicaps
 	Huntable:
 	OwnerLostAction:
 		Action: Kill
-	DrawLineToTarget:
 	UpdatesPlayerStatistics:
 	Mobile:
 		PauseOnCondition: being-captured
 		Locomotor: wheeled
-		TurnSpeed: 5
-	SelectionDecorations:
-	WithSpriteControlGroupDecoration:
+		TurnSpeed: 80
 	Selectable:
 		Bounds: 24, 24
 	Targetable:
 		RequiresCondition: !parachute
-		TargetTypes: Ground, Vehicle
-	Targetable@AIR:
-		RequiresCondition: parachute
-		TargetTypes: air
+		TargetTypes: GroundActor, Vehicle
 	Targetable@REPAIR:
 		RequiresCondition: !parachute && damaged
 		TargetTypes: Repair
+	Targetable@AIR:
+		RequiresCondition: parachute
+		TargetTypes: Air
 	GrantConditionOnDamageState@DAMAGED:
 		Condition: damaged
 		ValidDamageStates: Light, Medium, Heavy, Critical
 	Repairable:
 		RepairActors: fix, mfix.deployed
 	Chronoshiftable:
-	Passenger:
-		CargoType: Vehicle
-		Weight: 3
-		PipType: Gray
 	AttackMove:
 	HiddenUnderFog:
 	ActorLostNotification:
@@ -300,6 +437,10 @@ HGUN:
 	Guardable:
 	Tooltip:
 		GenericName: Vehicle
+	Passenger:
+		CargoType: Vehicle
+		Weight: 3
+		CustomPipType: gray
 	CaptureManager:
 		BeingCapturedCondition: being-captured
 	Capturable:
@@ -327,8 +468,6 @@ HGUN:
 		OpeningSequence: open
 		Offset: 0,0,200
 		RequiresCondition: parachute
-	BodyOrientation:
-		UseClassicFacingFudge: True
 	HitShape:
 	MapEditorData:
 		Categories: Vehicle
@@ -344,8 +483,8 @@ HGUN:
 	SpeedMultiplier@CRITICALDAMAGE:
 		RequiresCondition: critical-damage
 		Modifier: 50
-	SelfHealing@HOSPITAL:
-		Step: 5
+	ChangesHealth@HOSPITAL:
+		Step: 200
 		Delay: 75
 		HealIfBelow: 100
 		DamageCooldown: 125
@@ -362,11 +501,12 @@ HGUN:
 	WithDecoration@REDCROSS:
 		Image: tech
 		Sequence: repair
-		ReferencePoint: Bottom, Right
+		Position: BottomRight
+		Margin: 17, 4
 		RequiresCondition: hospitalheal
 		BlinkInterval: 32
 		BlinkPattern: Off, On
-        
+
 ^Ship:
 	Inherits@1: ^ExistsInWorld
 	Inherits@2: ^GainsExperience
@@ -374,19 +514,17 @@ HGUN:
 	Inherits@4: ^SpriteActor
 	Inherits@bounty: ^GlobalBounty
 	Inherits@selection: ^SelectableCombatUnit
+	Inherits@handicaps: ^PlayerHandicaps
 	Huntable:
 	OwnerLostAction:
 		Action: Kill
-	DrawLineToTarget:
 	UpdatesPlayerStatistics:
 	Mobile:
 		Locomotor: naval
-	SelectionDecorations:
-	WithSpriteControlGroupDecoration:
 	Selectable:
 		Bounds: 24,24
 	Targetable:
-		TargetTypes: Ground, Water, Ship
+		TargetTypes: WaterActor, Ship
 	Targetable@REPAIR:
 		RequiresCondition: damaged
 		TargetTypes: Repair
@@ -417,7 +555,7 @@ HGUN:
 		ExcludeTilesets: INTERIOR
 		Categories: Naval
 	Voiced:
-		VoiceSet: NewVehicleVoice
+		VoiceSet: VehicleVoice
 	WithFacingSpriteBody:
 	HitShape:
 	GrantConditionOnDamageState@HEAVY:
@@ -432,29 +570,6 @@ HGUN:
 	SpeedMultiplier@CRITICALDAMAGE:
 		RequiresCondition: critical-damage
 		Modifier: 50
-        
-^Plane:
-	Inherits: ^NeutralPlane
-	Inherits@2: ^GainsExperience
-	Voiced:
-		VoiceSet: NewVehicleVoice
-	Repairable:
-		RepairActors: fix, mfix.deployed
-	GrantConditionOnDamageState@DAMAGED:
-		Condition: damaged
-		ValidDamageStates: Light, Medium, Heavy, Critical
-	GrantConditionOnDamageState@HEAVY:
-		Condition: heavy-damage
-		ValidDamageStates: Heavy
-	GrantConditionOnDamageState@CRITICAL:
-		Condition: critical-damage
-		ValidDamageStates: Critical
-	SpeedMultiplier@HEAVYDAMAGE:
-		RequiresCondition: heavy-damage
-		Modifier: 75
-	SpeedMultiplier@CRITICALDAMAGE:
-		RequiresCondition: critical-damage
-		Modifier: 50      
 
 ^Infantry:
 	Inherits@1: ^ExistsInWorld
@@ -463,11 +578,11 @@ HGUN:
 	Inherits@4: ^SpriteActor
 	Inherits@bounty: ^GlobalBounty
 	Inherits@selection: ^SelectableCombatUnit
+	Inherits@handicaps: ^PlayerHandicaps
 	Huntable:
 	OwnerLostAction:
 		Action: Kill
 		DeathTypes: DefaultDeath
-	DrawLineToTarget:
 	Health:
 		HP: 2500
 	Armor:
@@ -476,18 +591,20 @@ HGUN:
 		Range: 4c0
 	Mobile:
 		Speed: 56
+		AlwaysTurnInPlace: true
 		Locomotor: foot
-	SelectionDecorations:
-	WithSpriteControlGroupDecoration:
 	Selectable:
 		Bounds: 18,20,0,-6
 		DecorationBounds: 12,18,0,-8
 	Targetable:
 		RequiresCondition: !parachute
-		TargetTypes: Ground, Infantry, Disguise
+		TargetTypes: GroundActor, Infantry, Disguise
 	Targetable@HEAL:
 		RequiresCondition: !parachute && damaged
 		TargetTypes: Heal
+	Targetable@AIR:
+		RequiresCondition: parachute
+		TargetTypes: Air
 	GrantConditionOnDamageState@DAMAGED:
 		Condition: damaged
 		ValidDamageStates: Light, Medium, Heavy, Critical
@@ -520,10 +637,10 @@ HGUN:
 	Guardable:
 	Tooltip:
 		GenericName: Soldier
-	SelfHealing@HOSPITAL:
+	ChangesHealth@HOSPITAL:
 		Step: 500
 		Delay: 100
-		HealIfBelow: 100
+		StartIfBelow: 100
 		DamageCooldown: 125
 		RequiresCondition: hospitalheal
 	GrantConditionOnPrerequisite@HOSPITAL:
@@ -538,7 +655,8 @@ HGUN:
 	WithDecoration@REDCROSS:
 		Image: pips
 		Sequence: medic
-		ReferencePoint: Bottom, Right
+		Position: BottomRight
+		Margin: 17, 4
 		RequiresCondition: hospitalheal
 		BlinkInterval: 32
 		BlinkPattern: Off, On
@@ -561,7 +679,7 @@ HGUN:
 	Cloneable:
 		Types: Infantry
 	Voiced:
-		VoiceSet: NewGenericVoice
+		VoiceSet: GenericVoice
 	WithParachute:
 		ShadowImage: parach-shadow
 		ShadowSequence: idle
@@ -587,12 +705,10 @@ HGUN:
 		ValidDamageStates: Critical
 	SpeedMultiplier@HEAVYDAMAGE:
 		RequiresCondition: heavy-damage
-		Modifier: 75
+		Modifier: 50
 	SpeedMultiplier@CRITICALDAMAGE:
 		RequiresCondition: critical-damage
-		Modifier: 50   
-	Repairable:
-		RepairActors: barr
+		Modifier: 25
 
 ^GainsExperience:
 	GainsExperience:
@@ -666,7 +782,7 @@ HGUN:
 	RevealsShroudMultiplier@RANK-ELITE:
 		RequiresCondition: rank-elite
 		Modifier: 150
-	SelfHealing@ELITE:
+	ChangesHealth@ELITE:
 		Step: 0
 		PercentageStep: 5
 		Delay: 100
@@ -677,70 +793,35 @@ HGUN:
 		Image: rank
 		Sequence: rank-veteran-1
 		Palette: effect
-		ReferencePoint: Bottom, Right
-		ValidStances: Ally, Neutral
+		Position: BottomRight
+		Margin: 5, 6
+		ValidRelationships: Ally, Enemy, Neutral
 		RequiresCondition: rank-veteran == 1
-		ZOffset: 256
 	WithDecoration@RANK-2:
 		Image: rank
 		Sequence: rank-veteran-2
 		Palette: effect
-		ReferencePoint: Bottom, Right
-		ValidStances: Ally, Neutral
+		Position: BottomRight
+		Margin: 5, 6
+		ValidRelationships: Ally, Enemy, Neutral
 		RequiresCondition: rank-veteran == 2
-		ZOffset: 256
 	WithDecoration@RANK-3:
 		Image: rank
 		Sequence: rank-veteran-3
 		Palette: effect
-		ReferencePoint: Bottom, Right
-		ValidStances: Ally, Neutral
+		Position: BottomRight
+		Margin: 5, 6
+		ValidRelationships: Ally, Enemy, Neutral
 		RequiresCondition: rank-veteran == 3
-		ZOffset: 256
 	WithDecoration@RANK-ELITE:
 		Image: rank
 		Sequence: rank-elite
 		Palette: effect
-		ReferencePoint: Bottom, Right
-		ValidStances: Ally, Enemy, Neutral
+		Position: BottomRight
+		Margin: 5, 6
+		ValidRelationships: Ally, Enemy, Neutral
 		RequiresCondition: rank-elite
-		ZOffset: 256
 
-^Crate:
-	Inherits@1: ^SpriteActor
-	Interactable:
-		Bounds: 24,24
-	HiddenUnderFog:
-	Tooltip:
-		Name: Crate
-		GenericName: Crate
-		ShowOwnerRow: false
-	Crate:
-		Lifetime: 180
-		TerrainTypes: Clear, Rough, Road, Ore, Beach, Water
-	RenderSprites:
-		Palette: effect
-		Image: scrate
-	WithCrateBody:
-		XmasImages: xcratea, xcrateb, xcratec, xcrated
-		LandSequence: land
-		WaterSequence: water
-	Parachutable:
-		FallRate: 26
-		KilledOnImpassableTerrain: false
-		ParachutingCondition: parachute
-	Passenger:
-	WithParachute:
-		Image: parach
-		Sequence: idle
-		OpeningSequence: open
-		ShadowImage: parach-shadow
-		ShadowSequence: idle
-		RequiresCondition: parachute
-	ConditionManager:
-	MapEditorData:
-		Categories: System
-        
 ^Palettes:
 	PaletteFromFile@cnc:
 		Name: cnc
@@ -910,81 +991,25 @@ HGUN:
 		BasePalette: player
 		Alpha: 0.65
 
-5TNK:
-	Inherits: ^TrackedVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 320
-		Prerequisites: fix, stek, ~vehicles.soviet, ~Superunits_Checkbox, ~techlevel.high 
-		Description: Big and slow tank, with anti-air capability.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Nothing\n has a nuke killswitch
-	Valued:
-		Cost: 10000
-	Tooltip:
-		Name: Super Tank
-		GenericName: Super Tank
-	Health:
-		HP: 2000000
-	Armor:
-		Type: Concrete
-	Mobile:
-		Speed: 42
-	RevealsShroud:
-		Range: 6c0
-	Turreted:
-		TurnSpeed: 1
-	Armament@PRIMARY:
-		Weapon: SuperTankPrimary
-		LocalOffset: 900,180,340, 900,-180,340
-		Recoil: 171
-		RecoilRecovery: 30
-		MuzzleSequence: muzzle
-	Armament@SECONDARY:
-		Name: secondary
-		Weapon: SuperTusk
-		LocalOffset: -85,384,340, -85,-384,340
-		LocalYaw: -100,100
-		Recoil: 43
-		MuzzleSequence: muzzle
-	AttackTurreted:
-	WithMuzzleOverlay:
-	WithSpriteTurret:
-	Explodes:
-		Weapon: MicroNuke
-		EmptyWeapon: MicroNuke
-	SpawnActorOnDeath:
-		Actor: 4TNK.Husk
-	SelfHealing:
-		Step: 100
-		Delay: 1
-		HealIfBelow: 100
-		DamageCooldown: 150
-	Selectable:
-		Bounds: 44,38,0,-4
-	KillsSelf:
-		RequiresCondition: invulnerability
-	Chronoshiftable:
-		ExplodeInstead: false
-	Passenger:
-		CargoType: Vehicle
-		Weight: 4
-	RenderSprites:
-		Image: 5tnk
-		Scale: 1.2
-		
 ^Husk:
 	Inherits: ^BasicHusk
+	Inherits@2: ^ClassicFacingSpriteActor
 	Husk:
 		AllowedTerrain: Clear, Rough, Road, Ore, Gems, Beach
-	Burns:
-		Damage: 20
+	WithIdleOverlay@Burns:
+		Image: fire
+		Sequence: 1
+		IsDecoration: true
+	ChangesHealth:
+		Step: -20
+		StartIfBelow: 101
+		Delay: 8
 	OwnerLostAction:
 		Action: ChangeOwner
 	CaptureManager:
 	Capturable:
 		Types: husk
-		ValidStances: Enemy, Neutral
+		ValidRelationships: Enemy, Neutral
 	TransformOnCapture:
 		ForceHealthPercentage: 25
 	InfiltrateForTransform:
@@ -993,104 +1018,83 @@ HGUN:
 	WithColoredOverlay@IDISABLE:
 		Palette: disabled
 	Targetable:
-		TargetTypes: Ground, Husk, NoAutoTarget
+		TargetTypes: GroundActor, Husk, NoAutoTarget
 		RequiresForceFire: true
 	Chronoshiftable:
 	Tooltip:
 		GenericName: Destroyed Vehicle
-	BodyOrientation:
-		UseClassicFacingFudge: True
 	Crushable:
 		CrushClasses: heavywall
 		CrushedByFriendlies: true
 
-5TNK.Husk:
-	Inherits: ^Husk
-	Tooltip:
-		Name: Husk (Super Tank)
-	ThrowsParticle@turret:
-		Anim: turret
-	Health:
-		HP: 200000
-	RenderSprites:
-		Image: 4TNK
-	-Capturable:
-	-TransformOnCapture:
-	-InfiltrateForTransform:
+^Plane:
+	Inherits: ^NeutralPlane
+	Inherits@2: ^GainsExperience
+	Repairable:
+		RepairActors: fix, mfix.deployed
 
-OILB:
-	Inherits: ^TechBuilding
-	Inherits@shape: ^2x2Shape
-	HitShape:
-		UseTargetableCellsOffsets: false
-		TargetableOffsets: 0,0,0, 630,-300,0, 420,512,0, -420,-512,0, -630,300,0
-	Selectable:
-		Priority: 0
-		Bounds: 48,48
-	OwnerLostAction:
-		Action: ChangeOwner
-	Building:
-		Footprint: xx xx
-		Dimensions: 2,2
-	Health:
-		HP: 80000
-	RevealsShroud:
-		Range: 4c0
-	CaptureManager:
-	Capturable:
-		Types: building
-	CapturableProgressBar:
-	CapturableProgressBlink:
-	EngineerRepairable:
-	GrantConditionOnPrerequisite@OILSILOS:
-		Condition: global-oil-silos
-		Prerequisites: global-oil-silos
-	CashTrickler@nonsilo:
-		RequiresCondition: !global-oil-silos
-		Interval: 220
-		Amount: 100
-		UseResourceStorage:	false
-	CashTrickler@silo:
-		RequiresCondition: global-oil-silos
-		Interval: 220
-		Amount: 100
-		UseResourceStorage:	true
+^DTree:
+	Inherits@1: ^SpriteActor
+	Inherits@shape: ^1x1Shape
+	Interactable:
 	Tooltip:
-		Name: Oil Derrick
-	TooltipDescription@ally:
-		Description: Provides additional funds.
-		ValidStances: Ally
-	TooltipDescription@other:
-		Description: Capture to receive additional funds.
-		ValidStances: Neutral, Enemy
-	Explodes:
-		Weapon: BarrelExplode
-	GpsDot:
-		String: Oil
+		Name: Tree (Burnt)
+		ShowOwnerRow: false
+	WithSpriteBody:
+	Building:
+		Footprint: x
+		Dimensions: 1,1
+	AppearsOnRadar:
+	RadarColorFromTerrain:
+		Terrain: Tree
 	AppearsOnMapPreview:
-	GivesCashOnCapture:
-		Amount: 500
-	RepairableBuilding:
-		RepairStep: 75
-		PlayerExperience: 25
-		RepairingNotification: Repairing
-	WithBuildingRepairDecoration:
-		Image: allyrepair
-		Sequence: repair
-		ReferencePoint: Center
-		Palette: player
-		IsPlayerPalette: True
-	UpdatesDerrickCount:
-        
+		Terrain: Tree
+	Health:
+		HP: 50000
+	Armor:
+		Type: Wood
+	Targetable:
+		TargetTypes: Trees
+	HiddenUnderShroud:
+	ScriptTriggers:
+	MapEditorData:
+		ExcludeTilesets: INTERIOR
+		Categories: Tree
+	RenderSprites:
+		Palette: terrain
+	RequiresSpecificOwners:
+		ValidOwnerNames: Neutral
+
+HGUN:
+	Inherits: GUN
+	Buildable:
+		Queue: Defense
+		Prerequisites: weap, ~techlevel.medium
+	Valued:
+		Cost: 2800
+	Tooltip:
+		Name: Heavy Turret Prototype
+	Health:
+		HP: 350000
+	Armor:
+		Type: Heavy
+	RevealsShroud:
+		Range: 8c0
+	Armament:
+		Weapon: HeavyTurretGun
+	RenderSprites:
+		Image: GUN
+
 WEAP:
 	Inherits: ^Building
 	Inherits@shape: ^3x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Selectable:
 		Bounds: 72,48
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 80
-		Prerequisites: barr, ~structures.soviet, ~techlevel.low
+		Prerequisites: barr, ~techlevel.low
 		Description: Produces vehicles.
 	Valued:
 		Cost: 2000
@@ -1175,265 +1179,91 @@ WEAP:
 	ProvidesPrerequisite@ukrainianstructure:
 		RequiresPrerequisites: structures.ukraine
 		Prerequisite: vehicles.ukraine
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	ProductionBar:
 		ProductionType: Vehicle
 	Power:
 		Amount: -30
 	ProvidesPrerequisite@buildingname:
 	Targetable:
-		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
+		TargetTypes: GroundActor, C4, DetonateAttack, Structure, SpyInfiltrate
 	InfiltrateForSupportPower:
 		Proxy: vehicles.upgraded
 		Types: SpyInfiltrate
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	-ActorPreviewPlaceBuildingPreview:
 	SequencePlaceBuildingPreview:
 		Sequence: place
 		SequencePalette: placebuilding
 
-DOME:
-	Inherits: ^Building
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
-	Inherits@shape: ^2x2Shape
-	Selectable:
-		Bounds: 48,48
-	HitShape:
-		UseTargetableCellsOffsets: false
-		TargetableOffsets: 0,0,0, 630,-384,0, 630,384,0, -700,-512,0, -700,512,0
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 90
-		Prerequisites: barr, ~structures.soviet, ~techlevel.low
-		Description: Provides an overview\nof the battlefield.\nRequires power to operate.
-	Valued:
-		Cost: 1800
-	Tooltip:
-		Name: Radar Dome
-	Building:
-		Footprint: xx xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
-	Targetable:
-		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate
-	Health:
-		HP: 100000
-	Armor:
-		Type: Wood
-	RevealsShroud:
-		MinRange: 6c0
-		Range: 10c0
-		RequiresCondition: !disabled
-		RevealGeneratedShroud: False
-	RevealsShroud@Offline:
-		Range: 5c0
-		RequiresCondition: disabled
-	RevealsShroud@GAPGEN:
-		Range: 6c0
-		RequiresCondition: !disabled
-	WithBuildingBib:
-	ProvidesRadar:
-		RequiresCondition: !jammed && !disabled
-	InfiltrateForExploration:
-		Types: SpyInfiltrate
-	Power:
-		Amount: -40
-	ProvidesPrerequisite@buildingname:
-	ExternalCondition@JAMMED:
-		Condition: jammed
-
-HARV:
-	Inherits: ^Vehicle
-	Inherits@selection: ^SelectableEconomicUnit
+2TNK:
+	Inherits: ^TrackedVehicle
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Buildable:
 		Queue: Vehicle
-		BuildPaletteOrder: 110
-		Prerequisites: ~disabled
-		Description: Collects Ore and Gems for processing.\n  Unarmed
+		BuildPaletteOrder: 220
+		BuildDurationModifier: 40
+		Prerequisites: fix, ~vehicles.allies, ~techlevel.medium
+		Description: Secondary Soviet Main Battle Tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
-		Cost: 1100
+		Cost: 850
 	Tooltip:
-		Name: Ore Truck
-		GenericName: Harvester
-	Selectable:
-		DecorationBounds: 42,42
-	SelectionDecorations:
-	Harvester:
-		Capacity: 20
-		Resources: Ore,Gems
-		BaleUnloadDelay: 1
-		SearchFromProcRadius: 15
-		SearchFromHarvesterRadius: 8
-		EmptyCondition: no-ore
+		Name: Medium Tank
+		GenericName: Tank
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
 	Health:
-		HP: 60000
+		HP: 46000
 	Armor:
 		Type: Heavy
 	Mobile:
 		Speed: 85
-		Locomotor: heavywheeled
-	RevealsShroud:
-		Range: 4c0
-	WithHarvestAnimation:
-	WithDockingAnimation:
-	GpsDot:
-		String: Harvester
-	SpawnActorOnDeath:
-		Actor: HARV.EmptyHusk
-	HarvesterHuskModifier:
-		FullHuskActor: HARV.FullHusk
-		FullnessThreshold: 50
-	SelfHealing:
-		Step: 100
-		Delay: 25
-		HealIfBelow: 50
-		DamageCooldown: 500
-	Explodes:
-		RequiresCondition: !no-ore
-		Weapon: OreExplosion
-	WithHarvesterSpriteBody:
-		ImageByFullness: harvempty, harvhalf, harv
-	-WithFacingSpriteBody:
-
-SILO:
-	Inherits: ^Building
-	Selectable:
-		Bounds: 24,24
-	GrantConditionOnPrerequisite@OILSILOS:
-		Condition: global-oil-silos
-		Prerequisites: global-oil-silos
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 35
-		Prerequisites: ~global-oil-silos, ~techlevel.low
-		Description: Stores excess oil.
-	Valued:
-		Cost: 150
-	Targetable:
-		TargetTypes: Ground, Structure, C4, DetonateAttack, ThiefInfiltrate
-	Tooltip:
-		Name: Oil Silo
-	-GivesBuildableArea:
-	-MustBeDestroyed:
-	Health:
-		HP: 30000
-	Armor:
-		Type: Wood
-	RevealsShroud:
-		Range: 4c0
-	InfiltrateForCash:
-		Percentage: 50
-		Types: ThiefInfiltrate
-		Notification: CreditsStolen
-	WithBuildingBib:
-		HasMinibib: true
-	-WithSpriteBody:
-	WithResourceLevelSpriteBody:
-		Sequence: stages
-	StoresResources:
-		PipCount: 5
-		Capacity: 1500
-	-SpawnActorsOnSell:
-	Power:
-		Amount: -10
-	Explodes:
-		Weapon: SmallBuildingExplode
-		EmptyWeapon: SmallBuildingExplode
-
-PROC:
-	Inherits: ^Building
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 60
-		Prerequisites: ~disabled
-		Description: Refines Ore and Gems\ninto credits.
-	Valued:
-		Cost: 1400
-	Tooltip:
-		Name: Ore Refinery
-	Building:
-		Footprint: _X_ xxx X== ===
-		Dimensions: 3,4
-		LocalCenterOffset: 0,-512,0
-	Selectable:
-		Bounds: 72,50,0,4
-		DecorationBounds: 72,70,0,-2
-	SelectionDecorations:
-	Targetable:
-		TargetTypes: Ground, Structure, C4, DetonateAttack, ThiefInfiltrate, SpyInfiltrate
-	Health:
-		HP: 90000
-	Armor:
-		Type: Wood
 	RevealsShroud:
 		MinRange: 4c0
-		Range: 5c0
+		Range: 6c0
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Refinery:
-		DockAngle: 64
-		DockOffset: 1,2
-	StoresResources:
-		PipCount: 17
-		Capacity: 2000
-	DrawLineToTarget:
-	CustomSellValue:
-		Value: 300
-	FreeActor:
-		Actor: HARV
-		SpawnOffset: 1,2
-		Facing: 64
-	InfiltrateForCash:
-		Percentage: 50
-		Types: SpyInfiltrate, ThiefInfiltrate
-		Notification: CreditsStolen
-	WithBuildingBib:
-	WithIdleOverlay@TOP:
-		RequiresCondition: !build-incomplete
-		Sequence: idle-top
-	Power:
-		Amount: -30
-	WithDeathAnimation:
-		DeathSequence: dead
-		UseDeathTypeSuffix: false
-	ProvidesPrerequisite@buildingname:
-	HitShape:
-		Type: Rectangle
-			TopLeft: -1536, -512
-			BottomRight: 1536, 598
-	HitShape@TOP:
-		TargetableOffsets: 1680,0,0
-		Type: Rectangle
-			TopLeft: -512, -1536
-			BottomRight: 512, -512
-	HitShape@BOTTOMLEFT:
-		TargetableOffsets: -1260,-1024,0
-		Type: Rectangle
-			TopLeft: -1536, 598
-			BottomRight: -512, 1280
-	-ActorPreviewPlaceBuildingPreview:
-	SequencePlaceBuildingPreview:
-		Sequence: idle
-		SequencePalette: placebuilding
+	Turreted:
+		TurnSpeed: 80
+	Armament:
+		Weapon: 90mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+	AttackTurreted:
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	SpawnActorOnDeath:
+		Actor: 2TNK.Husk
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
+	Selectable:
+		DecorationBounds: 28,28
+
+1TNK.Husk:
+	Inherits: ^Husk
+	Tooltip:
+		Name: Husk (Light Tank)
+	ThrowsParticle@turret:
+		Anim: turret
+	TransformOnCapture:
+		IntoActor: 1tnk
+	InfiltrateForTransform:
+		IntoActor: 1tnk
+	RenderSprites:
+		Image: 1tnk.destroyed
+
 1TNK:
 	Inherits: ^TrackedVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Buildable:
 		Queue: Vehicle
-		BuildDurationModifier: 31
 		BuildPaletteOrder: 120
+		BuildDurationModifier: 31
 		Prerequisites: ~vehicles.soviet, ~techlevel.low
-		Description: Fast tank, good for scouting.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
+		Description: Fast tank, good for scouting.\n  Strong vs Infantry, Light armor\n  Weak vs  Tanks, Aircraft
 	Valued:
 		Cost: 700
 	Tooltip:
@@ -1454,7 +1284,7 @@ PROC:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	Turreted:
-		TurnSpeed: 7
+		TurnSpeed: 112
 	Armament:
 		Weapon: 25mm
 		Recoil: 85
@@ -1483,29 +1313,267 @@ PROC:
 	Passenger:
 		CargoType: Vehicle
 		Weight: 2
-        
-2TNK:
+
+TSLA:
+	Inherits: ^Defense
+	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
+	Inherits@AUTOTARGET: ^AutoTargetGround
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 80
+		Prerequisites: weap, ~structures.soviet, ~techlevel.medium
+		Description: Advanced base defense.\nRequires power to operate.\nCan detect cloaked units.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
+	Valued:
+		Cost: 1200
+	Tooltip:
+		Name: Tesla Coil
+	Selectable:
+		Bounds: 24,24
+		DecorationBounds: 24,40,0,-8
+	Health:
+		HP: 40000
+	Armor:
+		Type: Heavy
+	RevealsShroud:
+		MinRange: 6c0
+		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 6c0
+	WithBuildingBib:
+		HasMinibib: true
+	WithTeslaChargeAnimation:
+	Armament:
+		Weapon: TeslaZap
+		LocalOffset: 0,0,896
+	AttackTesla:
+		RequiresCondition: !build-incomplete
+		PauseOnCondition: disabled
+		ChargeAudio: tslachg2.aud
+		MaxCharges: 3
+		ReloadDelay: 120
+
+5TNK:
 	Inherits: ^TrackedVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Buildable:
 		Queue: Vehicle
-		BuildPaletteOrder: 220
-		Prerequisites: fix, ~vehicles.soviet, ~techlevel.medium
-		Description: A Secondary Main Battle Tank for the Red Army.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
+		BuildPaletteOrder: 320
+		Prerequisites: fix, stek, ~vehicles.soviet, ~Superunits_Checkbox, ~techlevel.high
+		Description: Big and slow tank, with anti-air capability.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Nothing\n has a nuke killswitch
 	Valued:
-		Cost: 800
+		Cost: 10000
 	Tooltip:
-		Name: Medium Tank
+		Name: Super Tank
+		GenericName: Super Tank
+	Health:
+		HP: 2000000
+	Armor:
+		Type: Concrete
+	Mobile:
+		Speed: 42
+		Locomotor: heavytracked
+	RevealsShroud:
+		Range: 6c0
+	Turreted:
+		TurnSpeed: 4
+	Armament@PRIMARY:
+		Weapon: SuperTankPrimary
+		LocalOffset: 900,180,340, 900,-180,340
+		Recoil: 171
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: SuperTusk
+		LocalOffset: -85,384,340, -85,-384,340
+		LocalYaw: -100,100
+		Recoil: 43
+		MuzzleSequence: muzzle
+	AttackTurreted:
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	Explodes:
+		Weapon: MicroNuke
+		EmptyWeapon: MicroNuke
+	SpawnActorOnDeath:
+		Actor: 4TNK.Husk
+	ChangesHealth:
+		Step: 100
+		Delay: 1
+		HealIfBelow: 100
+		DamageCooldown: 150
+	Selectable:
+		Bounds: 44,38,0,-4
+	KillsSelf:
+		RequiresCondition: invulnerability
+	Chronoshiftable:
+		ExplodeInstead: false
+	Passenger:
+		CargoType: Vehicle
+		Weight: 4
+	RenderSprites:
+		Image: 5tnk
+		Scale: 1.2
+
+BADR.hd:
+	Inherits: BADR
+	Health:
+		HP: 30500
+	Aircraft:
+		CruiseAltitude: 3500
+		TurnSpeed: 20
+		Speed: 150
+		Repulsable: False
+		MaximumPitch: 56
+	RenderSprites:
+		Image: BADR
+
+hbbadr:
+	Inherits: ^NeutralPlane
+	AttackBomber:
+	Armament:
+		Weapon: ParaBomb
+	Health:
+		HP: 40000
+	Aircraft:
+		CruiseAltitude: 4060
+		TurnSpeed: 20
+		Speed: 120
+		Repulsable: False
+		MaximumPitch: 56
+	AmmoPool:
+		Ammo: 15
+	-Selectable:
+	SelectionDecorations:
+	-Voiced:
+	Tooltip:
+		Name: Badger
+	Contrail@1:
+		Offset: -432,560,0
+	Contrail@2:
+		Offset: -432,-560,0
+	SpawnActorOnDeath:
+		Actor: BADR.Husk
+	SmokeTrailWhenDamaged@0:
+		Offset: -432,560,0
+		Interval: 2
+	SmokeTrailWhenDamaged@1:
+		Offset: -432,-560,0
+		Interval: 2
+	-EjectOnDeath:
+	-MapEditorData:
+	RejectsOrders:
+	RenderSprites:
+		Image: badr
+	GivesExperience:
+		Experience: 1000
+	Interactable:
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+
+BADRIBomber:
+	Inherits: ^NeutralPlane
+	AttackBomber:
+	Armament:
+		Weapon: SParaBomb
+	Health:
+		HP: 200000
+	Aircraft:
+		CruiseAltitude: 2000
+		TurnSpeed: 28
+		Speed: 500
+		Repulsable: False
+		MaximumPitch: 56
+	AmmoPool:
+		Ammo: 1
+	-Selectable:
+	SelectionDecorations:
+	-Voiced:
+	Tooltip:
+		Name: Strategic Bomber
+	Contrail@1:
+		Offset: -725,683,0
+	Contrail@2:
+		Offset: -725,-683,0
+	SpawnActorOnDeath:
+		Actor: U2.Husk
+	SmokeTrailWhenDamaged:
+		Offset: -1c43,0,0
+		Interval: 2
+	-EjectOnDeath:
+	MapEditorData:
+	RejectsOrders:
+	RenderSprites:
+		Image: u2
+	GivesExperience:
+		Experience: 1000
+	Interactable:
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+
+TENTFIX:
+	Inherits: ^TechBuilding
+	Inherits@shape: ^2x2Shape
+	OwnerLostAction:
+		Action: ChangeOwner
+	Selectable:
+		Priority: 0
+		Bounds: 48,48
+	Building:
+		Footprint: xx xx
+		Dimensions: 2,2
+	Health:
+		HP: 80000
+	CaptureManager:
+	Capturable:
+		Types: building
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	EngineerRepairable:
+	Tooltip:
+		Name: Vehicle Maintenance Outpost
+	TooltipDescription@ally:
+		Description: Provides vehicles with self-healing.
+		ValidRelationships: Ally
+	TooltipDescription@other:
+		Description: Capture to enable self-healing for vehicles.
+		ValidRelationships: Neutral, Enemy
+	RevealsShroud:
+		Range: 4c0
+	ProvidesPrerequisite@buildingname:
+	AppearsOnMapPreview:
+	GpsDot:
+		String: Hospital
+	RenderSprites:
+		Image: tent
+
+4TNK:
+	Inherits: ^TrackedVehicle
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 320
+		Prerequisites: fix, stek, ~vehicles.soviet, ~techlevel.high
+		Description: Big and slow tank, with anti-air capability.\nCan crush concrete walls and husks.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Nothing
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Mammoth Tank
 		GenericName: Tank
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 45000
+		HP: 90000
 	Armor:
 		Type: Heavy
 	Mobile:
-		Speed: 85
+		Speed: 50
+		Locomotor: heavytracked
 	RevealsShroud:
 		MinRange: 4c0
 		Range: 6c0
@@ -1513,23 +1581,824 @@ PROC:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	Turreted:
-		TurnSpeed: 5
-	Armament:
-		Weapon: 90mm
-		Recoil: 128
-		RecoilRecovery: 38
-		LocalOffset: 720,0,80
+		TurnSpeed: 8
+	Armament@PRIMARY:
+		Weapon: 120mm
+		LocalOffset: 900,180,340, 900,-180,340
+		Recoil: 171
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: MammothTusk
+		LocalOffset: -85,384,340, -85,-384,340
+		LocalYaw: -100,100
+		Recoil: 43
 		MuzzleSequence: muzzle
 	AttackTurreted:
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
-		Actor: 2TNK.Husk
+		Actor: 4TNK.Husk
+	ChangesHealth:
+		Step: 100
+		Delay: 3
+		HealIfBelow: 50
+		DamageCooldown: 150
 	SelectionDecorations:
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	Selectable:
-		DecorationBounds: 28,28
+		DecorationBounds: 44,38,0,-4
+	Passenger:
+		CargoType: Vehicle
+		Weight: 4
+
+MFIX.Deployed:
+	Inherits: ^Building
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 100
+		Prerequisites: ~disabled
+		Description: Repairs vehicles for credits.
+	Valued:
+		Cost: 1200
+	Tooltip:
+		Name: Mobile Service Depot
+	Building:
+		Footprint: _+_ +++ _+_
+		Dimensions: 3,3
+	Selectable:
+		Bounds: 68,34,0,3
+		DecorationBounds: 72,48
+	SelectionDecorations:
+	Health:
+		HP: 80000
+	Armor:
+		Type: Wood
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Reservable:
+	RallyPoint:
+	RepairsUnits:
+		HpPerStep: 1100
+		Interval: 5
+		StartRepairingNotification: Repairing
+		FinishRepairingNotification: UnitRepaired
+		PlayerExperience: 15
+	WithBuildingBib:
+		HasMinibib: true
+	WithResupplyAnimation:
+		RequiresCondition: !build-incomplete
+	Transforms:
+		IntoActor: mfix
+		Offset: 0,0
+	ProvidesPrerequisite@buildingname:
+	HitShape:
+		TargetableOffsets: 840,0,0, 598,-640,0, 598,640,0, -1060,0,0, -768,-640,0, -768,640,0
+		Type: Polygon
+			Points: -1536,-300, -640,-811, 640,-811, 1536,-300, 1536,555, 640,1110, -640,1110, -1536,555
+	Passenger:
+		CargoType: Vehicle
+		Weight: 4
+			
+MFIX:
+	Inherits: ^Vehicle
+	Inherits@selection: ^SelectableSupportUnit
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 210
+		Prerequisites: fix, ~techlevel.medium
+		BuildDurationModifier: 50
+		Description: Deploys into another Repair Pad.\n  Unarmed
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Mobile Service Depot
+	Selectable:
+		DecorationBounds: 42,42
+	SelectionDecorations:
+	Health:
+		HP: 60000
+	Armor:
+		Type: Light
+	Mobile:
+		Speed: 71
+		Locomotor: heavywheeled
+	RevealsShroud:
+		Range: 4c0
+	Transforms:
+		IntoActor: mfix.deployed
+		Offset: 0,0
+	Passenger:
+		CargoType: Vehicle
+		Weight: 4
+
+E3:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 30
+		Prerequisites: ~barracks, ~techlevel.infonly
+		Description: Anti-tank/Anti-aircraft infantry.\n  Strong vs Vehicles, Aircraft\n  Weak vs Infantry
+	Selectable:
+		Class: E3
+	Valued:
+		Cost: 525
+	Tooltip:
+		Name: Anti-tank/Anti-aircraft Rocket Soldier
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 4500
+	Armament@PRIMARY:
+		Weapon: RedEye
+		LocalOffset: 0,0,555
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: Dragon
+		LocalOffset: 0,0,555
+	Armament@GARRISONED:
+		Name: garrisoned
+		Weapon: Dragon
+	TakeCover:
+		ProneOffset: 384,0,-395
+	WithInfantryBody:
+		DefaultAttackSequence: shoot
+		RequiresCondition: !parachute
+	WithInfantryBody@PARACHUTE:
+		StandSequences: parachute
+		RequiresCondition: parachute
+	Explodes:
+		Weapon: UnitExplodeSmall
+		EmptyWeapon: UnitExplodeSmall
+		DamageSource: Killer
+		Chance: 50
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded
+	AutoTarget:
+		ScanRadius: 5
+		
+E4:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 70
+		Prerequisites: ~barr, ftur, ~techlevel.low
+		Description: Advanced anti-structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Vehicles, Aircraft
+	Valued:
+		Cost: 300
+	Tooltip:
+		Name: Flamethrower
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 4000
+	Armament@PRIMARY:
+		Weapon: Flamer
+		LocalOffset: 700,0,500
+		FireDelay: 8
+	Armament@GARRISONED:
+		Name: garrisoned
+		Weapon: Flamer
+	TakeCover:
+		ProneOffset: 160,0,-288
+	Explodes:
+		Weapon: UnitExplodeSmall
+		EmptyWeapon: UnitExplodeSmall
+		DamageSource: Killer
+		Chance: 50
+	WithInfantryBody:
+		DefaultAttackSequence: shoot
+		RequiresCondition: !parachute
+	WithInfantryBody@PARACHUTE:
+		StandSequences: parachute
+		RequiresCondition: parachute
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded
+		
+E2:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 40
+		Prerequisites: ~barr, ~techlevel.infonly
+		Description: Infantry armed with grenades.\n  Strong vs Buildings, Infantry\n  Weak vs Vehicles, Aircraft
+	Valued:
+		Cost: 160
+	Tooltip:
+		Name: Grenadier
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 5000
+	Mobile:
+		Speed: 71
+	Armament@PRIMARY:
+		Weapon: Grenade
+		LocalOffset: 0,0,555
+		FireDelay: 15
+	Armament@GARRISONED:
+		Name: garrisoned
+		Weapon: Grenade
+		FireDelay: 15
+	TakeCover:
+		ProneOffset: 256,64,-331
+	WithInfantryBody:
+		DefaultAttackSequence: throw
+		RequiresCondition: !parachute
+	WithInfantryBody@PARACHUTE:
+		StandSequences: parachute
+		RequiresCondition: parachute
+	Explodes:
+		Weapon: UnitExplodeSmall
+		EmptyWeapon: UnitExplodeSmall
+		DamageSource: Killer
+		Chance: 50
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded
+	
+E1:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 10
+		Prerequisites: ~barracks, ~techlevel.infonly
+		Description: General-purpose infantry.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
+	Selectable:
+		Class: E1
+	Valued:
+		Cost: 100
+	Tooltip:
+		Name: Rifle Infantry
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 5000
+	Armament@PRIMARY:
+		Weapon: M1Carbine
+	Armament@GARRISONED:
+		Name: garrisoned
+		Weapon: Vulcan.garr
+		MuzzleSequence: garrison-muzzle
+	WithInfantryBody:
+		DefaultAttackSequence: shoot
+		RequiresCondition: !parachute
+	WithInfantryBody@PARACHUTE:
+		StandSequences: parachute
+		RequiresCondition: parachute
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded
+
+ARCO.Husk:
+	Inherits: ^TechBuilding
+	RenderSprites:
+		Palette: cnc
+		PlayerPalette: cncplayer
+	Building:
+		Footprint: xx
+		Dimensions: 2,1
+	Tooltip:
+		Name: High Tech Oil Pump (Destroyed)
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	CaptureManager:
+	Capturable:
+		Types: building-husk
+	TransformOnCapture:
+		IntoActor: arco
+		ForceHealthPercentage: 50
+	Targetable:
+		TargetTypes: building-husk
+
+ISOILHUSK:
+	Inherits: ^TechBuilding
+	RenderSprites:
+		Palette: player
+	Tooltip:
+		Name: Husk (Oil Pump)
+	WithSpriteBody:
+	WithIdleOverlay:
+		StartSequence: fire-start
+		Sequence: fire-loop
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	CaptureManager:
+	Capturable:
+		Types: building-husk
+	TransformOnCapture:
+		IntoActor: isoil
+		ForceHealthPercentage: 50
+	Targetable:
+		TargetTypes: building-husk
+
+OILP.husk:
+	Inherits: ^TechBuilding
+	RenderSprites:
+		Palette: player
+	Tooltip:
+		Name: Husk (Oil Pump)
+	WithSpriteBody:
+	WithIdleOverlay:
+		StartSequence: fire-start
+		Sequence: fire-loop
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	CaptureManager:
+	Capturable:
+		Types: building-husk
+	TransformOnCapture:
+		IntoActor: OILP
+		ForceHealthPercentage: 50
+	Targetable:
+		TargetTypes: building-husk
+
+OILP:
+	Inherits: ^TechBuilding
+	Tooltip:
+		Name: Oil Pump
+	TooltipDescription@ally:
+		Description: Provides additional funds.
+		ValidRelationships: Ally
+	TooltipDescription@other:
+		Description: Capture to receive additional funds.
+	CaptureManager:
+	Capturable:
+		Types: building
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	EngineerRepairable:
+	GrantConditionOnPrerequisite@OILSILOS:
+		Condition: global-oil-silos
+		Prerequisites: global-oil-silos
+	CashTrickler@nonsilo:
+		RequiresCondition: !global-oil-silos
+		Interval: 295
+		Amount: 50
+	CashTrickler@silo:
+		RequiresCondition: global-oil-silos
+		Interval: 295
+		Amount: 50
+		UseResourceStorage: true
+	GpsDot:
+		String: Oil
+	RevealsShroud:
+		Range: 3c0
+	SpawnActorOnDeath:
+		Actor: OILP.husk
+		OwnerType: InternalName
+	TooltipDescription@ally:
+		Description: Provides additional funds.
+		ValidRelationships: Ally
+	TooltipDescription@other:
+		Description: Capture to receive additional funds.
+		ValidRelationships: Neutral, Enemy
+	Explodes:
+		Weapon: BarrelExplode
+	OwnerLostAction:
+		Action: ChangeOwner
+	UpdatesDerrickCount:
+
+HOSP.Husk:
+	Inherits: ^TechBuilding
+	Building:
+		Footprint: xx xx
+		Dimensions: 2,2
+	Tooltip:
+		Name: Hospital (Destroyed)
+	WithSpriteBody:
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	CaptureManager:
+	Capturable:
+		Types: building-husk
+	TransformOnCapture:
+		IntoActor: HOSP
+		ForceHealthPercentage: 50
+	Targetable:
+		TargetTypes: building-husk
+
+HOSP:
+	Inherits: ^TechBuilding
+	Inherits@shape: ^2x2Shape
+	OwnerLostAction:
+		Action: ChangeOwner
+	Selectable:
+		Priority: 0
+		Bounds: 48,48
+	Building:
+		Footprint: xx xx
+		Dimensions: 2,2
+	Health:
+		HP: 80000
+	CaptureManager:
+	Capturable:
+		Types: building
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	EngineerRepairable:
+	Tooltip:
+		Name: Hospital
+	TooltipDescription@ally:
+		Description: Provides infantry with self-healing.
+		ValidRelationships: Ally
+	TooltipDescription@other:
+		Description: Capture to enable self-healing for infantry.
+		ValidRelationships: Neutral, Enemy
+	RevealsShroud:
+		Range: 4c0
+	WithBuildingBib:
+		HasMinibib: true
+	WithDeathAnimation:
+		DeathSequence: dead
+		UseDeathTypeSuffix: false
+	ProvidesPrerequisite@buildingname:
+	AppearsOnMapPreview:
+	GpsDot:
+		String: Hospital
+	SpawnActorOnDeath:
+		Actor: hosp.husk
+		OwnerType: InternalName
+
+OILP.slow:
+	Inherits: ^TechBuilding
+	Tooltip:
+		Name: Slow Oil Pump
+	TooltipDescription@ally:
+		Description: Provides additional funds.
+		ValidRelationships: Ally
+	TooltipDescription@other:
+		Description: Capture to receive additional funds.
+	CaptureManager:
+	Capturable:
+		Types: building
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	EngineerRepairable:
+	GrantConditionOnPrerequisite@OILSILOS:
+		Condition: global-oil-silos
+		Prerequisites: global-oil-silos
+	CashTrickler@nonsilo:
+		RequiresCondition: !global-oil-silos
+		Interval: 500
+		Amount: 50
+	CashTrickler@silo:
+		RequiresCondition: global-oil-silos
+		Interval: 500
+		Amount: 50
+		UseResourceStorage: true
+	GpsDot:
+		String: Oil
+	RevealsShroud:
+		Range: 3c0
+	SpawnActorOnDeath:
+		Actor: OILP.husk
+		OwnerType: InternalName
+	TooltipDescription@ally:
+		Description: Provides additional funds.
+		ValidRelationships: Ally
+	TooltipDescription@other:
+		Description: Capture to receive additional funds.
+		ValidRelationships: Neutral, Enemy
+	Explodes:
+		Weapon: BarrelExplode
+	OwnerLostAction:
+		Action: ChangeOwner
+	UpdatesDerrickCount:
+
+OILP.slow.husk:
+	Inherits: ^TechBuilding
+	RenderSprites:
+		Palette: player
+	Tooltip:
+		Name: Husk (Slow Oil Pump)
+	WithSpriteBody:
+	WithIdleOverlay:
+		StartSequence: fire-start
+		Sequence: fire-loop
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	CaptureManager:
+	Capturable:
+		Types: building-husk
+	TransformOnCapture:
+		IntoActor: OILP.slow
+		ForceHealthPercentage: 50
+	Targetable:
+		TargetTypes: building-husk
+
+Katy:
+	Inherits: ^TrackedVehicle
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Valued:
+		Cost: 900
+	Tooltip:
+		Name: Katyusha Rocket Truck
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		BuildPaletteOrder: 250
+		Prerequisites: dome, fix, ~vehicles.soviet, ~techlevel.medium
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Long range, rapid firing, inaccurate, slow reloading rocket artillery.\n  Strong vs all Ground units.\n  Special Ability: No Contrails - Makes it harder for the enemy to know where you are and fire back
+	Mobile:
+		Speed: 100
+		TurnSpeed: 20
+		Locomotor: lighttracked
+	Health:
+		HP: 15000
+	Armor:
+		Type: Light
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Turreted:
+		TurnSpeed: 1023
+		Offset: -256,0,128
+	Armament@PRIMARY:
+		Weapon: Katyr
+		LocalOffset: 268,0,440
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: Katyr
+		LocalOffset: 268,0,440
+	AttackFrontal:
+		ForceFireIgnoresActors: True
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
+
+OILB:
+	Inherits: ^TechBuilding
+	Inherits@shape: ^2x2Shape
+	HitShape:
+		UseTargetableCellsOffsets: false
+		TargetableOffsets: 0,0,0, 630,-300,0, 420,512,0, -420,-512,0, -630,300,0
+	Selectable:
+		Priority: 0
+		Bounds: 48,48
+	OwnerLostAction:
+		Action: ChangeOwner
+	Building:
+		Footprint: xx xx
+		Dimensions: 2,2
+	Health:
+		HP: 80000
+	RevealsShroud:
+		Range: 4c0
+	CaptureManager:
+	Capturable:
+		Types: building
+	CapturableProgressBar:
+	CapturableProgressBlink:
+	EngineerRepairable:
+	GrantConditionOnPrerequisite@OILSILOS:
+		Condition: global-oil-silos
+		Prerequisites: global-oil-silos
+	CashTrickler@nonsilo:
+		RequiresCondition: !global-oil-silos
+		Interval: 220
+		Amount: 100
+		UseResourceStorage: false
+	CashTrickler@silo:
+		RequiresCondition: global-oil-silos
+		Interval: 220
+		Amount: 100
+		UseResourceStorage: true
+	Tooltip:
+		Name: Oil Derrick
+	TooltipDescription@ally:
+		Description: Provides additional funds.
+		ValidRelationships: Ally
+	TooltipDescription@other:
+		Description: Capture to receive additional funds.
+		ValidRelationships: Neutral, Enemy
+	Explodes:
+		Weapon: BarrelExplode
+	GpsDot:
+		String: Oil
+	AppearsOnMapPreview:
+	GivesCashOnCapture:
+		Amount: 500
+	RepairableBuilding:
+		RepairStep: 75
+		PlayerExperience: 25
+		RepairingNotification: Repairing
+	WithBuildingRepairDecoration:
+		Image: allyrepair
+		Sequence: repair
+		Position: Center
+		Palette: player
+		IsPlayerPalette: True
+	UpdatesDerrickCount:
+
+PROC:
+	Inherits: ^Building
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 60
+		Prerequisites: anypower, ,~proc, ~techlevel.infonly
+		Description: Refines Ore and Gems\ninto credits.
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Ore Refinery
+	Building:
+		Footprint: _X_ xxx X== ===
+		Dimensions: 3,4
+		LocalCenterOffset: 0,-512,0
+	Selectable:
+		Bounds: 72,50,0,4
+		DecorationBounds: 72,70,0,-2
+	Targetable:
+		TargetTypes: GroundActor, Structure, C4, DetonateAttack, ThiefInfiltrate, SpyInfiltrate
+	Health:
+		HP: 90000
+	Armor:
+		Type: Wood
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Refinery:
+		DockAngle: 1024
+		DockOffset: 1,2
+	StoresResources:
+		Capacity: 2000
+	CustomSellValue:
+		Value: 300
+	FreeActor:
+		Actor: HARV
+		SpawnOffset: 1,2
+		Facing: 1024
+	InfiltrateForCash:
+		Percentage: 50
+		Types: SpyInfiltrate, ThiefInfiltrate
+		InfiltratedNotification: CreditsStolen
+	WithBuildingBib:
+	WithIdleOverlay@TOP:
+		RequiresCondition: !build-incomplete
+		Sequence: idle-top
+	Power:
+		Amount: -30
+	WithDeathAnimation:
+		DeathSequence: dead
+		UseDeathTypeSuffix: false
+	ProvidesPrerequisite@buildingname:
+	HitShape:
+		Type: Rectangle
+			TopLeft: -1536, -512
+			BottomRight: 1536, 598
+	HitShape@TOP:
+		TargetableOffsets: 1680,0,0
+		Type: Rectangle
+			TopLeft: -512, -1536
+			BottomRight: 512, -512
+	HitShape@BOTTOMLEFT:
+		TargetableOffsets: -1260,-1024,0
+		Type: Rectangle
+			TopLeft: -1536, 598
+			BottomRight: -512, 1280
+	-ActorPreviewPlaceBuildingPreview:
+	SequencePlaceBuildingPreview:
+		Sequence: idle
+		SequencePalette: placebuilding
+	WithResourceStoragePipsDecoration:
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+		PipCount: 17
+		FullSequence: pip-yellow
+
+HARV:
+	Inherits: ^Vehicle
+	Inherits@selection: ^SelectableEconomicUnit
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 110
+		Prerequisites: ~proc, ~techlevel.infonly
+		Description: Collects Ore and Gems for processing.\n  Unarmed
+	Valued:
+		Cost: 1100
+	Tooltip:
+		Name: Ore Truck
+		GenericName: Harvester
+	Selectable:
+		DecorationBounds: 42,42
+	Harvester:
+		Capacity: 20
+		Resources: Ore,Gems
+		BaleUnloadDelay: 1
+		SearchFromProcRadius: 15
+		SearchFromHarvesterRadius: 8
+		HarvestFacings: 8
+		EmptyCondition: no-ore
+	Health:
+		HP: 60000
+	Armor:
+		Type: Heavy
+	Mobile:
+		Speed: 85
+		Locomotor: heavywheeled
+	RevealsShroud:
+		Range: 4c0
+	WithHarvestAnimation:
+	WithDockingAnimation:
+	GpsDot:
+		String: Harvester
+	SpawnActorOnDeath:
+		Actor: HARV.EmptyHusk
+	HarvesterHuskModifier:
+		FullHuskActor: HARV.FullHusk
+		FullnessThreshold: 50
+	ChangesHealth:
+		Step: 100
+		Delay: 25
+		StartIfBelow: 50
+		DamageCooldown: 500
+	Explodes:
+		RequiresCondition: !no-ore
+		Weapon: OreExplosion
+	WithHarvesterSpriteBody:
+		ImageByFullness: harvempty, harvhalf, harv
+	-WithFacingSpriteBody:
+	WithHarvesterPipsDecoration:
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+		PipCount: 7
+		ResourceSequences:
+			Ore: pip-yellow
+			Gems: pip-red
+	WithHarvesterPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+		PipCount: 7
+
+SILO:
+	Inherits: ^Building
+	Selectable:
+		Bounds: 24,24
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 35
+		Prerequisites: ~global-oil-silos, ~techlevel.infonly
+		Description: Stores excess oil.
+	Valued:
+		Cost: 150
+	Targetable:
+		TargetTypes: GroundActor, Structure, C4, DetonateAttack, ThiefInfiltrate
+	Tooltip:
+		Name: Oil Silo
+	-GivesBuildableArea:
+	-MustBeDestroyed:
+	Health:
+		HP: 30000
+	Armor:
+		Type: Wood
+	RevealsShroud:
+		Range: 4c0
+	InfiltrateForCash:
+		Percentage: 50
+		Types: ThiefInfiltrate
+		InfiltratedNotification: CreditsStolen
+	WithBuildingBib:
+		HasMinibib: true
+	-WithSpriteBody:
+	WithResourceLevelSpriteBody:
+		Sequence: stages
+	StoresResources:
+		Capacity: 3000
+	-SpawnActorsOnSell:
+	Power:
+		Amount: -10
+	Explodes:
+		Weapon: SmallBuildingExplode
+		EmptyWeapon: SmallBuildingExplode
+	WithResourceStoragePipsDecoration:
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+		PipCount: 5
+		FullSequence: pip-yellow
 
 ARTY:
 	Inherits: ^TrackedVehicle
@@ -1551,7 +2420,7 @@ ARTY:
 	Armor:
 		Type: Light
 	Mobile:
-		TurnSpeed: 2
+		TurnSpeed: 8
 		Speed: 85
 		Locomotor: lighttracked
 	RevealsShroud:
@@ -1595,7 +2464,7 @@ JEEP:
 	Armor:
 		Type: Light
 	Mobile:
-		TurnSpeed: 10
+		TurnSpeed: 40
 		Speed: 170
 		PauseOnCondition: notmobile || being-captured
 	RevealsShroud:
@@ -1605,7 +2474,7 @@ JEEP:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	Turreted:
-		TurnSpeed: 10
+		TurnSpeed: 40
 		Offset: 0,0,128
 	Armament:
 		Weapon: M60mg
@@ -1617,13 +2486,15 @@ JEEP:
 	Cargo:
 		Types: Infantry
 		MaxWeight: 1
-		PipCount: 1
 		LoadingCondition: notmobile
 	Passenger:
 		CargoType: Vehicle
 		Weight: 2
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 MGG:
 	Inherits: ^Vehicle
@@ -1688,7 +2559,7 @@ MRJ:
 		Offset: -256,0,256
 	ProximityExternalCondition@JAMMER:
 		Range: 18c0
-		ValidStances: Enemy, Neutral
+		ValidRelationships: Enemy, Neutral
 		Condition: jammed
 	WithRangeCircle@JAMMER:
 		Type: jammer
@@ -1696,11 +2567,98 @@ MRJ:
 		Color: 0000FF80
 	JamsMissiles:
 		Range: 5c0
-		DeflectionStances: Neutral, Enemy
+		DeflectionRelationships: Neutral, Enemy
 	RenderJammerCircle:
 	Passenger:
 		CargoType: Vehicle
 		Weight: 2
+
+HPAD:
+	Inherits: ^Building
+	Inherits@shape: ^2x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
+	Selectable:
+		Bounds: 48,48
+	HitShape:
+		UseTargetableCellsOffsets: false
+		TargetableOffsets: 0,0,0, 768,-512,0, 768,512,0, -281,-512,0, -630,512,0
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 120
+		Prerequisites: dome, ~structures.soviet, ~techlevel.medium
+		Description: Produces and reloads\nhelicopters.
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Helipad
+	Building:
+		Footprint: xx xx
+		Dimensions: 2,2
+		LocalCenterOffset: 0,-512,0
+		RemoveSmudgesOnBuild: True
+	Health:
+		HP: 80000
+	Armor:
+		Type: Wood
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	WithResupplyAnimation:
+		RequiresCondition: !build-incomplete
+	Exit@1:
+		RequiresCondition: !being-captured
+		SpawnOffset: 0,-256,0
+		ExitCell: 0,0
+		Facing: 3584
+	RallyPoint:
+	Production:
+		Produces: Aircraft, Helicopter
+	Reservable:
+	ProductionBar:
+		ProductionType: Aircraft
+	Power:
+		Amount: -10
+	ProvidesPrerequisite@allies:
+		Factions: allies, england, france, germany
+		Prerequisite: aircraft.allies
+	ProvidesPrerequisite@alliesvanilla:
+		Factions: allies
+		Prerequisite: aircraft.alliesvanilla
+	ProvidesPrerequisite@england:
+		Factions: england
+		Prerequisite: aircraft.england
+	ProvidesPrerequisite@france:
+		Factions: france
+		Prerequisite: aircraft.france
+	ProvidesPrerequisite@germany:
+		Factions: germany
+		Prerequisite: aircraft.germany
+	ProvidesPrerequisite@alliedstructure:
+		RequiresPrerequisites: structures.allies
+		Prerequisite: aircraft.allies
+	ProvidesPrerequisite@alliedvanillastructure:
+		RequiresPrerequisites: structures.alliesvanilla
+		Prerequisite: aircraft.alliesvanilla
+	ProvidesPrerequisite@englishstructure:
+		RequiresPrerequisites: structures.england
+		Prerequisite: aircraft.england
+	ProvidesPrerequisite@frenchstructure:
+		RequiresPrerequisites: structures.france
+		Prerequisite: aircraft.france
+	ProvidesPrerequisite@germanstructure:
+		RequiresPrerequisites: structures.germany
+		Prerequisite: aircraft.germany
+	ProvidesPrerequisite@buildingname:
+	Targetable:
+		TargetTypes: GroundActor, C4, DetonateAttack, Structure, SpyInfiltrate
+	InfiltrateForSupportPower:
+		Proxy: aircraft.upgraded
+		Types: SpyInfiltrate
+	WithBuildingBib:
+		HasMinibib: true
 
 DTRK:
 	Inherits: ^Vehicle
@@ -1728,7 +2686,7 @@ DTRK:
 		EmptyWeapon: MiniNuke
 		DamageSource: Killer
 	AttackFrontal:
-		FacingTolerance: 128
+		FacingTolerance: 512
 	Armament@PRIMARY:
 		Weapon: DemoTruckTargeting
 	GrantConditionOnAttack:
@@ -1752,8 +2710,6 @@ QTNK:
 	Passenger:
 		CargoType: Vehicle
 		Weight: 4
-
- 
 
 CTNK:
 	Inherits: ^Vehicle
@@ -1838,13 +2794,8 @@ STNK:
 		Weapon: APTusk.stnk
 		LocalOffset: 192,0,176
 	Turreted:
-		TurnSpeed: 5
+		TurnSpeed: 20
 	AttackTurreted:
-	Cargo:
-		Types: Infantry
-		MaxWeight: 0
-		PipCount: 0
-		LoadingCondition: notmobile
 	WithSpriteTurret:
 	Cloak:
 		InitialDelay: 125
@@ -1892,22 +2843,26 @@ STEK:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	GpsPower:
-		PauseOnCondition: disabled || lowpower
-		Icon: gps
-		OneShot: true
-		ChargeInterval: 12000
-		Description: GPS Satellite
-		LongDesc: Reveals map terrain and provides tactical\ninformation. Requires power and active radar.
-		RevealDelay: 375
-		LaunchSpeechNotification: SatelliteLaunched
-		DisplayTimerStances: Ally, Neutral, Enemy
-		SupportPowerPaletteOrder: 7
-	SupportPowerChargeBar:
 	WithBuildingBib:
 	Power:
 		Amount: -200
 	ProvidesPrerequisite@buildingname:
+	GpsPower:
+		PauseOnCondition: disabled
+		Icon: gps
+		OneShot: true
+		ChargeInterval: 24000
+		Description: GPS Satellite
+		LongDesc: Reveals map terrain and provides tactical\ninformation. Requires power and active radar.
+		RevealDelay: 375
+		LaunchSpeechNotification: SatelliteLaunched
+		DisplayTimerRelationships: Ally, Neutral, Enemy
+		SupportPowerPaletteOrder: 90
+	SupportPowerChargeBar:
+	InfiltrateForSupportPowerReset:
+		Types: SpyInfiltrate
+	Targetable:
+		TargetTypes: GroundActor, C4, DetonateAttack, Structure, SpyInfiltrate
 
 MSUB:
 	Inherits: ^Ship
@@ -1929,7 +2884,7 @@ MSUB:
 	Armor:
 		Type: Light
 	Mobile:
-		TurnSpeed: 3
+		TurnSpeed: 12
 		Speed: 42
 	RevealsShroud:
 		MinRange: 5c0
@@ -2001,7 +2956,7 @@ DD:
 	Armor:
 		Type: Heavy
 	Mobile:
-		TurnSpeed: 7
+		TurnSpeed: 28
 		Speed: 85
 	RevealsShroud:
 		MinRange: 5c0
@@ -2010,7 +2965,7 @@ DD:
 	RevealsShroud@GAPGEN:
 		Range: 5c0
 	Turreted:
-		TurnSpeed: 7
+		TurnSpeed: 28
 		Offset: 469,0,128
 	Armament@PRIMARY:
 		Weapon: Stinger
@@ -2036,6 +2991,7 @@ DD:
 
 SYRD:
 	Inherits: ^Building
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Selectable:
 		Bounds: 72,48
 	InfiltrateForSupportPower:
@@ -2051,7 +3007,7 @@ SYRD:
 	Tooltip:
 		Name: Naval Yard
 	Targetable:
-		TargetTypes: Ground, Water, Structure, WaterStructure, C4, DetonateAttack, SpyInfiltrate
+		TargetTypes: WaterActor, Structure, C4, DetonateAttack, SpyInfiltrate
 	Building:
 		Footprint: XXX xxx XXX
 		Dimensions: 3,3
@@ -2072,32 +3028,29 @@ SYRD:
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: -1024,1024,0
-		Facing: 160
+		Facing: 2560
 		ExitCell: 0,2
 		ProductionTypes: Ship, Boat
 	Exit@2:
 		RequiresCondition: !being-captured
 		SpawnOffset: 1024,1024,0
-		Facing: 224
+		Facing: 3584
 		ExitCell: 2,2
 		ProductionTypes: Ship, Boat
 	Exit@3:
 		RequiresCondition: !being-captured
 		SpawnOffset: -1024,-1024,0
-		Facing: 96
+		Facing: 1536
 		ExitCell: 0,0
 		ProductionTypes: Ship, Boat
 	Exit@4:
 		RequiresCondition: !being-captured
 		SpawnOffset: 1024,-1024,0
-		Facing: 32
+		Facing: 512
 		ExitCell: 2,0
 		ProductionTypes: Ship, Boat
 	Production:
 		Produces: Ship, Boat
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	-SpawnActorsOnSell:
 	RepairsUnits:
 		HpPerStep: 1000
@@ -2114,7 +3067,7 @@ SYRD:
 		Range: 10c0
 	RenderDetectionCircle:
 	ProvidesPrerequisite@allies:
-		Factions: allies, england, france, soviet
+		Factions: allies, england, france, germany
 		Prerequisite: ships.allies
 	ProvidesPrerequisite@alliesvanilla:
 		Factions: allies
@@ -2125,9 +3078,9 @@ SYRD:
 	ProvidesPrerequisite@france:
 		Factions: france
 		Prerequisite: ships.france
-	ProvidesPrerequisite@soviet:
-		Factions: soviet
-		Prerequisite: ships.soviet
+	ProvidesPrerequisite@germany:
+		Factions: germany
+		Prerequisite: ships.germany
 	ProvidesPrerequisite@alliedstructure:
 		RequiresPrerequisites: structures.allies
 		Prerequisite: ships.allies
@@ -2141,18 +3094,11 @@ SYRD:
 		RequiresPrerequisites: structures.france
 		Prerequisite: ships.france
 	ProvidesPrerequisite@germanstructure:
-		RequiresPrerequisites: structures.soviet
-		Prerequisite: ships.soviet
+		RequiresPrerequisites: structures.germany
+		Prerequisite: ships.germany
 	ProvidesPrerequisite@buildingname:
 	MapEditorData:
 		ExcludeTilesets: INTERIOR
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	HitShape:
 		TargetableOffsets: 768,0,0, 768,-1024,0, 768,1024,0
 		Type: Rectangle
@@ -2171,7 +3117,7 @@ CA:
 		Queue: Ship
 		BuildAtProductionType: Boat
 		BuildPaletteOrder: 50
-		Prerequisites: ~syrd, stek, ~techlevel.high
+		Prerequisites: ~syrd, atek, ~techlevel.high
 		Description: Very slow long-range ship.\n  Strong vs Buildings, Ground units\n  Weak vs Naval units, Aircraft
 	Valued:
 		Cost: 2400
@@ -2184,7 +3130,7 @@ CA:
 	Armor:
 		Type: Heavy
 	Mobile:
-		TurnSpeed: 3
+		TurnSpeed: 48
 		Speed: 42
 	RevealsShroud:
 		MinRange: 5c0
@@ -2195,11 +3141,11 @@ CA:
 	Turreted@PRIMARY:
 		Turret: primary
 		Offset: -896,0,128
-		TurnSpeed: 3
+		TurnSpeed: 48
 	Turreted@SECONDARY:
 		Turret: secondary
 		Offset: 768,0,128
-		TurnSpeed: 3
+		TurnSpeed: 48
 	Armament@PRIMARY:
 		Turret: primary
 		Weapon: 8Inch
@@ -2220,397 +3166,21 @@ CA:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
 	WithMuzzleOverlay:
-	SelectionDecorations:
 	WithSpriteTurret@PRIMARY:
 		Turret: primary
 	WithSpriteTurret@SECONDARY:
 		Turret: secondary
 	Selectable:
 		DecorationBounds: 44,44
-	AutoTarget:
-		InitialStance: ReturnFire
-		InitialStanceAI: ReturnFire
-		ScanOnIdle: true
-
-MIG:
-	Inherits: ^Plane
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Plane
-		BuildPaletteOrder: 50
-		Prerequisites: ~afld, stek, ~techlevel.high
-		Description: Fast Fighter Bomber\n  Strong vs Buildings, Vehicles, Aircraft, Infantry\n  Weak vs Anti Air Units
-	Valued:
-		Cost: 2150
-	Tooltip:
-		Name: MiG Attack Plane
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 10000
-	RevealsShroud:
-		MinRange: 11c0
-		Range: 13c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 11c0
-		Type: GroundPosition
-	Armament@PRIMARY:
-		Weapon: Maverick
-		LocalOffset: 0,-640,0, 0,640,0
-		LocalYaw: -40, 24
-		PauseOnCondition: !ammo
-	AttackAircraft:
-		FacingTolerance: 20
-		PersistentTargeting: false
-		OpportunityFire: true
-	Aircraft:
-		CruiseAltitude: 2560
-		InitialFacing: 192
-		TurnSpeed: 4
-		Speed: 223
-		RepulsionSpeed: 40
-		MaximumPitch: 56
-	AutoTarget:
-		InitialStance: AttackAnything
-		InitialStanceAI: AttackAnything
-		ScanOnIdle: true
-	AmmoPool:
-		Ammo: 8
-		AmmoCondition: ammo
-	Selectable:
-		Bounds: 36,28,0,2
-		DecorationBounds: 40,29,0,1
-	SelectionDecorations:
-	Contrail@1:
-		Offset: -598,-683,0
-	Contrail@2:
-		Offset: -598,683,0
-	SpawnActorOnDeath:
-		Actor: MIG.Husk
-	SmokeTrailWhenDamaged:
-		Offset: -853,0,171
-		Interval: 2
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
-	Rearmable:
-		RearmActors: afld, afld.ukraine
-
-HIND:
-	Inherits: ^Helicopter
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Helicopter
-		BuildPaletteOrder: 20
-		Prerequisites: ~hpad, ~dome, ~techlevel.medium
-		Description: Heavy Attack Helicopter Gunship armed\nwith dual chainguns and Air-to-Surface Missiles.\n A little fragile.\n  Strong vs Infantry, Medium armor\n  Weak vs Aircraft
-	Valued:
-		Cost: 1500
-	Tooltip:
-		Name: Hind
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 9500
-	RevealsShroud:
-		MinRange: 8c0
-		Range: 10c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 8c0
-		Type: GroundPosition
-	Armament@PRIMARY:
-		Weapon: ChainGun
-		LocalOffset: 85,-213,-85, 85,213,-85
-		MuzzleSequence: muzzle
-		PauseOnCondition: !ammo
-	Armament@SECONDARY:
-		Name: secondary
-		Weapon: HellfireAA.hind
-		LocalOffset: 85,213,-85, 85,-213,-85
-		MuzzleSequence: muzzle
-		PauseOnCondition: !ammo
-	AttackAircraft:
-		FacingTolerance: 20
-		PersistentTargeting: false
-		AttackType: Hover
-		OpportunityFire: true
-	Aircraft:
-		TurnSpeed: 4
-		Speed: 112
-	AutoTarget:
-		InitialStance: AttackAnything
-		InitialStanceAI: AttackAnything
-		ScanOnIdle: true
-	WithIdleOverlay@ROTORAIR:
-		Sequence: rotor
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTORGROUND:
-		Sequence: slow-rotor
-		RequiresCondition: !airborne
-	AmmoPool:
-		Ammo: 24
-		PipCount: 6
-		ReloadDelay: 8
-		AmmoCondition: ammo
-	Cargo:
-		Types: Infantry
-		MaxWeight: 3
-		PipCount: 3
-		AfterUnloadDelay: 20
-	SelectionDecorations:
-	WithMuzzleOverlay:
-	SpawnActorOnDeath:
-		Actor: HIND.Husk
-	SmokeTrailWhenDamaged:
-		Offset: -427,0,0
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
-	Selectable:
-		DecorationBounds: 38,32
-	Rearmable:
-		RearmActors: hpad, carr.deployed
-	Chronoshiftable:
-
-HELI:
-	Inherits: ^Helicopter
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Helicopter
-		BuildPaletteOrder: 40
-		Prerequisites: ~disabled, ~hpad, atek, ~techlevel.high
-		Description: Helicopter gunship armed\nwith multi-purpose missiles.\n  Strong vs Buildings, Vehicles, Aircraft\n  Weak vs Infantry
-	Valued:
-		Cost: 2000
-	Tooltip:
-		Name: Longbow
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 12000
-	RevealsShroud:
-		MinRange: 10c0
-		Range: 12c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 10c0
-		Type: GroundPosition
-	Armament@PRIMARY:
-		Weapon: HellfireAA
-		LocalOffset: 0,-213,-85, 0,213,-85
-		PauseOnCondition: !ammo
-	Armament@SECONDARY:
-		Weapon: HellfireAG
-		LocalOffset: 0,213,-85, 0,-213,-85
-		PauseOnCondition: !ammo
-	AttackAircraft:
-		FacingTolerance: 20
-		PersistentTargeting: false
-		AttackType: Hover
-		OpportunityFire: False
-	Aircraft:
-		TurnSpeed: 4
-		Speed: 149
-	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
-	WithIdleOverlay@ROTORAIR:
-		Offset: 0,0,85
-		Sequence: rotor
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTORGROUND:
-		Offset: 0,0,85
-		Sequence: slow-rotor
-		RequiresCondition: !airborne
-	AmmoPool:
-		Ammo: 8
-		AmmoCondition: ammo
-	SelectionDecorations:
-	SpawnActorOnDeath:
-		Actor: HELI.Husk
-	SmokeTrailWhenDamaged:
-		Offset: -427,0,0
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
-	Selectable:
-		DecorationBounds: 36,28
-	Rearmable:
-		RearmActors: hpad
-
-MH60:
-	Inherits: ^Helicopter
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Helicopter
-		BuildPaletteOrder: 20
-		Prerequisites: ~disabled ~hpad, ~techlevel.medium
-		Description: Helicopter gunship armed\nwith dual chainguns.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
-	Valued:
-		Cost: 1500
-	Tooltip:
-		Name: Black Hawk
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 10000
-	RevealsShroud:
-		MinRange: 8c0
-		Range: 10c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 8c0
-		Type: GroundPosition
-	Armament@PRIMARY:
-		Weapon: ChainGun
-		LocalOffset: 85,-213,-85, 85,213,-85
-		MuzzleSequence: muzzle
-		PauseOnCondition: !ammo
-	Armament@SECONDARY:
-		Name: secondary
-		Weapon: ChainGun
-		LocalOffset: 85,213,-85, 85,-213,-85
-		MuzzleSequence: muzzle
-		PauseOnCondition: !ammo
-	AttackAircraft:
-		FacingTolerance: 20
-		PersistentTargeting: false
-		AttackType: Hover
-	Aircraft:
-		TurnSpeed: 4
-		Speed: 112
-	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
-	WithIdleOverlay@ROTORAIR:
-		Sequence: rotor
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTORGROUND:
-		Sequence: slow-rotor
-		RequiresCondition: !airborne
-	AmmoPool:
-		Ammo: 24
-		PipCount: 6
-		ReloadDelay: 8
-		AmmoCondition: ammo
-	SelectionDecorations:
-	WithMuzzleOverlay:
-	SpawnActorOnDeath:
-		Actor: MH60.Husk
-	SmokeTrailWhenDamaged:
-		Offset: -427,0,0
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
-	Selectable:
-		DecorationBounds: 38,32
-	Rearmable:
-		RearmActors: hpad
-
-HPAD:
-	Inherits: ^Building
-	Inherits@shape: ^2x2Shape
-	Selectable:
-		Bounds: 48,48
-	HitShape:
-		UseTargetableCellsOffsets: false
-		TargetableOffsets: 0,0,0, 768,-512,0, 768,512,0, -281,-512,0, -630,512,0
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 120
-		Prerequisites: dome, ~structures.soviet, ~techlevel.medium
-		Description: Produces and reloads\nhelicopters.
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Helipad
-	Building:
-		Footprint: xx xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
-	Health:
-		HP: 80000
-	Armor:
-		Type: Wood
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	WithBuildingBib:
-	WithResupplyAnimation:
-		RequiresCondition: !build-incomplete
-	Exit@1:
-		RequiresCondition: !being-captured
-		SpawnOffset: 0,-256,0
-		ExitCell: 0,0
-		Facing: 224
-	RallyPoint:
-	Production:
-		Produces: Aircraft, Helicopter
-	Reservable:
-	ProductionBar:
-		ProductionType: Aircraft
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
-	Power:
-		Amount: -10
-	ProvidesPrerequisite@allies:
-		Factions: allies, england, france, soviet
-		Prerequisite: aircraft.allies
-	ProvidesPrerequisite@alliesvanilla:
-		Factions: allies
-		Prerequisite: aircraft.alliesvanilla
-	ProvidesPrerequisite@england:
-		Factions: england
-		Prerequisite: aircraft.england
-	ProvidesPrerequisite@france:
-		Factions: france
-		Prerequisite: aircraft.france
-	ProvidesPrerequisite@soviet:
-		Factions: soviet
-		Prerequisite: aircraft.soviet
-	ProvidesPrerequisite@alliedstructure:
-		RequiresPrerequisites: structures.allies
-		Prerequisite: aircraft.allies
-	ProvidesPrerequisite@alliedvanillastructure:
-		RequiresPrerequisites: structures.alliesvanilla
-		Prerequisite: aircraft.alliesvanilla
-	ProvidesPrerequisite@englishstructure:
-		RequiresPrerequisites: structures.england
-		Prerequisite: aircraft.england
-	ProvidesPrerequisite@frenchstructure:
-		RequiresPrerequisites: structures.france
-		Prerequisite: aircraft.france
-	ProvidesPrerequisite@germanstructure:
-		RequiresPrerequisites: structures.soviet
-		Prerequisite: aircraft.soviet
-	ProvidesPrerequisite@buildingname:
-	Targetable:
-		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
-	InfiltrateForSupportPower:
-		Proxy: aircraft.upgraded
-		Types: SpyInfiltrate
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 
 SPEN:
 	Inherits: ^Building
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Selectable:
 		Bounds: 72,48
+	InfiltrateForSupportPower:
+		Proxy: powerproxy.sonarpulse
+		Types: SpyInfiltrate
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -2619,9 +3189,9 @@ SPEN:
 		Queue: Building
 		BuildPaletteOrder: 50
 		Prerequisites: anypower, ~structures.soviet, ~techlevel.low
-		Description: Produces and repairs\nsubmarines and transports.\n  Special Ability: Sonar Pulse
+		Description: Produces and repairs\nsubmarines and transports.
 	Targetable:
-		TargetTypes: Ground, Water, Structure, WaterStructure, C4, DetonateAttack, SpyInfiltrate
+		TargetTypes: WaterActor, Structure, C4, DetonateAttack, SpyInfiltrate
 	Building:
 		Footprint: XXX xxx XXX
 		Dimensions: 3,3
@@ -2643,56 +3213,53 @@ SPEN:
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: 0,-213,0
-		Facing: 96
+		Facing: 1536
 		ExitCell: -1,2
 		ProductionTypes: Submarine
 	Exit@2:
 		RequiresCondition: !being-captured
 		SpawnOffset: 0,-213,0
-		Facing: 160
+		Facing: 2560
 		ExitCell: 3,2
 		ProductionTypes: Submarine
 	Exit@3:
 		RequiresCondition: !being-captured
 		SpawnOffset: 0,0,0
-		Facing: 32
+		Facing: 512
 		ExitCell: 0,0
 		ProductionTypes: Submarine
 	Exit@4:
 		RequiresCondition: !being-captured
 		SpawnOffset: 0,0,0
-		Facing: 224
+		Facing: 3584
 		ExitCell: 2,0
 		ProductionTypes: Submarine
 	Exit@b1:
 		RequiresCondition: !being-captured
 		SpawnOffset: -1024,1024,0
-		Facing: 160
+		Facing: 2560
 		ExitCell: 0,2
 		ProductionTypes: Ship
 	Exit@b2:
 		RequiresCondition: !being-captured
 		SpawnOffset: 1024,1024,0
-		Facing: 224
+		Facing: 3584
 		ExitCell: 2,2
 		ProductionTypes: Ship
 	Exit@b3:
 		RequiresCondition: !being-captured
 		SpawnOffset: -1024,-1024,0
-		Facing: 96
+		Facing: 1536
 		ExitCell: 0,0
 		ProductionTypes: Ship
 	Exit@b4:
 		RequiresCondition: !being-captured
 		SpawnOffset: 1024,-1024,0
-		Facing: 32
+		Facing: 512
 		ExitCell: 2,0
 		ProductionTypes: Ship
 	Production:
 		Produces: Ship, Submarine
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	-SpawnActorsOnSell:
 	RepairsUnits:
 		HpPerStep: 1000
@@ -2735,6 +3302,15 @@ SPEN:
 	ProvidesPrerequisite@buildingname:
 	MapEditorData:
 		ExcludeTilesets: INTERIOR
+	HitShape:
+		Type: Rectangle
+			TopLeft: -1536, -598
+			BottomRight: 1536, 598
+	HitShape@TOPANDBOTTOM:
+		TargetableOffsets: 811,0,0, -811,0,0
+		Type: Rectangle
+			TopLeft: -555, -1110
+			BottomRight: 555, 1110
 	SpawnActorPower@SonarPulse:
 		Icon: sonar
 		Description: Sonar Pulse
@@ -2745,27 +3321,12 @@ SPEN:
 		Actor: sonar
 		LifeTime: 250
 		DeploySound: sonpulse.aud
-		EffectImage: moveflsh
+		EffectImage: moveflash
 		EffectPalette: moveflash
 		SupportPowerPaletteOrder: 8
 		PauseOnCondition: lowpower
-        DisplayTimerStances: Ally
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
-	HitShape:
-		Type: Rectangle
-			TopLeft: -1536, -598
-			BottomRight: 1536, 598
-	HitShape@TOPANDBOTTOM:
-		TargetableOffsets: 811,0,0, -811,0,0
-		Type: Rectangle
-			TopLeft: -555, -1110
-			BottomRight: 555, 1110
+		DisplayTimerRelationships: Ally
+		EffectSequence: idle
 
 AFLD:
 	Inherits: ^Building
@@ -2801,7 +3362,7 @@ AFLD:
 	Exit@1:
 		RequiresCondition: !being-captured
 		ExitCell: 1,1
-		Facing: 192
+		Facing: 768
 	RallyPoint:
 	Production:
 		Produces: Aircraft, Plane
@@ -2851,7 +3412,7 @@ AFLD:
 		UseDirectionalTarget: True
 		DirectionArrowAnimation: paradirection
 		SupportPowerPaletteOrder: 60
-        DisplayTimerStances: Ally
+		DisplayTimerRelationships: Ally
 	ParatroopersPower@paratroopers:
 		OrderName: SovietParatroopers
 		Prerequisites: aircraft.soviet
@@ -2874,7 +3435,7 @@ AFLD:
 		DirectionArrowAnimation: paradirection
 		SupportPowerPaletteOrder: 50
 		AllowMultiple: False
-        DisplayTimerStances: Ally
+		DisplayTimerRelationships: Ally
 	AirstrikePower@parabombs:
 		OrderName: UkraineParabombs
 		Prerequisites: aircraft.soviet
@@ -2898,7 +3459,7 @@ AFLD:
 		DirectionArrowAnimation: paradirection
 		SupportPowerPaletteOrder: 40
 		AllowMultiple: False
-        DisplayTimerStances: Ally
+		DisplayTimerRelationships: Ally
 	AirstrikePower@Carpetbomb:
 		OrderName: Carpetbomb
 		Prerequisites: aircraft.soviet
@@ -2922,14 +3483,14 @@ AFLD:
 		DirectionArrowAnimation: paradirection
 		SupportPowerPaletteOrder: 40
 		AllowMultiple: False
-        DisplayTimerStances: Ally
+		DisplayTimerRelationships: Ally
 	AirstrikePower@StrategicBombing:
 		OrderName: StrategicBombing
 		Prerequisites: aircraft.soviet, stek
 		Icon: parabombs
 		ChargeInterval: 11500
 		Description: Strategic Bombing
-		LongDesc: Twin strategic bombers drops 2 devastating bombs with high damage but a small bast radius on a spific target\n Hard to shoot down\n Note: It can be hard to aim this Airstrike you will want to set the target it 5 tiles (tanks) ahead of your real target
+		LongDesc: Twin strategic bombers drops 2 devastating bombs with high damage but a small bast radius on a spific target\n Hard to shoot down\n Note: It can be hard to aim this Airstrike you will want to set the target it 6 tiles (tanks) ahead of your real target
 		SelectTargetSpeechNotification: SelectTarget
 		CameraActor: camera
 		CameraRemoveDelay: 150
@@ -2946,7 +3507,7 @@ AFLD:
 		DirectionArrowAnimation: paradirection
 		SupportPowerPaletteOrder: 40
 		AllowMultiple: False
-        DisplayTimerStances: Ally
+		DisplayTimerRelationships: Ally
 	ParatroopersPower@Paratanks:
 		OrderName: Paratanks
 		Prerequisites: aircraft.soviet, stek
@@ -2972,7 +3533,7 @@ AFLD:
 		SquadSize: 3
 		SupportPowerPaletteOrder: 4
 		AllowMultiple: False
-    	DisplayTimerStances: Ally
+		DisplayTimerRelationships: Ally
 	ProductionBar:
 		ProductionType: Aircraft
 	SupportPowerChargeBar:
@@ -2992,8 +3553,7 @@ AFLD:
 		RequiresSelection: true
 		Image: pips
 		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
+		Position: Top
 		RequiresCondition: primary
 	WithResupplyAnimation:
 		RequiresCondition: !build-incomplete
@@ -3076,315 +3636,6 @@ BRIK:
 	WithWallSpriteBody:
 		Type: concrete
 
-1TNK:
-	Inherits: ^TrackedVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 120
-		BuildDurationModifier: 31
-		Prerequisites: ~vehicles.soviet, ~techlevel.low
-		Description: Fast tank, good for scouting.\n  Strong vs Infantry, Light armor\n  Weak vs  Tanks, Aircraft
-	Valued:
-		Cost: 700
-	Tooltip:
-		Name: Light Tank
-		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 22000
-	Armor:
-		Type: Heavy
-	Mobile:
-		Speed: 128
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Turreted:
-		TurnSpeed: 7
-	Armament:
-		Weapon: 25mm
-		Recoil: 85
-		RecoilRecovery: 25
-		LocalOffset: 768,0,90
-		MuzzleSequence: muzzle
-	AttackTurreted:
-	WithMuzzleOverlay:
-	WithSpriteTurret:
-	SpawnActorOnDeath:
-		Actor: 1TNK.Husk
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
-	GrantConditionOnDamageState@HEAVY:
-		Condition: heavy-damage
-		ValidDamageStates: Heavy
-	GrantConditionOnDamageState@CRITICAL:
-		Condition: critical-damage
-		ValidDamageStates: Critical
-	SpeedMultiplier@HEAVYDAMAGE:
-		RequiresCondition: heavy-damage
-		Modifier: 75
-	SpeedMultiplier@CRITICALDAMAGE:
-		RequiresCondition: critical-damage
-		Modifier: 50
-	Passenger:
-		CargoType: Vehicle
-		Weight: 2
-
-2TNK:
-	Inherits: ^TrackedVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Buildable:
-		Queue: Vehicle
-		BuildDurationModifier: 40
-		BuildPaletteOrder: 220
-		Prerequisites: fix, ~vehicles.soviet, ~techlevel.medium
-		Description: Secondary Soviet Main Battle Tank.\n  Strong vs Infantry, Vehicles\n  Weak vs  Aircraft
-	Valued:
-		Cost: 800
-	Tooltip:
-		Name: Medium Tank
-		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 45000
-	Armor:
-		Type: Heavy
-	Mobile:
-		Speed: 85
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Turreted:
-		TurnSpeed: 5
-	Armament:
-		Weapon: 90mm
-		Recoil: 128
-		RecoilRecovery: 38
-		LocalOffset: 720,0,80
-		MuzzleSequence: muzzle
-	AttackTurreted:
-	WithMuzzleOverlay:
-	WithSpriteTurret:
-	SpawnActorOnDeath:
-		Actor: 2TNK.Husk
-	SelectionDecorations:
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 28,28
-
-ARTY:
-	Inherits: ^TrackedVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 230
-		Prerequisites: dome, ~vehicles.soviet, ~techlevel.medium
-		Description: Long-range artillery.\n  Strong vs Infantry, Vehicles, Buildings\n  Weak vs  Aircraft
-	Valued:
-		Cost: 850
-	Tooltip:
-		Name: Artillery
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 10000
-	Armor:
-		Type: Light
-	Mobile:
-		TurnSpeed: 2
-		Speed: 85
-		Locomotor: lighttracked
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Armament:
-		Weapon: 155mm
-		LocalOffset: 624,0,208
-		MuzzleSequence: muzzle
-	AttackFrontal:
-		TargetFrozenActors: True
-		ForceFireIgnoresActors: True
-	WithMuzzleOverlay:
-	Explodes:
-		Weapon: ArtilleryExplode
-		EmptyWeapon: UnitExplodeSmall
-		LoadedChance: 75
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
-
-JEEP:
-	Inherits: ^Vehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 130
-		Prerequisites: ~vehicles.soviet, ~techlevel.low
-		Description: Fast scout & anti-infantry vehicle.\nCan carry one infantry.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Ranger
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 15000
-	Armor:
-		Type: Light
-	Mobile:
-		TurnSpeed: 10
-		Speed: 170
-		PauseOnCondition: notmobile || being-captured
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 8c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Turreted:
-		TurnSpeed: 10
-		Offset: 0,0,128
-	Armament:
-		Weapon: M60mg
-		MuzzleSequence: muzzle
-		LocalOffset: 128,0,43
-	AttackTurreted:
-	WithMuzzleOverlay:
-	WithSpriteTurret:
-	Cargo:
-		Types: Infantry
-		MaxWeight: 1
-		PipCount: 1
-		LoadingCondition: notmobile
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
-
-MGG:
-	Inherits: ^Vehicle
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 330
-		Prerequisites: stek, ~vehicles.soviet, ~techlevel.high
-		Description: Regenerates the shroud nearby, \nobscuring the area.\n  Unarmed
-	Valued:
-		Cost: 1000
-	Tooltip:
-		Name: Mobile Gap Generator
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 22000
-	Armor:
-		Type: Heavy
-	Mobile:
-		Speed: 85
-	WithIdleOverlay@SPINNER:
-		Offset: -299,0,171
-		Sequence: spinner
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	CreatesShroud:
-		Range: 6c0
-	RenderShroudCircle:
-	SpawnActorOnDeath:
-		Actor: MGG.Husk
-
-MRJ:
-	Inherits: ^Vehicle
-	Valued:
-		Cost: 1000
-	Tooltip:
-		Name: Mobile Radar Jammer
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 320
-		Prerequisites: stek, ~vehicles.soviet, ~techlevel.high
-		Description: Jams nearby enemy radar domes\nand deflects incoming missiles.\n  Unarmed
-	Health:
-		HP: 22000
-	Armor:
-		Type: Heavy
-	Mobile:
-		Speed: 85
-	RevealsShroud:
-		Range: 7c0
-	WithIdleOverlay@SPINNER:
-		Sequence: spinner
-		Offset: -256,0,256
-	ProximityExternalCondition@JAMMER:
-		Range: 18c0
-		ValidStances: Enemy, Neutral
-		Condition: jammed
-	WithRangeCircle@JAMMER:
-		Type: jammer
-		Range: 18c0
-		Color: 0000FF80
-	JamsMissiles:
-		Range: 5c0
-		DeflectionStances: Neutral, Enemy
-	RenderJammerCircle:
-
-DTRK:
-	Inherits: ^Vehicle
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 330
-		Prerequisites: stek, ~vehicles.soviet, ~techlevel.high
-		Description: Truck with actively armed nuclear\nexplosives. Has very weak armor.
-	Valued:
-		Cost: 2500
-	Tooltip:
-		Name: Demolition Truck
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 5000
-	Armor:
-		Type: Light
-	Mobile:
-		Speed: 85
-	RevealsShroud:
-		Range: 4c0
-	Explodes:
-		Weapon: MiniNuke
-		EmptyWeapon: MiniNuke
-		DamageSource: Killer
-	AttackFrontal:
-		FacingTolerance: 128
-	Armament@PRIMARY:
-		Weapon: DemoTruckTargeting
-	GrantConditionOnAttack:
-		Condition: triggered
-	GrantConditionOnDeploy:
-		DeployedCondition: triggered
-	-DamageMultiplier@IRONCURTAIN:
-	KillsSelf:
-		RequiresCondition: invulnerability || triggered
-	Chronoshiftable:
-		ExplodeInstead: true
-
 CTNK:
 	Inherits: ^Vehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -3434,77 +3685,17 @@ CTNK:
 		Actor: CTNK.Husk
 	Chronoshiftable:
 		ReturnToOrigin: false
-        
+		
 CTNK.Husk:
 	Inherits: ^Husk
 	Tooltip:
 		Name: Husk (Chrono Tank)
-	ThrowsParticle@turret:
-		Anim: turret
 	TransformOnCapture:
 		IntoActor: ctnk
 	InfiltrateForTransform:
 		IntoActor: ctnk
 	RenderSprites:
 		Image: ctnk.destroyed
-
-STNK:
-	Inherits: ^Vehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 330
-		Prerequisites: stek, ~vehicles.soviet, ~techlevel.high
-		Description: Tank which\ncan cloak. Armed with anti-ground missiles.\n  Strong vs Medium armor\n  Weak vs Infantry, Heavy Tanks, Aircraft
-	Valued:
-		Cost: 1230
-	Tooltip:
-		Name: Phase Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 35000
-	Armor:
-		Type: Light
-	Mobile:
-		Speed: 142
-		Locomotor: heavywheeled
-		PauseOnCondition: notmobile || being-captured
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 7c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: ReturnFire
-	Armament:
-		Weapon: APTusk.stnk
-		LocalOffset: 192,0,176
-	Turreted:
-		TurnSpeed: 5
-	AttackTurreted:
-	WithSpriteTurret:
-	Cargo:
-		Types: Infantry
-		MaxWeight: 0
-		PipCount: 0
-		LoadingCondition: notmobile
-	Cloak:
-		InitialDelay: 125
-		CloakDelay: 175
-		CloakSound: appear1.aud
-		UncloakSound: appear1.aud
-		IsPlayerPalette: true
-		PauseOnCondition: cloak-force-disabled
-	GrantConditionOnDamageState@UNCLOAK:
-		Condition: cloak-force-disabled
-		ValidDamageStates: Critical
-	-MustBeDestroyed:
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 
 GUN:
 	Inherits: ^Defense
@@ -3532,8 +3723,8 @@ GUN:
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
-		TurnSpeed: 12
-		InitialFacing: 56
+		TurnSpeed: 48
+		InitialFacing: 224
 	-WithSpriteBody:
 	WithEmbeddedTurretSpriteBody:
 	Armament:
@@ -3547,122 +3738,7 @@ GUN:
 		Amount: -40
 	DetectCloaked:
 		Range: 6c0
-	BodyOrientation:
-		UseClassicFacingFudge: True
-
-HBOX:
-	Inherits: ^Defense
-	Inherits@AUTOTARGET: ^AutoTargetAll
-	Tooltip:
-		Name: Camo Pillbox
-	Building:
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 50
-		Prerequisites: dome, ~structures.soviet, ~techlevel.medium
-		Description: Camouflaged static defense with a fireport\nfor a garrisoned soldier.\nCan detect cloaked units.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
-	Valued:
-		Cost: 750
-	CustomSellValue:
-		Value: 550
-	Health:
-		HP: 40000
-	Armor:
-		Type: Heavy
-	RevealsShroud:
-		MinRange: 5c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 5c0
-	Cloak:
-		InitialDelay: 125
-		CloakDelay: 60
-		IsPlayerPalette: true
-		PauseOnCondition: cloak-force-disabled
-	GrantConditionOnDamageState@UNCLOAK:
-		Condition: cloak-force-disabled
-		ValidDamageStates: Critical
-	Turreted:
-		TurnSpeed: 255
-	-QuantizeFacingsFromSequence:
-	BodyOrientation:
-		QuantizedFacings: 8
-	Cargo:
-		Types: Infantry
-		MaxWeight: 1
-		PipCount: 1
-		InitialUnits: e1
-	-SpawnActorsOnSell:
-	DetectCloaked:
-		Range: 6c0
-	RenderRangeCircle:
-		FallbackRange: 6c0
-	AttackGarrisoned:
-		RequiresCondition: !build-incomplete
-		Armaments: garrisoned
-		PortOffsets: 384,0,128, 224,-341,128, -224,-341,128, -384,0,128, -224,341,128, 224,341,128
-		PortYaws: 0, 176, 341, 512, 682, 853
-		PortCones: 88, 88, 88, 88, 88, 88
-	Power:
-		Amount: -20
-	-MustBeDestroyed:
-
-PBOX:
-	Inherits: ^Defense
-	Inherits@AUTOTARGET: ^AutoTargetAll
-	Tooltip:
-		Name: Pillbox
-	Building:
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 40
-		Prerequisites: barr, ~structures.soviet, ~techlevel.low
-		Description: Static defense with a fireport for\na garrisoned soldier.\nCan detect cloaked units.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
-	Valued:
-		Cost: 600
-	CustomSellValue:
-		Value: 400
-	Health:
-		HP: 40000
-	Armor:
-		Type: Heavy
-	RevealsShroud:
-		MinRange: 5c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 5c0
-	WithBuildingBib:
-		HasMinibib: true
-	Turreted:
-		TurnSpeed: 255
-	-QuantizeFacingsFromSequence:
-	BodyOrientation:
-		QuantizedFacings: 8
-	Cargo:
-		Types: Infantry
-		MaxWeight: 1
-		PipCount: 1
-		InitialUnits: e1
-	-SpawnActorsOnSell:
-	AttackGarrisoned:
-		RequiresCondition: !build-incomplete
-		Armaments: garrisoned
-		PortOffsets: 384,0,128, 224,-341,128, -224,-341,128, -384,0,128, -224,341,128, 224,341,128
-		PortYaws: 0, 176, 341, 512, 682, 853
-		PortCones: 88, 88, 88, 88, 88, 88
-	RenderRangeCircle:
-		FallbackRange: 6c0
-	Power:
-		Amount: -20
-	DetectCloaked:
-		Range: 6c0
-	HitShape@BOTTOM:
-		TargetableOffsets: -768,0,0
-		Type: Rectangle
-			TopLeft: -512, 598
-			BottomRight: 512, 1110
+	ClassicFacingBodyOrientation:
 
 AGUN:
 	Inherits: ^Defense
@@ -3694,8 +3770,8 @@ AGUN:
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
-		TurnSpeed: 15
-		InitialFacing: 224
+		TurnSpeed: 60
+		InitialFacing: 896
 	-WithSpriteBody:
 	WithEmbeddedTurretSpriteBody:
 	Armament:
@@ -3710,8 +3786,7 @@ AGUN:
 		RangeCircleType: aa
 	Power:
 		Amount: -50
-	BodyOrientation:
-		UseClassicFacingFudge: True
+	ClassicFacingBodyOrientation:
 
 GAP:
 	Inherits: ^ScienceBuilding
@@ -3782,7 +3857,7 @@ SPY:
 	RevealsShroud:
 		Range: 5c0
 	Passenger:
-		PipType: Blue
+		CustomPipType: blue
 		Voice: Move
 	Disguise:
 		DisguisedCondition: disguise
@@ -3804,8 +3879,7 @@ SPY:
 		Image: pips
 		Sequence: pip-disguise
 		Palette: effect
-		ReferencePoint: Top, Right
-		ZOffset: 256
+		Position: TopRight
 		RequiresCondition: disguise
 	IgnoresDisguise:
 	Armament:
@@ -3814,19 +3888,6 @@ SPY:
 		Voice: Move
 	Voiced:
 		VoiceSet: SpyVoice
-
-SPY.England:
-	Inherits: SPY
-	Buildable:
-		Prerequisites: ~infantry.england, dome, ~tent, ~techlevel.medium
-	Valued:
-		Cost: 250
-	GivesExperience:
-		Experience: 500
-	DisguiseTooltip:
-		Name: British Spy
-	RenderSprites:
-		Image: spy
 
 E7:
 	Inherits: ^Soldier
@@ -3857,7 +3918,7 @@ E7:
 		DetonationDelay: 45
 		Voice: Demolish
 	Passenger:
-		PipType: Red
+		CustomPipType: red
 		Voice: Move
 	Armament@PRIMARY:
 		Weapon: Colt45
@@ -3902,13 +3963,13 @@ MEDI:
 	RevealsShroud:
 		Range: 3c0
 	Passenger:
-		PipType: Blue
+		CustomPipType: blue
 	Armament:
 		Weapon: Heal
 		Cursor: heal
 		OutsideRangeCursor: heal
-		TargetStances: Ally
-		ForceTargetStances: None
+		TargetRelationships: Ally
+		ForceTargetRelationships: None
 	WithInfantryBody:
 		IdleSequences: idle
 		StandSequences: stand
@@ -3941,14 +4002,14 @@ MECH:
 	RevealsShroud:
 		Range: 3c0
 	Passenger:
-		PipType: Blue
+		CustomPipType: blue
 		Voice: Move
 	Armament:
 		Weapon: Repair
 		Cursor: repair
 		OutsideRangeCursor: repair
-		TargetStances: Ally
-		ForceTargetStances: None
+		TargetRelationships: Ally
+		ForceTargetRelationships: None
 	AttackFrontal:
 		Voice: Action
 	CaptureManager:
@@ -3971,15 +4032,15 @@ MECH:
 	Infiltrates:
 		RequiresCondition: !global-reusable-mechanics
 		Types: Husk
-		ValidStances: ally
+		ValidRelationships: ally
 		EnterCursor: goldwrench
 		PlayerExperience: 25
 	Infiltrates@rehusk:
 		RequiresCondition: global-reusable-mechanics
 		Types: Husk
-		ValidStances: ally
+		ValidRelationships: ally
 		EnterCursor: goldwrench
-        EnterBehaviour: Exit
+		EnterBehaviour: Exit
 		PlayerExperience: 25
 	WithInfantryBody:
 		IdleSequences: idle
@@ -4008,7 +4069,7 @@ SNIPER:
 	Health:
 		HP: 8000
 	Passenger:
-		PipType: Red
+		CustomPipType: red
 	RevealsShroud:
 		Range: 6c0
 	AutoTarget:
@@ -4059,7 +4120,7 @@ PT:
 	Armor:
 		Type: Heavy
 	Mobile:
-		TurnSpeed: 7
+		TurnSpeed: 112
 		Speed: 118
 	RevealsShroud:
 		MinRange: 5c0
@@ -4068,7 +4129,7 @@ PT:
 	RevealsShroud@GAPGEN:
 		Range: 5c0
 	Turreted:
-		TurnSpeed: 7
+		TurnSpeed: 28
 		Offset: 512,0,0
 	Armament@PRIMARY:
 		Weapon: 2Inch
@@ -4129,7 +4190,7 @@ SAM:
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
-		TurnSpeed: 30
+		TurnSpeed: 120
 		InitialFacing: 0
 	-WithSpriteBody:
 	WithEmbeddedTurretSpriteBody:
@@ -4157,11 +4218,107 @@ SAM:
 		RangeCircleType: aa
 	Power:
 		Amount: -40
-	BodyOrientation:
-		UseClassicFacingFudge: True
+	ClassicFacingBodyOrientation:
 	ProvidesPrerequisite@russia:
 		Factions: russia
 		Prerequisite: aircraft.upgraded
+
+PDOX:
+	Inherits: ^ScienceBuilding
+	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
+	Inherits@shape: ^2x2Shape
+	Selectable:
+		Bounds: 48,48
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 120
+		Prerequisites: stek, ~structures.soviet, ~techlevel.unrestricted
+		BuildLimit: 1
+		Description: Teleports a group of units across the\nmap for a short time.\nRequires power to operate.\nMaximum 1 can be built.\n  Special Ability: Chronoshift
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Chronosphere
+	Building:
+		Footprint: xx xx
+		Dimensions: 2,2
+	Health:
+		HP: 100000
+	Armor:
+		Type: Wood
+	RevealsShroud:
+		MinRange: 5c0
+		Range: 6c0
+		RequiresCondition: !disabled
+		RevealGeneratedShroud: False
+	RevealsShroud@Offline:
+		Range: 5c0
+		RequiresCondition: disabled
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+		RequiresCondition: !disabled
+	WithBuildingBib:
+		HasMinibib: true
+	ProvidesPrerequisite@germany:
+		Factions: russia
+		Prerequisite: pdox.germany
+	ProvidesPrerequisite@germanstructure:
+		RequiresPrerequisites: structures.russia
+		Prerequisite: pdox.germany
+	ChronoshiftPower@chronoshift:
+		OrderName: Chronoshift
+		PauseOnCondition: disabled
+		Prerequisites: pdox.germany
+		Icon: chrono
+		ChargeInterval: 3000
+		Description: Chronoshift
+		LongDesc: Teleports a group of units across\nthe map for 20 seconds.
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		BeginChargeSpeechNotification: ChronosphereCharging
+		EndChargeSpeechNotification: ChronosphereReady
+		Duration: 400
+		KillCargo: true
+		DisplayRadarPing: True
+		SupportPowerPaletteOrder: 20
+		Dimensions: 3, 3
+		Footprint: _x_ xxx _x_
+		AllowMultiple: True
+		DisplayTimerRelationships: Ally
+		Dimensions: 3, 3
+		Footprint: _x_ xxx _x_
+	ChronoshiftPower@advancedchronoshift:
+		OrderName: AdvancedChronoshift
+		PauseOnCondition: disabled
+		Prerequisites: pdox.germany
+		Icon: chrono
+		ChargeInterval: 3000
+		Description: Advanced Chronoshift
+		LongDesc: Teleports a large group of units across\nthe map for 20 seconds.
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		BeginChargeSpeechNotification: ChronosphereCharging
+		EndChargeSpeechNotification: ChronosphereReady
+		Duration: 400
+		KillCargo: true
+		DisplayRadarPing: True
+		SupportPowerPaletteOrder: 30
+		Dimensions: 5, 5
+		Footprint: __x__ _xxx_ xxxxx _xxx_ __x__
+		AllowMultiple: True
+		DisplayTimerRelationships: Ally
+		Dimensions: 3, 3
+		Footprint: _x_ xxx _x_
+	SupportPowerChargeBar:
+	InfiltrateForSupportPowerReset:
+		Types: SpyInfiltrate
+	Targetable:
+		TargetTypes: GroundActor, C4, DetonateAttack, Structure, SpyInfiltrate
+	Power:
+		Amount: -200
+	MustBeDestroyed:
+		RequiredForShortGame: false
+	ProvidesPrerequisite@buildingname:
 
 IRON:
 	Inherits: ^ScienceBuilding
@@ -4170,9 +4327,9 @@ IRON:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
-		Prerequisites: stek, ~structures.soviet, ~techlevel.high
+		Prerequisites: stek, ~structures.soviet, ~techlevel.unrestricted
 		BuildLimit: 1
-		Description: Makes a group of units invulnerable\nfor a short time.\nRequires power to operate.\nMaximum 1 can be built.\n  Special Ability: Invulnerability, Advanced Invulnerability
+		Description: Makes a group of units invulnerable\nfor a short time.\nRequires power to operate.\nMaximum 1 can be built.\n  Special Ability: Invulnerability
 	Valued:
 		Cost: 1500
 	Tooltip:
@@ -4183,7 +4340,6 @@ IRON:
 	Selectable:
 		Bounds: 48,28,0,2
 		DecorationBounds: 50,50,0,-12
-	SelectionDecorations:
 	Health:
 		HP: 100000
 	Armor:
@@ -4208,7 +4364,6 @@ IRON:
 		Description: Advanced Invulnerability
 		LongDesc: Makes a large group of units invulnerable\nfor 1 minute.
 		Duration: 1500
-		Range: 3
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
 		BeginChargeSpeechNotification: IronCurtainCharging
@@ -4218,519 +4373,245 @@ IRON:
 		OnFireSound: ironcur9.aud
 		SupportPowerPaletteOrder: 10
 		AllowMultiple: True
-        DisplayTimerStances: Ally
+		DisplayTimerRelationships: Ally
+		Dimensions: 5, 5
+		Footprint: xxxxx xxxxx xxxxx xxxxx xxxxx
+		Dimensions: 3, 3
+		Footprint: _x_ xxx _x_
 	SupportPowerChargeBar:
+	InfiltrateForSupportPowerReset:
+		Types: SpyInfiltrate
+	Targetable:
+		TargetTypes: GroundActor, C4, DetonateAttack, Structure, SpyInfiltrate
 	Power:
 		Amount: -200
 	MustBeDestroyed:
 		RequiredForShortGame: false
 
-PDOX:
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 120
-		Prerequisites: stek, ~structures.soviet, ~techlevel.high
-		BuildLimit: 1
-		Description: Teleports a group of units across the\nmap for a short time.\nRequires power to operate.\nMaximum 1 can be built.\n  Special Ability: Chronoshift
-	ChronoshiftPower@chronoshift:
-		AllowMultiple: True
-        DisplayTimerStances: Ally
-	ChronoshiftPower@advancedchronoshift:
-		OrderName: AdvancedChronoshift
-		PauseOnCondition: disabled
-		Prerequisites: stek
-		Icon: chrono
-		ChargeInterval: 7500
-		Description: Advanced Chronoshift
-		LongDesc: Teleports a large group of units across\nthe map for 3 minutes.
-		SelectTargetSpeechNotification: SelectTarget
-		InsufficientPowerSpeechNotification: InsufficientPower
-		BeginChargeSpeechNotification: ChronosphereCharging
-		EndChargeSpeechNotification: ChronosphereReady
-		Duration: 4500
-		KillCargo: true
-        DisplayTimerStances: Ally
-		DisplayRadarPing: True
-		Range: 2
-		SupportPowerPaletteOrder: 30
-		AllowMultiple: True
-
-NTNK:
-	Inherits: ^TrackedVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+TRUK:
+	Inherits: ^Vehicle
+	Inherits@selection: ^SelectableSupportUnit
 	Buildable:
 		Queue: Vehicle
-		BuildPaletteOrder: 120
-		Prerequisites: stek, ~vehicles.soviet, ~Superunits_Checkbox, ~techlevel.low
-		Description: Extremely fast tank, good for scouting.\n  Strong vs Light armor\n  Weak vs Infantry, Tanks, Aircraft\n Explodes like a demo truck
+		BuildPaletteOrder: 410
+		Prerequisites: ~techlevel.low
+		Description: Transports cash to other players.\n  Unarmed
 	Valued:
-		Cost: 5000
+		Cost: 500
 	Tooltip:
-		Name: Nuclear Light Tank
-		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
+		Name: Supply Truck
 	Health:
-		HP: 2000
+		HP: 11000
 	Armor:
-		Type: Heavy
+		Type: Light
 	Mobile:
-		Speed: 270
-		TurnSpeed: 100
+		Speed: 128
 	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Turreted:
-		TurnSpeed: 7
-	Armament:
-		Weapon: 25mm
-		Recoil: 85
-		RecoilRecovery: 25
-		LocalOffset: 768,0,90
-		MuzzleSequence: muzzle
-	AttackTurreted:
-	Explodes:
-		Weapon: MicroNuke
-		EmptyWeapon: MicroNuke
-	WithMuzzleOverlay:
-	WithSpriteTurret:
+	DeliversCash:
+		Payload: 500
+		PlayerExperience: 50
 	SpawnActorOnDeath:
-		Actor: NTNK.Husk
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
-	KillsSelf:
-		RequiresCondition: invulnerability
-	Chronoshiftable:
-		ExplodeInstead: true
+		Actor: moneycrate
 	Passenger:
 		CargoType: Vehicle
 		Weight: 2
 
-NTNK.Husk:
-	Inherits: ^Husk
+TIMECRATE:
+	Inherits: ^Crate
 	Tooltip:
-		Name: Husk (Light nTank)
-	ThrowsParticle@turret:
-		Anim: turret
-	TransformOnCapture:
-		IntoActor: ntnk
-	InfiltrateForTransform:
-		IntoActor: ntnk
-	RenderSprites:
-		Image: ntnk.destroyed
+		Name: quake
+	ExplodeCrateAction@timequake:
+		Weapon: TimeQuake
+		SelectionShares: 100
+		Sequence: timequake
 
-FPWR:
-	Inherits: ^FakeBuilding
-	Inherits@infiltrate: ^InfiltratableFake
-	Inherits@shape: ^2x2Shape
-	Selectable:
-		Bounds: 48,48
-	HitShape:
-		UseTargetableCellsOffsets: false
-		TargetableOffsets: 0,0,0, 640,-384,0, 640,512,0, -710,-512,0, -710,512,0
-	Buildable:
-		BuildPaletteOrder: 870
-		Queue: Defense
-		Prerequisites: ~structures.soviet, ~techlevel.infonly
-		Description: Looks like a Power Plant.
-		Icon: fake-icon
+MONEYCRATE:
+	Inherits: ^Crate
 	Tooltip:
-		Name: Fake Power Plant
-		GenericName: Power Plant
-		GenericVisibility: Enemy
-		GenericStancePrefix: False
-	Building:
-		Footprint: xx xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
-	Health:
-		HP: 40000
-	Armor:
-		Type: Wood
-	WithBuildingBib:
+		Name: Money Crate
+	GiveCashCrateAction:
+		Amount: 500
+		SelectionShares: 1
+		UseCashTick: true
+		Sequence: dollar
 	RenderSprites:
-		Image: POWR
+		Image: wcrate
+
+MCV:
+	Inherits: ^Vehicle
+	Inherits@selection: ^SelectableSupportUnit
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 210
+		Prerequisites: fix, ~techlevel.medium
+		BuildDurationModifier: 50
+		Description: Deploys into another Construction Yard.\n  Unarmed
 	Valued:
-		Cost: 30
-
-SYRF:
-	Inherits: ^FakeBuilding
-	Inherits@infiltrate: ^InfiltratableFake
-	Selectable:
-		Bounds: 72,48
-	Buildable:
-		BuildPaletteOrder: 890
-		Queue: Defense
-		Prerequisites: ~structures.soviet, ~techlevel.medium
-		Description: Looks like a Naval Yard.
-		Icon: fake-icon
+		Cost: 2000
 	Tooltip:
-		Name: Fake Naval Yard
-		GenericName: Naval Yard
-		GenericVisibility: Enemy
-		GenericStancePrefix: False
-	Targetable:
-		TargetTypes: Ground, Water, Structure, SpyInfiltrate
-	Building:
-		Footprint: XXX xxx XXX
-		Dimensions: 3,3
-		TerrainTypes: Water
-	RequiresBuildableArea:
-		Adjacent: 8
-	RenderSprites:
-		Image: SYRD
-	Valued:
-		Cost: 100
-	Health:
-		HP: 100000
-	Armor:
-		Type: Light
-	MapEditorData:
-		ExcludeTilesets: INTERIOR
-	HitShape:
-		TargetableOffsets: 768,0,0, 768,-1024,0, 768,1024,0
-		Type: Rectangle
-			TopLeft: -1536, -1152
-			BottomRight: 1536, 598
-	HitShape@BOTTOM:
-		TargetableOffsets: -768,0,0
-		Type: Rectangle
-			TopLeft: -512, 598
-			BottomRight: 512, 1110
-
-SPEF:
-	Inherits: ^FakeBuilding
-	Inherits@infiltrate: ^InfiltratableFake
+		Name: Mobile Construction Vehicle
 	Selectable:
-		Bounds: 72,48
-	Targetable:
-		TargetTypes: Ground, Water, Structure, SpyInfiltrate
-	Buildable:
-		BuildPaletteOrder: 890
-		Queue: Defense
-		Prerequisites: ~structures.soviet, ~techlevel.medium
-		Description: Looks like a Sub Pen.
-		Icon: fake-icon
-	Tooltip:
-		Name: Fake Sub Pen
-		GenericName: Sub Pen
-		GenericVisibility: Enemy
-		GenericStancePrefix: False
-	Building:
-		Footprint: XXX xxx XXX
-		Dimensions: 3,3
-		TerrainTypes: Water
-	RequiresBuildableArea:
-		Adjacent: 8
-	RenderSprites:
-		Image: SPEN
-	Valued:
-		Cost: 80
-	Health:
-		HP: 100000
-	Armor:
-		Type: Light
-	MapEditorData:
-		ExcludeTilesets: INTERIOR
-	HitShape:
-		Type: Rectangle
-			TopLeft: -1536, -598
-			BottomRight: 1536, 598
-	HitShape@TOPANDBOTTOM:
-		TargetableOffsets: 811,0,0, -811,0,0
-		Type: Rectangle
-			TopLeft: -555, -1110
-			BottomRight: 555, 1110
-
-WEAF:
-	Inherits: ^FakeBuilding
-	Inherits@infiltrate: ^InfiltratableFake
-	Inherits@shape: ^3x2Shape
-	Selectable:
-		Bounds: 72,48
-	Buildable:
-		BuildPaletteOrder: 920
-		Prerequisites: ~structures.soviet, ~techlevel.medium
-		Queue: Defense
-		Description: Looks like a War Factory.
-		Icon: fake-icon
-	Tooltip:
-		Name: Fake War Factory
-		GenericName: War Factory
-		GenericVisibility: Enemy
-		GenericStancePrefix: False
-	Building:
-		Footprint: xxx xxx ===
-		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
-	RenderSprites:
-		Image: WEAP
-	WithBuildingBib:
-	WithProductionDoorOverlay:
-		RequiresCondition: !build-incomplete
-		Sequence: build-top
-	Valued:
-		Cost: 200
-	Health:
-		HP: 150000
-	Armor:
-		Type: Wood
-	-ActorPreviewPlaceBuildingPreview:
-	SequencePlaceBuildingPreview:
-		Sequence: place
-		SequencePalette: placebuilding
-
-DOMF:
-	Inherits: ^FakeBuilding
-	Inherits@IDISABLE: ^DisableOnLowPower
-	Inherits@infiltrate: ^InfiltratableFake
-	Inherits@shape: ^2x2Shape
-	Selectable:
-		Bounds: 48,48
-	HitShape:
-		UseTargetableCellsOffsets: false
-		TargetableOffsets: 0,0,0, 630,-384,0, 630,384,0, -700,-512,0, -700,512,0
-	Tooltip:
-		Name: Fake Radar Dome
-		GenericName: Radar Dome
-		GenericVisibility: Enemy
-		GenericStancePrefix: False
-	Buildable:
-		BuildPaletteOrder: 930
-		Queue: Defense
-		Prerequisites: ~structures.soviet, ~techlevel.medium
-		Description: Looks like a Radar Dome.
-		Icon: fake-icon
-	Building:
-		Footprint: xx xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
-	WithBuildingBib:
-	RenderSprites:
-		Image: DOME
-	Valued:
-		Cost: 180
-	Health:
-		HP: 100000
-	Armor:
-		Type: Wood
-
-FIXF:
-	Inherits: ^FakeBuilding
-	Selectable:
-		Bounds: 68,34,0,3
-		DecorationBounds: 72,48
-	Buildable:
-		BuildPaletteOrder: 940
-		Queue: Defense
-		Prerequisites: ~structures.soviet, ~techlevel.medium
-		Description: Looks like a Service Depot.
-		Icon: fake-icon
-	Tooltip:
-		Name: Fake Service Depot
-		GenericName: Service Depot
-		GenericVisibility: Enemy
-		GenericStancePrefix: False
-	Building:
-		Footprint: _=_ xxx _=_
-		Dimensions: 3,3
-	Health:
-		HP: 80000
-	Armor:
-		Type: Wood
-	WithBuildingBib:
-		HasMinibib: true
-	RenderSprites:
-		Image: FIX
-	Valued:
-		Cost: 120
-	HitShape:
-		TargetableOffsets: 840,0,0, 598,-640,0, 598,640,0, -1060,0,0, -768,-640,0, -768,640,0
-		Type: Polygon
-			Points: -1536,-300, -640,-811, 640,-811, 1536,-300, 1536,555, 640,1110, -640,1110, -1536,555
-
-FAPW:
-	Inherits: ^FakeBuilding
-	Inherits@infiltrate: ^InfiltratableFake
-	Inherits@shape: ^3x2Shape
-	HitShape:
-		TargetableOffsets: -355,-1024,0
-	Buildable:
-		BuildPaletteOrder: 950
-		Queue: Defense
-		Prerequisites: ~structures.soviet, ~techlevel.medium
-		Description: Looks like an Advanced Power Plant.
-		Icon: fake-icon
-	Tooltip:
-		Name: Fake Advanced Power Plant
-		GenericName: Advanced Power Plant
-		GenericVisibility: Enemy
-		GenericStancePrefix: False
-	Building:
-		Footprint: xxx Xxx ===
-		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
-	Health:
-		HP: 70000
-	Armor:
-		Type: Wood
-	WithBuildingBib:
-	RenderSprites:
-		Image: APWR
-	Selectable:
-		Bounds: 72,48
-		DecorationBounds: 72,68,0,-10
+		DecorationBounds: 42,42
 	SelectionDecorations:
-	Valued:
-		Cost: 50
-
-PDOF:
-	Inherits: ^FakeBuilding
-	Inherits@IDISABLE: ^DisableOnLowPower
-	Inherits@shape: ^2x2Shape
-	Selectable:
-		Bounds: 48,48
-	Tooltip:
-		Name: Fake Chronosphere
-		GenericName: Chronosphere
-		GenericVisibility: Enemy
-		GenericStancePrefix: False
-	Buildable:
-		BuildPaletteOrder: 980
-		Queue: Defense
-		Prerequisites: ~structures.soviet, ~techlevel.high
-		BuildLimit: 99
-		Description: Looks like a Chronosphere.\nMaximum 1 can be built.
-		Icon: fake-icon
-	Building:
-		Footprint: xx xx
-		Dimensions: 2,2
-	RenderSprites:
-		Image: PDOX
-	WithBuildingBib:
-		HasMinibib: true
-	Valued:
-		Cost: 150
 	Health:
-		HP: 100000
+		HP: 60000
 	Armor:
-		Type: Wood
+		Type: Light
+	Mobile:
+		Speed: 71
+		Locomotor: heavywheeled
+	RevealsShroud:
+		Range: 4c0
+	Transforms:
+		IntoActor: fact
+		Offset: -1,-1
+		Facing: 1536
+		TransformSounds: placbldg.aud, build5.aud
+		NoTransformNotification: BuildingCannotPlaceAudio
+	MustBeDestroyed:
+		RequiredForShortGame: true
+	BaseBuilding:
+	SpawnActorOnDeath:
+		Actor: MCV.Husk
+	TransferTimedExternalConditionOnTransform:
+		Condition: invulnerability
+	Passenger:
+		CargoType: Vehicle
+		Weight: 4
+
+SS:
+	Inherits: ^Ship
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Buildable:
+		Queue: Ship
+		BuildAtProductionType: Submarine
+		BuildPaletteOrder: 30
+		Prerequisites: ~spen, ~techlevel.low
+		Description: Submerged anti-ship unit\narmed with torpedoes.\nCan detect other submarines.\n  Strong vs Naval units\n  Weak vs Ground units, Aircraft\n  Special Ability: Submerge
+	Valued:
+		Cost: 950
+	Tooltip:
+		Name: Submarine
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 25000
+	Armor:
+		Type: Light
+	Mobile:
+		TurnSpeed: 64
+		Speed: 71
+	RevealsShroud:
+		MinRange: 5c0
+		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+	Targetable:
+		TargetTypes: WaterActor, Ship, Submarine, Repair
+		RequiresCondition: !underwater
+	Targetable@UNDERWATER:
+		TargetTypes: Underwater, Submarine
+		RequiresCondition: underwater
+	Cloak:
+		CloakTypes: Underwater
+		InitialDelay: 0
+		CloakDelay: 50
+		CloakSound: subshow1.aud
+		UncloakSound: subshow1.aud
+		CloakedCondition: underwater
+		Palette: submerged
+		PauseOnCondition: cloak-force-disabled
+		UncloakOn: Dock
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: heavy, critical
+	Armament:
+		Weapon: TorpTube
+		LocalOffset: 0,-171,0, 0,171,0
+		FireDelay: 2
+	AttackFrontal:
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: WaterActor, Underwater
+		InvalidTargets: NoAutoTarget, Structure
+	AutoTargetPriority@ATTACKANYTHING:
+		ValidTargets: WaterActor, Underwater
+	DetectCloaked:
+		CloakTypes: Underwater
+		Range: 4c0
+	RenderDetectionCircle:
 	Explodes:
-		DamageThreshold: 50
-
-MSLF:
-	Inherits: ^FakeBuilding
-	Inherits@IDISABLE: ^DisableOnLowPower
-	Inherits@shape: ^2x1Shape
+		Weapon: UnitExplodeSubmarine
+		EmptyWeapon: UnitExplodeSubmarine
+	-MustBeDestroyed:
 	Selectable:
-		Bounds: 48,24
-	Tooltip:
-		Name: Fake Missile Silo
-		GenericName: Missile Silo
-		GenericVisibility: Enemy
-		GenericStancePrefix: False
-	Buildable:
-		BuildPaletteOrder: 990
-		Queue: Defense
-		Prerequisites: ~structures.soviet, ~techlevel.unrestricted
-		BuildLimit: 1
-		Description: Looks like a Missile Silo.\nMaximum 1 can be built.
-		Icon: fake-icon
-	Building:
-		Footprint: xx
-		Dimensions: 2,1
-	RenderSprites:
-		Image: MSLO
-	Valued:
-		Cost: 250
-	Health:
-		HP: 100000
-	Armor:
-		Type: Wood
-	Explodes:
-		DamageThreshold: 50
+		DecorationBounds: 38,38
 
-FACF:
-	Inherits: ^FakeBuilding
-	Selectable:
-		Bounds: 72,72
-	Buildable:
-		BuildPaletteOrder: 1000
-		Queue: Defense
-		Prerequisites: ~structures.soviet, ~techlevel.medium
-		Description: Looks like a Construction Yard.
-		Icon: fake-icon
-	Tooltip:
-		Name: Fake Construction Yard
-		GenericName: Construction Yard
-		GenericVisibility: Enemy
-		GenericStancePrefix: False
-	Building:
-		Footprint: xxX xxx XxX ===
-		Dimensions: 3,4
-		LocalCenterOffset: 0,-512,0
-	WithBuildingBib:
-	RenderSprites:
-		Image: FACT
-	Valued:
-		Cost: 200
-	Health:
-		HP: 150000
-	Armor:
-		Type: Wood
-	HitShape:
-		TargetableOffsets: 1273,939,0, -980,-640,0, -980,640,0
-		Type: Rectangle
-			TopLeft: -1536, -1536
-			BottomRight: 1536, 1536
-
-SRTY:
+7TNK:
 	Inherits: ^TrackedVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Buildable:
 		Queue: Vehicle
-		BuildPaletteOrder: 230
-		Prerequisites: fix, stek, ~vehicles.soviet, ~Superunits_Checkbox, ~techlevel.high
-		Description: Long-range Super Tank Destroyer.\n  Strong vs Super Tanks\n  Weak vs Everything
+		BuildPaletteOrder: 220
+		Prerequisites: fix, ~vehicles.soviet, ~techlevel.medium
+		Description: A Prototype Soviet Self-Healing Tank.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
-		Cost: 3000
+		Cost: 1800
 	Tooltip:
-		Name: Super Tank Destroyer
+		Name: Prototype T-72 Tank
+		GenericName: Tank
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 6000
+		HP: 45000
 	Armor:
 		Type: Heavy
 	Mobile:
-		TurnSpeed: 2
-		Speed: 85
-		Locomotor: lighttracked
+		Speed: 75
 	RevealsShroud:
 		MinRange: 4c0
-		Range: 5c0
+		Range: 6c0
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
+	Turreted:
+		TurnSpeed: 80
 	Armament:
-		Weapon: Smm
-		LocalOffset: 624,0,208
+		Weapon: T7mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
 		MuzzleSequence: muzzle
-	AttackFrontal:
-		TargetFrozenActors: True
-		ForceFireIgnoresActors: True
+	AttackTurreted:
 	WithMuzzleOverlay:
-	Explodes:
-		Weapon: ArtilleryExplode
-		EmptyWeapon: UnitExplodeSmall
-		LoadedChance: 75
+	WithSpriteTurret:
+	SpawnActorOnDeath:
+		Actor: 7TNK.Husk
+	SelectionDecorations:
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
+	Selectable:
+		DecorationBounds: 28,28
+	ChangesHealth:
+		Step: 100
+		Delay: 1
+		StartIfBelow: 100
+		DamageCooldown: 100
+
+7TNK.Husk:
+	Inherits: ^Husk
+	Tooltip:
+		Name: Husk (Prototype T-72 Tank)
+	ThrowsParticle@turret:
+		Anim: turret
+	TransformOnCapture:
+		IntoActor: 7tnk
+	InfiltrateForTransform:
+		IntoActor: 7tnk
+	RenderSprites:
+		Image: 7tnk.destroyed
 
 BARB:
 	Inherits: ^Wall
@@ -4801,929 +4682,49 @@ WOOD:
 	WithWallSpriteBody:
 		Type: woodfence
 
-3TNK:
+SRTY:
 	Inherits: ^TrackedVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Buildable:
 		Queue: Vehicle
-		BuildPaletteOrder: 220
-		Prerequisites: fix, ~vehicles.soviet, ~techlevel.medium
-		Description: Soviet Main Battle Tank, with dual cannons\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+		BuildPaletteOrder: 230
+		Prerequisites: fix, stek, ~vehicles.soviet, ~Superunits_Checkbox, ~techlevel.high
+		Description: Long-range Super Tank Destroyer.\n  Strong vs Super Tanks\n  Weak vs Everything
 	Valued:
-		Cost: 1150
+		Cost: 3000
 	Tooltip:
-		Name: Heavy Tank
-		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 60000
-	Armor:
-		Type: Heavy
-	Mobile:
-		Speed: 71
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Turreted:
-		TurnSpeed: 5
-	Armament:
-		Weapon: 105mm
-		Recoil: 128
-		RecoilRecovery: 38
-		LocalOffset: 768,85,90, 768,-85,90
-		MuzzleSequence: muzzle
-	AttackTurreted:
-	WithMuzzleOverlay:
-	WithSpriteTurret:
-	SpawnActorOnDeath:
-		Actor: 3TNK.Husk
-	SelectionDecorations:
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 28,28
-	GrantConditionOnDamageState@HEAVY:
-		Condition: heavy-damage
-		ValidDamageStates: Heavy
-	GrantConditionOnDamageState@CRITICAL:
-		Condition: critical-damage
-		ValidDamageStates: Critical
-	SpeedMultiplier@HEAVYDAMAGE:
-		RequiresCondition: heavy-damage
-		Modifier: 75
-	SpeedMultiplier@CRITICALDAMAGE:
-		RequiresCondition: critical-damage
-		Modifier: 50
-
-4TNK:
-	Inherits: ^TrackedVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 320
-		Prerequisites: fix, stek, ~vehicles.soviet, ~techlevel.high
-		Description: Big and slow tank, with anti-air capability.\nCan crush concrete walls and husks.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Nothing
-	Valued:
-		Cost: 2000
-	Tooltip:
-		Name: Mammoth Tank
-		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 90000
-	Armor:
-		Type: Heavy
-	Mobile:
-		Speed: 50
-		Locomotor: heavytracked
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Turreted:
-		TurnSpeed: 2
-	Armament@PRIMARY:
-		Weapon: 120mm
-		LocalOffset: 900,180,340, 900,-180,340
-		Recoil: 171
-		RecoilRecovery: 30
-		MuzzleSequence: muzzle
-	Armament@SECONDARY:
-		Name: secondary
-		Weapon: MammothTusk
-		LocalOffset: -85,384,340, -85,-384,340
-		LocalYaw: -100,100
-		Recoil: 43
-		MuzzleSequence: muzzle
-	AttackTurreted:
-	WithMuzzleOverlay:
-	WithSpriteTurret:
-	SpawnActorOnDeath:
-		Actor: 4TNK.Husk
-	SelfHealing:
-		Step: 100
-		Delay: 3
-		HealIfBelow: 50
-		DamageCooldown: 150
-	SelectionDecorations:
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 44,38,0,-4
-	Passenger:
-		CargoType: Vehicle
-		Weight: 4
-        
-MNLY:
-	Inherits: ^TrackedVehicle
-	Inherits@selection: ^SelectableSupportUnit
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 310
-		Prerequisites: fix, ~techlevel.medium
-		Description: Lays mines to destroy\nunwary enemy units.\nCan detect mines.\n  Unarmed
-	Valued:
-		Cost: 800
-	Tooltip:
-		Name: Minelayer
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 30000
-	Armor:
-		Type: Heavy
-	Mobile:
-		Speed: 128
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Minelayer:
-		Mine: MINV
-		TileUnknownName: build-valid
-	MineImmune:
-	AmmoPool:
-		Ammo: 30
-		RearmSound: minelay1.aud
-	DetectCloaked:
-		Range: 5c0
-		CloakTypes: Mine
-	RenderDetectionCircle:
-	Explodes:
-		Weapon: ATMine
-	RenderSprites:
-		Image: MNLY
-	Rearmable:
-		RearmActors: fix, mfix.deployed
-	Targetable:
-		TargetTypes: Ground, Vehicle, Mine
-	Passenger:
-		CargoType: Vehicle
-		Weight: 2
-        
-7TNK:
-	Inherits: ^TrackedVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 220
-		Prerequisites: fix, ~vehicles.soviet, ~techlevel.medium
-		Description: A Prototype Soviet Self-Healing Tank.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
-	Valued:
-		Cost: 1800
-	Tooltip:
-		Name: Prototype T-72 Tank
-		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 45000
-	Armor:
-		Type: Heavy
-	Mobile:
-		Speed: 75
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Turreted:
-		TurnSpeed: 5
-	Armament:
-		Weapon: T7mm
-		Recoil: 128
-		RecoilRecovery: 38
-		LocalOffset: 720,0,80
-		MuzzleSequence: muzzle
-	AttackTurreted:
-	WithMuzzleOverlay:
-	WithSpriteTurret:
-	SpawnActorOnDeath:
-		Actor: 7TNK.Husk
-	SelectionDecorations:
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 28,28
-    SelfHealing:
-		Step: 100
-		Delay: 1
-		HealIfBelow: 100
-		DamageCooldown: 100
-        
-        
-CARR:
-	Inherits: ^Ship
-	Buildable:
-		Queue: Ship
-		BuildAtProductionType: Boat
-		BuildPaletteOrder: 35
-		Prerequisites: ~syrd, hpad, stek, ~techlevel.high
-		Description: Mobile helipad.\n  Unarmed\n  Special Toggle Ability: Deploy
-	Valued:
-		Cost: 400
-	Tooltip:
-		Name: Heli Carrier
-	Health:
-		HP: 30000
-	Armor:
-		Type: Heavy
-	Mobile:
-		TurnSpeed: 255
-		Speed: 85
-	RevealsShroud:
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	SelectionDecorations:
-	Selectable:
-		DecorationBounds: 48,48
-	Transforms:
-		IntoActor: carr.deployed
-		Offset: 0,0
-
-CARR.Deployed:
-	Inherits: ^Building
-	-GivesBuildableArea:
-	-RepairableBuilding:
-	-WithBuildingRepairDecoration:
-	-EngineerRepairable:
-	-AcceptsDeliveredCash:
-	-WithMakeAnimation:
-	-CaptureManager:
-	-Capturable:
-	-CapturableProgressBar:
-	-CapturableProgressBlink:
-	-SpawnActorsOnSell:
-	-GpsDot:
-	GpsDot:
-		String: Ship
-	-Demolishable:
-	-Sellable:
-	-Explodes:
-	Explodes:
-		Weapon: UnitExplodeShip
-		EmptyWeapon: UnitExplodeShip
-	Selectable:
-		Bounds: 48,48
-	Valued:
-		Cost: 400
-	Tooltip:
-		Name: Heli Carrier
-	Building:
-		TerrainTypes: Water
-		RequiresBaseProvider: False
-	-RequiresBuildableArea:
-	-ShakeOnDeath:
-	Health:
-		HP: 30000
-	Armor:
-		Type: Heavy
-	RevealsShroud:
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	SelectionDecorations:
-	Selectable:
-		DecorationBounds: 48,48
-	Transforms:
-		IntoActor: carr
-		Offset: 0,0
-	Reservable:
-	Targetable:
-		TargetTypes: Ground, Water, Ship
-	WithResupplyAnimation:
-    
-MFIX.Deployed:
-	Inherits: ^Building
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 100
-		Prerequisites: ~disabled
-		Description: Repairs vehicles for credits.
-	Valued:
-		Cost: 1200
-	Tooltip:
-		Name: Mobile Service Depot
-	Building:
-		Footprint: _+_ +++ _+_
-		Dimensions: 3,3
-	Selectable:
-		Bounds: 68,34,0,3
-		DecorationBounds: 72,48
-	SelectionDecorations:
-	Health:
-		HP: 80000
-	Armor:
-		Type: Wood
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Reservable:
-	RallyPoint:
-	RepairsUnits:
-		HpPerStep: 1100
-		Interval: 5
-		StartRepairingNotification: Repairing
-		FinishRepairingNotification: UnitRepaired
-		PlayerExperience: 15
-	WithBuildingBib:
-		HasMinibib: true
-	WithResupplyAnimation:
-		RequiresCondition: !build-incomplete
-	Transforms:
-		IntoActor: mfix
-		Offset: 0,0
-	ProvidesPrerequisite@buildingname:
-	HitShape:
-		TargetableOffsets: 840,0,0, 598,-640,0, 598,640,0, -1060,0,0, -768,-640,0, -768,640,0
-		Type: Polygon
-			Points: -1536,-300, -640,-811, 640,-811, 1536,-300, 1536,555, 640,1110, -640,1110, -1536,555
-	Passenger:
-		CargoType: Vehicle
-		Weight: 4
-            
-MFIX:
-	Inherits: ^Vehicle
-	Inherits@selection: ^SelectableSupportUnit
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 210
-		Prerequisites: fix, ~techlevel.medium
-		BuildDurationModifier: 50
-		Description: Deploys into another Repair Pad.\n  Unarmed
-	Valued:
-		Cost: 2000
-	Tooltip:
-		Name: Mobile Service Depot
-	Selectable:
-		DecorationBounds: 42,42
-	SelectionDecorations:
-	Health:
-		HP: 60000
-	Armor:
-		Type: Light
-	Mobile:
-		Speed: 71
-		Locomotor: heavywheeled
-	RevealsShroud:
-		Range: 4c0
-	Transforms:
-		IntoActor: mfix.deployed
-		Offset: 0,0
-	Passenger:
-		CargoType: Vehicle
-		Weight: 4
-        
-7TNK.Husk:
-	Inherits: ^Husk
-	Tooltip:
-		Name: Husk (Prototype T-72 Tank)
-	ThrowsParticle@turret:
-		Anim: turret
-	TransformOnCapture:
-		IntoActor: 7tnk
-	InfiltrateForTransform:
-		IntoActor: 7tnk
-	RenderSprites:
-		Image: 7tnk.destroyed
-        
-E3:
-	Inherits: ^Soldier
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 30
-		Prerequisites: ~barracks, ~techlevel.infonly
-		Description: Anti-tank/Anti-aircraft infantry.\n  Strong vs Vehicles, Aircraft\n  Weak vs Infantry
-	Selectable:
-		Class: E3
-	Valued:
-		Cost: 525
-	Tooltip:
-		Name: Anti-tank/Anti-aircraft Rocket Soldier
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 4500
-	Armament@PRIMARY:
-		Weapon: RedEye
-		LocalOffset: 0,0,555
-	Armament@SECONDARY:
-		Name: secondary
-		Weapon: Dragon
-		LocalOffset: 0,0,555
-	Armament@GARRISONED:
-		Name: garrisoned
-		Weapon: Dragon
-	TakeCover:
-		ProneOffset: 384,0,-395
-	WithInfantryBody:
-		DefaultAttackSequence: shoot
-		RequiresCondition: !parachute
-	WithInfantryBody@PARACHUTE:
-		StandSequences: parachute
-		RequiresCondition: parachute
-	Explodes:
-		Weapon: UnitExplodeSmall
-		EmptyWeapon: UnitExplodeSmall
-		DamageSource: Killer
-		Chance: 50
-	ProducibleWithLevel:
-		Prerequisites: barracks.upgraded
-	AutoTarget:
-		ScanRadius: 5
-        
-E4:
-	Inherits: ^Soldier
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 70
-		Prerequisites: ~barr, ftur, ~techlevel.low
-		Description: Advanced anti-structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Vehicles, Aircraft
-	Valued:
-		Cost: 300
-	Tooltip:
-		Name: Flamethrower
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 4000
-	Armament@PRIMARY:
-		Weapon: Flamer
-		LocalOffset: 700,0,500
-		FireDelay: 8
-	Armament@GARRISONED:
-		Name: garrisoned
-		Weapon: Flamer
-	TakeCover:
-		ProneOffset: 160,0,-288
-	Explodes:
-		Weapon: UnitExplodeSmall
-		EmptyWeapon: UnitExplodeSmall
-		DamageSource: Killer
-		Chance: 50
-	WithInfantryBody:
-		DefaultAttackSequence: shoot
-		RequiresCondition: !parachute
-	WithInfantryBody@PARACHUTE:
-		StandSequences: parachute
-		RequiresCondition: parachute
-	ProducibleWithLevel:
-		Prerequisites: barracks.upgraded
-        
-E2:
-	Inherits: ^Soldier
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 40
-		Prerequisites: ~barr, ~techlevel.infonly
-		Description: Infantry armed with grenades.\n  Strong vs Buildings, Infantry\n  Weak vs Vehicles, Aircraft
-	Valued:
-		Cost: 160
-	Tooltip:
-		Name: Grenadier
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 5000
-	Mobile:
-		Speed: 71
-	Armament@PRIMARY:
-		Weapon: Grenade
-		LocalOffset: 0,0,555
-		FireDelay: 15
-	Armament@GARRISONED:
-		Name: garrisoned
-		Weapon: Grenade
-		FireDelay: 15
-	TakeCover:
-		ProneOffset: 256,64,-331
-	WithInfantryBody:
-		DefaultAttackSequence: throw
-		RequiresCondition: !parachute
-	WithInfantryBody@PARACHUTE:
-		StandSequences: parachute
-		RequiresCondition: parachute
-	Explodes:
-		Weapon: UnitExplodeSmall
-		EmptyWeapon: UnitExplodeSmall
-		DamageSource: Killer
-		Chance: 50
-	ProducibleWithLevel:
-		Prerequisites: barracks.upgraded
-       
-E1:
-	Inherits: ^Soldier
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 10
-		Prerequisites: ~barracks, ~techlevel.infonly
-		Description: General-purpose infantry.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
-	Selectable:
-		Class: E1
-	Valued:
-		Cost: 100
-	Tooltip:
-		Name: Rifle Infantry
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 5000
-	Armament@PRIMARY:
-		Weapon: M1Carbine
-	Armament@GARRISONED:
-		Name: garrisoned
-		Weapon: Vulcan.garr
-		MuzzleSequence: garrison-muzzle
-	WithInfantryBody:
-		DefaultAttackSequence: shoot
-		RequiresCondition: !parachute
-	WithInfantryBody@PARACHUTE:
-		StandSequences: parachute
-		RequiresCondition: parachute
-	ProducibleWithLevel:
-		Prerequisites: barracks.upgraded
-        
-YAK:
-	Inherits: ^Plane
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Plane
-		BuildPaletteOrder: 30
-		Prerequisites: ~afld, ~techlevel.medium
-		Description: Attack Plane armed with\ndual machine guns.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
-	Valued:
-		Cost: 1350
-	Tooltip:
-		Name: Yak Attack Plane
+		Name: Super Tank Destroyer
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
 		HP: 6000
-	RevealsShroud:
-		MinRange: 9c0
-		Range: 11c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 9c0
-		Type: GroundPosition
-	Armament@PRIMARY:
-		Weapon: ChainGun.Yak
-		LocalOffset: 256,-213,0
-		MuzzleSequence: muzzle
-		PauseOnCondition: !ammo
-	Armament@SECONDARY:
-		Name: secondary
-		Weapon: ChainGun.Yak
-		LocalOffset: 256,213,0
-		MuzzleSequence: muzzle
-		PauseOnCondition: !ammo
-	AttackAircraft:
-		FacingTolerance: 20
-		PersistentTargeting: false
-		OpportunityFire: true
-	Aircraft:
-		CruiseAltitude: 2560
-		InitialFacing: 192
-		TurnSpeed: 4
-		Speed: 178
-		RepulsionSpeed: 40
-		MaximumPitch: 56
-	AutoTarget:
-		InitialStance: Defend
-		InitialStanceAI: Defend
-		ScanOnIdle: true
-	AmmoPool:
-		Ammo: 18
-		PipCount: 6
-		ReloadDelay: 11
-		AmmoCondition: ammo
-	SelectionDecorations:
-	WithMuzzleOverlay:
-	Contrail:
-		Offset: -853,0,0
-	SpawnActorOnDeath:
-		Actor: YAK.Husk
-	SmokeTrailWhenDamaged:
-		Offset: -853,0,0
-		Interval: 2
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
-	Selectable:
-		DecorationBounds: 30,28,0,2
-	Rearmable:
-		RearmActors: afld
-        
-E6:
-	Inherits: ^Soldier
-	Inherits@selection: ^SelectableSupportUnit
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 60
-		Prerequisites: ~barracks, ~techlevel.infonly
-		Description: Infiltrates and captures\nenemy structures.\n  Unarmed
-	Valued:
-		Cost: 400
-	Tooltip:
-		Name: Engineer
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	WithInfantryBody:
-		RequiresCondition: !parachute
-	WithInfantryBody@PARACHUTE:
-		StandSequences: parachute
-		RequiresCondition: parachute
-	Passenger:
-		PipType: Yellow
-	EngineerRepair:
-	RepairsBridges:
-	CaptureManager:
-	GrantConditionOnPrerequisite@GLOBALREUSABLEENGINEER:
-		Condition: global-reusable-engineers
-		Prerequisites: global-reusable-engineers
-	Captures:
-		RequiresCondition: !global-reusable-engineers
-		CaptureTypes: building
-		PlayerExperience: 25
-		CaptureDelay: 200
-	Captures@REUSABLE:
-		RequiresCondition: global-reusable-engineers
-		CaptureTypes: building
-		PlayerExperience: 25
-		CaptureDelay: 375
-		ConsumedByCapture: False
-		EnterCursor: ability
-	Captures@husk:
-		RequiresCondition: !global-reusable-engineers
-		CaptureTypes: building-husk
-		PlayerExperience: 25
-		CaptureDelay: 200
-		EnterCursor: goldwrench
-	Captures@husk-reusable:
-		RequiresCondition: global-reusable-engineers
-		CaptureTypes: building-husk
-		PlayerExperience: 25
-		CaptureDelay: 375
-		EnterCursor: goldwrench
-		ConsumedByCapture: False
-		EnterBlockedCursor: move-blocked
-	Voiced:
-		VoiceSet: EngineerVoice
-	-AttackFrontal:
-    MineImmune:
-    
-OILBisland:
-	Inherits: ^TechBuilding
-	Inherits@shape: ^2x2Shape
-	HitShape:
-		UseTargetableCellsOffsets: false
-		TargetableOffsets: 0,0,0, 630,-300,0, 420,512,0, -420,-512,0, -630,300,0
-	Selectable:
-		Priority: 0
-		Bounds: 48,48
-	OwnerLostAction:
-		Action: ChangeOwner
-	Building:
-		Footprint: xx xx
-		Dimensions: 2,2
-	Health:
-		HP: 80000
-	RevealsShroud:
-		Range: 4c0
-	CaptureManager:
-	Capturable:
-		Types: building
-	CapturableProgressBar:
-	CapturableProgressBlink:
-	EngineerRepairable:
-	GrantConditionOnPrerequisite@OILSILOS:
-		Condition: global-oil-silos
-		Prerequisites: global-oil-silos
-	CashTrickler@nonsilo:
-		RequiresCondition: !global-oil-silos
-		Interval: 220
-		Amount: 100
-	CashTrickler@silo:
-		RequiresCondition: global-oil-silos
-		Interval: 220
-		Amount: 100
-		UseResourceStorage:	true
-	Tooltip:
-		Name: Oil Derrick
-	TooltipDescription@ally:
-		Description: Provides additional funds.
-		ValidStances: Ally
-	TooltipDescription@other:
-		Description: Capture to receive additional funds.
-		ValidStances: Neutral, Enemy
-	Explodes:
-		Weapon: BarrelExplode
-	GpsDot:
-		String: Oil
-	AppearsOnMapPreview:
-	GivesCashOnCapture:
-		Amount: 500
-	RepairableBuilding:
-		RepairStep: 75
-		PlayerExperience: 25
-		RepairingNotification: Repairing
-	WithBuildingRepairDecoration:
-		Image: allyrepair
-		Sequence: repair
-		ReferencePoint: Center
-		Palette: player
-		IsPlayerPalette: True
-	UpdatesDerrickCount:
-    
-ISOIL:
-	Inherits: ^TechBuilding
-	Tooltip:
-		Name: Oil Pump
-	TooltipDescription@ally:
-		Description: Provides additional funds.
-		ValidStances: Ally
-	TooltipDescription@other:
-		Description: Capture to receive additional funds.
-	CaptureManager:
-	Capturable:
-		Types: building
-	CapturableProgressBar:
-	CapturableProgressBlink:
-	EngineerRepairable:
-	GrantConditionOnPrerequisite@OILSILOS:
-		Condition: global-oil-silos
-		Prerequisites: global-oil-silos
-	CashTrickler@nonsilo:
-		RequiresCondition: !global-oil-silos
-		Interval: 295
-		Amount: 50
-	CashTrickler@silo:
-		RequiresCondition: global-oil-silos
-		Interval: 295
-		Amount: 50
-		UseResourceStorage:	true
-	GpsDot:
-		String: Oil
-	TooltipDescription@ally:
-		Description: Provides additional funds.
-		ValidStances: Ally
-	TooltipDescription@other:
-		Description: Capture to receive additional funds.
-		ValidStances: Neutral, Enemy
-	Explodes:
-		Weapon: BarrelExplode
-	RevealsShroud:
-		Range: 3c0
-	SpawnActorOnDeath:
-		Actor: isoilhusk
-		OwnerType: InternalName
-	OwnerLostAction:
-		Action: ChangeOwner
-	UpdatesDerrickCount:
-    
-MSLO:
-	Inherits: ^ScienceBuilding
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
-	Inherits@shape: ^2x1Shape
-	Selectable:
-		Bounds: 48,24
-	Valued:
-		Cost: 2500
-	Tooltip:
-		Name: Missile Silo
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 140
-		Prerequisites: techcenter, ~techlevel.unrestricted
-		BuildLimit: 1
-		Description: Provides an atomic bomb.\nRequires power to operate.\nMaximum 1 can be built.\n  Special Ability: Atom Bomb
-	Building:
-		Footprint: xx
-		Dimensions: 2,1
-	Health:
-		HP: 100000
 	Armor:
-		Type: Wood
-	RevealsShroud:
-		MinRange: 5c0
-		Range: 6c0
-		RequiresCondition: !disabled
-		RevealGeneratedShroud: False
-	RevealsShroud@Offline:
-		Range: 5c0
-		RequiresCondition: disabled
-	RevealsShroud@GAPGEN:
-		Range: 5c0
-		RequiresCondition: !disabled
-	NukePower:
-		PauseOnCondition: disabled
-		Cursor: nuke
-		Icon: abomb
-		ChargeInterval: 13500
-		Description: Atom Bomb
-		LongDesc: Launches a devastating atomic bomb\nat a target location.
-		BeginChargeSpeechNotification: AbombPrepping
-		EndChargeSpeechNotification: AbombReady
-		SelectTargetSpeechNotification: SelectTarget
-		InsufficientPowerSpeechNotification: InsufficientPower
-		IncomingSpeechNotification: AbombLaunchDetected
-		MissileWeapon: atomic
-		MissileDelay: 5
-		SpawnOffset: 1c0,427,0
-		DisplayTimerStances: Ally, Neutral, Enemy
-		DisplayBeacon: True
-		DisplayRadarPing: True
-		BeaconPoster: atomicon
-		FlashType: Nuke
-		CameraRange: 10c0
-		ArrowSequence: arrow
-		ClockSequence: clock
-		CircleSequence: circles
-		SupportPowerPaletteOrder: 70
-	SupportPowerChargeBar:
-	Power:
-		Amount: -150
-	MustBeDestroyed:
-		RequiredForShortGame: false
-	WithNukeLaunchAnimation:
-		RequiresCondition: !build-incomplete
-        
-FIX:
-	Inherits: ^Building
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 100
-		Prerequisites: weap, ~techlevel.medium
-		Description: Repairs vehicles for credits.
-	Valued:
-		Cost: 1200
-	Tooltip:
-		Name: Service Depot
-	Building:
-		Footprint: _+_ +++ _+_
-		Dimensions: 3,3
-	Selectable:
-		Bounds: 68,34,0,3
-		DecorationBounds: 72,48
-	SelectionDecorations:
-	Health:
-		HP: 80000
-	Armor:
-		Type: Wood
+		Type: Heavy
+	Mobile:
+		TurnSpeed: 32
+		Speed: 85
+		Locomotor: lighttracked
 	RevealsShroud:
 		MinRange: 4c0
 		Range: 5c0
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Reservable:
-	RallyPoint:
-	RepairsUnits:
-		HpPerStep: 1100
-		Interval: 5
-		StartRepairingNotification: Repairing
-		FinishRepairingNotification: UnitRepaired
-		PlayerExperience: 15
-	WithBuildingBib:
-		HasMinibib: true
-	WithResupplyAnimation:
-		RequiresCondition: !build-incomplete
-	Power:
-		Amount: -30
-	ProvidesPrerequisite@buildingname:
-	HitShape:
-		TargetableOffsets: 840,0,0, 598,-640,0, 598,640,0, -1060,0,0, -768,-640,0, -768,640,0
-		Type: Polygon
-			Points: -1536,-300, -640,-811, 640,-811, 1536,-300, 1536,555, 640,1110, -640,1110, -1536,555
+	Armament:
+		Weapon: Smm
+		LocalOffset: 624,0,208
+		MuzzleSequence: muzzle
+	AttackFrontal:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+	WithMuzzleOverlay:
+	Explodes:
+		Weapon: ArtilleryExplode
+		EmptyWeapon: UnitExplodeSmall
+		LoadedChance: 75
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
 
 TTNK:
 	Inherits: ^TrackedVehicle
@@ -5767,7 +4768,7 @@ TTNK:
 		DecorationBounds: 30,30
 	SpawnActorOnDeath:
 		Actor: TTNK.Husk
-        
+		
 ttnk.Husk:
 	Inherits: ^Husk
 	Tooltip:
@@ -5780,12 +4781,12 @@ ttnk.Husk:
 		IntoActor: ttnk
 	RenderSprites:
 		Image: ttnk.destroyed
-        
+
 ARCO:
 	Inherits: ^TechBuilding
 	Inherits@shape: ^2x1Shape
 	RenderSprites:
-        Palette: cnc
+		Palette: cnc
 		PlayerPalette: cncplayer
 	Building:
 		Footprint: xx
@@ -5817,10 +4818,10 @@ ARCO:
 		ShowOwnerRow: True
 	TooltipDescription@ally:
 		Description: Provides additional funds.
-		ValidStances: Ally
+		ValidRelationships: Ally
 	TooltipDescription@other:
 		Description: Capture to receive additional funds.
-		ValidStances: Neutral, Enemy
+		ValidRelationships: Neutral, Enemy
 	Explodes:
 		Weapon: BarrelExplode
 	GpsDot:
@@ -5833,192 +4834,77 @@ ARCO:
 		OwnerType: InternalName
 	UpdatesDerrickCount:
 
-BIO.Husk:
-	Interactable:
-		Bounds: 48,48
-	Building:
-		Footprint: xx xx
-		Dimensions: 2,2
-	Tooltip:
-		Name: Biological Lab (Destroyed)
-
-ARCO.Husk:
-	Inherits: ^TechBuilding
-	RenderSprites:
-        Palette: cnc
-		PlayerPalette: cncplayer
-	Building:
-		Footprint: xx
-		Dimensions: 2,1
-	Tooltip:
-		Name: High Tech Oil Pump (Destroyed)
-	CapturableProgressBar:
-	CapturableProgressBlink:
-	CaptureManager:
-	Capturable:
-		Types: building-husk
-	TransformOnCapture:
-		IntoActor: arco
-		ForceHealthPercentage: 50
-	Targetable:
-		TargetTypes: building-husk
-
-ISOILHUSK:
-	Inherits: ^TechBuilding
-	RenderSprites:
-		Palette: player
-	Tooltip:
-		Name: Husk (Oil Pump)
-	WithSpriteBody:
-	WithIdleOverlay:
-		StartSequence: fire-start
-		Sequence: fire-loop
-	CapturableProgressBar:
-	CapturableProgressBlink:
-	CaptureManager:
-	Capturable:
-		Types: building-husk
-	TransformOnCapture:
-		IntoActor: isoil
-		ForceHealthPercentage: 50
-	Targetable:
-		TargetTypes: building-husk
-
-OILP.husk:
-	Inherits: ^TechBuilding
-	RenderSprites:
-		Palette: player
-	Tooltip:
-		Name: Husk (Oil Pump)
-	WithSpriteBody:
-	WithIdleOverlay:
-		StartSequence: fire-start
-		Sequence: fire-loop
-	CapturableProgressBar:
-	CapturableProgressBlink:
-	CaptureManager:
-	Capturable:
-		Types: building-husk
-	TransformOnCapture:
-		IntoActor: OILP
-		ForceHealthPercentage: 50
-	Targetable:
-		TargetTypes: building-husk
-
-OILP:
-	Inherits: ^TechBuilding
-	Tooltip:
-		Name: Oil Pump
-	TooltipDescription@ally:
-		Description: Provides additional funds.
-		ValidStances: Ally
-	TooltipDescription@other:
-		Description: Capture to receive additional funds.
-	CaptureManager:
-	Capturable:
-		Types: building
-	CapturableProgressBar:
-	CapturableProgressBlink:
-	EngineerRepairable:
-	GrantConditionOnPrerequisite@OILSILOS:
-		Condition: global-oil-silos
-		Prerequisites: global-oil-silos
-	CashTrickler@nonsilo:
-		RequiresCondition: !global-oil-silos
-		Interval: 295
-		Amount: 50
-	CashTrickler@silo:
-		RequiresCondition: global-oil-silos
-		Interval: 295
-		Amount: 50
-		UseResourceStorage:	true
-	GpsDot:
-		String: Oil
-	RevealsShroud:
-		Range: 3c0
-	SpawnActorOnDeath:
-		Actor: OILP.husk
-		OwnerType: InternalName
-	TooltipDescription@ally:
-		Description: Provides additional funds.
-		ValidStances: Ally
-	TooltipDescription@other:
-		Description: Capture to receive additional funds.
-		ValidStances: Neutral, Enemy
-	Explodes:
-		Weapon: BarrelExplode
-	OwnerLostAction:
-		Action: ChangeOwner
-	UpdatesDerrickCount:
-
-HOSP.Husk:
-	Inherits: ^TechBuilding
-	Building:
-		Footprint: xx xx
-		Dimensions: 2,2
-	Tooltip:
-		Name: Hospital (Destroyed)
-	WithSpriteBody:
-	CapturableProgressBar:
-	CapturableProgressBlink:
-	CaptureManager:
-	Capturable:
-		Types: building-husk
-	TransformOnCapture:
-		IntoActor: HOSP
-		ForceHealthPercentage: 50
-	Targetable:
-		TargetTypes: building-husk
-
-HOSP:
+OILBisland:
 	Inherits: ^TechBuilding
 	Inherits@shape: ^2x2Shape
-	OwnerLostAction:
-		Action: ChangeOwner
+	HitShape:
+		UseTargetableCellsOffsets: false
+		TargetableOffsets: 0,0,0, 630,-300,0, 420,512,0, -420,-512,0, -630,300,0
 	Selectable:
 		Priority: 0
 		Bounds: 48,48
+	OwnerLostAction:
+		Action: ChangeOwner
 	Building:
 		Footprint: xx xx
 		Dimensions: 2,2
 	Health:
 		HP: 80000
+	RevealsShroud:
+		Range: 4c0
 	CaptureManager:
 	Capturable:
 		Types: building
 	CapturableProgressBar:
 	CapturableProgressBlink:
 	EngineerRepairable:
+	GrantConditionOnPrerequisite@OILSILOS:
+		Condition: global-oil-silos
+		Prerequisites: global-oil-silos
+	CashTrickler@nonsilo:
+		RequiresCondition: !global-oil-silos
+		Interval: 220
+		Amount: 100
+		UseResourceStorage: false
+	CashTrickler@silo:
+		RequiresCondition: global-oil-silos
+		Interval: 220
+		Amount: 100
+		UseResourceStorage: true
 	Tooltip:
-		Name: Hospital
-	TooltipDescription@ally:
-		Description: Provides infantry with self-healing.
-		ValidStances: Ally
-	TooltipDescription@other:
-		Description: Capture to enable self-healing for infantry.
-		ValidStances: Neutral, Enemy
-	RevealsShroud:
-		Range: 4c0
-	WithBuildingBib:
-		HasMinibib: true
-	WithDeathAnimation:
-		DeathSequence: dead
-		UseDeathTypeSuffix: false
-	ProvidesPrerequisite@buildingname:
-	AppearsOnMapPreview:
-	GpsDot:
-		String: Hospital
-	SpawnActorOnDeath:
-		Actor: hosp.husk
-		OwnerType: InternalName
-
-OILP.slow:
-	Inherits: ^TechBuilding
-	Tooltip:
-		Name: Slow Oil Pump
+		Name: Oil Derrick
 	TooltipDescription@ally:
 		Description: Provides additional funds.
-		ValidStances: Ally
+		ValidRelationships: Ally
+	TooltipDescription@other:
+		Description: Capture to receive additional funds.
+		ValidRelationships: Neutral, Enemy
+	Explodes:
+		Weapon: BarrelExplode
+	GpsDot:
+		String: Oil
+	AppearsOnMapPreview:
+	GivesCashOnCapture:
+		Amount: 500
+	RepairableBuilding:
+		RepairStep: 75
+		PlayerExperience: 25
+		RepairingNotification: Repairing
+	WithBuildingRepairDecoration:
+		Image: allyrepair
+		Sequence: repair
+		Position: Center
+		Palette: player
+		IsPlayerPalette: True
+	UpdatesDerrickCount:
+
+ISOIL:
+	Inherits: ^TechBuilding
+	Tooltip:
+		Name: Oil Pump
+	TooltipDescription@ally:
+		Description: Provides additional funds.
+		ValidRelationships: Ally
 	TooltipDescription@other:
 		Description: Capture to receive additional funds.
 	CaptureManager:
@@ -6032,514 +4918,59 @@ OILP.slow:
 		Prerequisites: global-oil-silos
 	CashTrickler@nonsilo:
 		RequiresCondition: !global-oil-silos
-		Interval: 500
+		Interval: 295
 		Amount: 50
 	CashTrickler@silo:
 		RequiresCondition: global-oil-silos
-		Interval: 500
+		Interval: 295
 		Amount: 50
-		UseResourceStorage:	true
+		UseResourceStorage: true
 	GpsDot:
 		String: Oil
 	TooltipDescription@ally:
 		Description: Provides additional funds.
-		ValidStances: Ally
+		ValidRelationships: Ally
 	TooltipDescription@other:
 		Description: Capture to receive additional funds.
-		ValidStances: Neutral, Enemy
+		ValidRelationships: Neutral, Enemy
 	Explodes:
 		Weapon: BarrelExplode
 	RevealsShroud:
 		Range: 3c0
 	SpawnActorOnDeath:
-		Actor: OILP.slow.husk
+		Actor: isoilhusk
 		OwnerType: InternalName
 	OwnerLostAction:
 		Action: ChangeOwner
 	UpdatesDerrickCount:
 
-OILP.slow.husk:
-	Inherits: ^TechBuilding
-	RenderSprites:
-		Palette: player
-	Tooltip:
-		Name: Husk (Slow Oil Pump)
-	WithSpriteBody:
-	WithIdleOverlay:
-		StartSequence: fire-start
-		Sequence: fire-loop
-	CapturableProgressBar:
-	CapturableProgressBlink:
-	CaptureManager:
-	Capturable:
-		Types: building-husk
-	TransformOnCapture:
-		IntoActor: OILP.slow
-		ForceHealthPercentage: 50
-	Targetable:
-		TargetTypes: building-husk
-
-Katy:
-	Inherits: ^TrackedVehicle
-	Inherits@EXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Valued:
-		Cost: 900
-	Tooltip:
-		Name: Katyusha Rocket Truck
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Buildable:
-		BuildPaletteOrder: 250
-		Prerequisites: dome, fix, ~vehicles.soviet, ~techlevel.medium
-		Queue: Vehicle
-		IconPalette: chrometd
-		Description: Long range, rapid firing, inaccurate, slow reloading rocket artillery.\n  Strong vs all Ground units.\n  Special Ability: No Contrails - Makes it harder for the enemy to know where you are and fire back 
-	Mobile:
-		Speed: 100
-		TurnSpeed: 5
-		Locomotor: lighttracked
-	Health:
-		HP: 15000
-	Armor:
-		Type: Light
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Turreted:
-		TurnSpeed: 255
-		Offset: -256,0,128
-	Armament@PRIMARY:
-		Weapon: Katyr
-		LocalOffset: 268,0,440
-	Armament@SECONDARY:
-		Name: secondary
-		Weapon: Katyr
-		LocalOffset: 268,0,440
-	AttackFrontal:
-		ForceFireIgnoresActors: True
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
-
-HOOSP.Husk:
-	Inherits: ^TechBuilding
+UnkillT04:
+	Inherits: ^TreeHusk
 	Building:
-		Footprint: xx xx
+		Footprint: __ x_
 		Dimensions: 2,2
-	Tooltip:
-		Name: Biological Laboratory (Destroyed)
-	WithSpriteBody:
-	CapturableProgressBar:
-	CapturableProgressBlink:
-	CaptureManager:
-	Capturable:
-		Types: building-husk
-	TransformOnCapture:
-		IntoActor: bio
-		ForceHealthPercentage: 50
-	Targetable:
-		TargetTypes: building-husk
+	MapEditorData:
+		ExcludeTilesets: TEMPERAT, SNOW, INTERIOR
 
-E11:
-	Inherits: ^Soldier
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 30
-		Prerequisites: ~barracks, ~techlevel.infonly ~disabled
-		Description: Anti-tan infantry.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
-	Selectable:
-		Class: E3
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Anti-tank Rocket Soldier
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 4500
-	Armament@PRIMARY:
-		Weapon: Pistol
-		LocalOffset: 0,0,555
-	Armament@SECONDARY:
-		Name: secondary
-		Weapon: IDragon
-		LocalOffset: 0,0,555
-	TakeCover:
-		ProneOffset: 384,0,-395
-	WithInfantryBody:
-		DefaultAttackSequence: shoot
-	Explodes:
-		Weapon: UnitExplodeSmall
-		EmptyWeapon: UnitExplodeSmall
-		DamageSource: Killer
-		Chance: 50
-	ProducibleWithLevel:
-		Prerequisites: barracks.upgraded
-	AutoTarget:
-		ScanRadius: 5
-
-ATR:
-	Inherits: ^Soldier
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Anti-Tank Rifle
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 31
-		Prerequisites: ~barracks, ~techlevel.infonly ~disabled
-		Description: Anti-Tank Rifle infantry unit.\n  Strong vs Vehicles  \n  Weak vs Aircraft, Infantry
-	Health:
-		HP: 8000
-	RevealsShroud:
-		Range: 4c0
-	AutoTargetPriority@DEFAULT:
-		ValidTargets: Vehicle
-	TakeCover:
-		ProneOffset: 384,0,-395
-	Armament@PRIMARY:
-		Weapon: ATRifle
-	Armament@GARRISONED:
-		Name: garrisoned
-		Weapon: ATRifle 
-		MuzzleSequence: garrison-muzzle
-	WithInfantryBody:
-		DefaultAttackSequence: shoot
-	ProducibleWithLevel:
-		Prerequisites: barracks.upgraded
-
-BARR:
-	Inherits: ^Building
-	Inherits@shape: ^2x2Shape
-	Selectable:
-		Bounds: 48,48
-	HitShape:
-		UseTargetableCellsOffsets: false
-		TargetableOffsets: 0,0,0, 490,-470,0, 355,512,0, -355,-512,0, -630,512,0
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 30
-		Prerequisites: anypower, ~structures.soviet, ~techlevel.infonly
-		Description: Trains infantry.
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Soviet Barracks
+UnkillT08:
+	Inherits: ^TreeHusk
 	Building:
-		Footprint: xx xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
-	Health:
-		HP: 60000
-	Armor:
-		Type: Wood
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	WithBuildingBib:
-	RallyPoint:
-	Exit@1:
-		RequiresCondition: !being-captured
-		SpawnOffset: -170,810,0
-		ExitCell: 1,2
-		ProductionTypes: Soldier, Infantry
-	Exit@2:
-		RequiresCondition: !being-captured
-		SpawnOffset: -725,640,0
-		ExitCell: 0,2
-		ProductionTypes: Soldier, Infantry
-	Production:
-		Produces: Infantry, Soldier
-	GrantExternalConditionToProduced:
-		Condition: produced
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
-	ProductionBar:
-		ProductionType: Infantry
-	ProvidesPrerequisite:
-		Prerequisite: barracks
-	ProvidesPrerequisite@soviet:
-		Factions: soviet, russia, ukraine
-		Prerequisite: infantry.soviet
-	ProvidesPrerequisite@sovietvanilla:
-		Factions: soviet
-		Prerequisite: infantry.sovietvanilla
-	ProvidesPrerequisite@russia:
-		Factions: russia
-		Prerequisite: infantry.russia
-	ProvidesPrerequisite@ukraine:
-		Factions: ukraine
-		Prerequisite: infantry.ukraine
-	ProvidesPrerequisite@sovietstructure:
-		RequiresPrerequisites: structures.soviet
-		Prerequisite: infantry.soviet
-	ProvidesPrerequisite@sovietvanillastructure:
-		RequiresPrerequisites: structures.sovietvanilla
-		Prerequisite: infantry.sovietvanilla
-	ProvidesPrerequisite@russianstructure:
-		RequiresPrerequisites: structures.russia
-		Prerequisite: infantry.russia
-	ProvidesPrerequisite@ukrainianstructure:
-		RequiresPrerequisites: structures.ukraine
-		Prerequisite: infantry.ukraine
-	Power:
-		Amount: -20
-	ProvidesPrerequisite@buildingname:
-	InfiltrateForSupportPower:
-		Proxy: barracks.upgraded
-		Types: SpyInfiltrate
-	Targetable:
-		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
-	RepairsUnits:
-		HpPerStep: 500
-		Interval: 1
+		Footprint: x_
+		Dimensions: 2,1
 
-V2RL:
-	Inherits: ^Vehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 230
-		Prerequisites: dome, ~vehicles.soviet, ~techlevel.medium
-		Description:  Extreme-range rocket artillery.\n  Strong vs Infantry, Buildings\n  Weak vs Vehicles, Aircraft
-	Valued:
-		Cost: 900
-	Tooltip:
-		Name: V2 Rocket Launcher
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 20000
-	Armor:
-		Type: Light
-	Mobile:
-		Speed: 85
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Armament:
-		Weapon: SCUD
-		ReloadingCondition: reloading
-	AutoTarget:
-		ScanRadius: 10
-	AttackFrontal:
-		TargetFrozenActors: True
-		ForceFireIgnoresActors: True
-	WithFacingSpriteBody:
-		RequiresCondition: !reloading
-		Name: loaded
-	WithFacingSpriteBody@EMPTY:
-		RequiresCondition: reloading
-		Sequence: empty-idle
-		Name: reloading
-	SelectionDecorations:
-	Explodes:
-		Weapon: V2Explode
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 28,28
+UnkillT09:
+	Inherits: ^TreeHusk
+	MapEditorData:
+		ExcludeTilesets: TEMPERAT, SNOW, INTERIOR
 
-CRATE:
-	Inherits: ^Crate
-	GiveMcvCrateAction:
-		SelectionShares: 1
-		NoBaseSelectionShares: 100
-		Units: mcv
-	GiveCashCrateAction:
-		Amount: 2000
-		SelectionShares: 50
-		Sequence: dollar
-		UseCashTick: true
-	LevelUpCrateAction:
-		SelectionShares: 40
-	ExplodeCrateAction@fire:
-		Weapon: CrateNapalm
-		SelectionShares: 5
-	ExplodeCrateAction@boom:
-		Weapon: CrateExplosion
-		SelectionShares: 5
-	HideMapCrateAction:
-		SelectionShares: 5
-		Sequence: hide-map
-	HealUnitsCrateAction:
-		Sound: heal2.aud
-		SelectionShares: 2
-		Sequence: heal
-	RevealMapCrateAction:
-		SelectionShares: 1
-		Sequence: reveal-map
-	DuplicateUnitCrateAction:
-		SelectionShares: 10
-		MaxAmount: 5
-		MinAmount: 2
-		MaxDuplicateValue: 1500
-	GiveUnitCrateAction@jeep:
-		SelectionShares: 6
-		Units: jeep
-		ValidFactions: soviet, russia, ukraine
-		Prerequisites: techlevel.low
-	GiveUnitCrateAction@1tnk:
-		SelectionShares: 6
-		Units: 1tnk
-		ValidFactions: soviet, russia, ukraine
-		Prerequisites: techlevel.low
-	GiveUnitCrateAction@apc:
-		SelectionShares: 6
-		Units: apc
-		ValidFactions: soviet, russia, ukraine
-		Prerequisites: techlevel.low
-	GiveUnitCrateAction@ftrk:
-		SelectionShares: 6
-		Units: ftrk
-		ValidFactions: soviet, russia, ukraine
-		Prerequisites: techlevel.low
-	GiveUnitCrateAction@v2rl:
-		SelectionShares: 5
-		Units: v2rl
-		ValidFactions: soviet, russia, ukraine
-		Prerequisites: techlevel.medium
-	GiveUnitCrateAction@2tnk:
-		SelectionShares: 4
-		Units: 2tnk
-		ValidFactions: soviet, russia, ukraine
-		Prerequisites: techlevel.medium
-	GiveUnitCrateAction@3tnk:
-		SelectionShares: 4
-		Units: 3tnk
-		ValidFactions: soviet, russia, ukraine
-		Prerequisites: techlevel.medium
-	GiveUnitCrateAction@squadlight:
-		SelectionShares: 10
-		Units: e1,e1,e1,e3,e3
-		ValidFactions: soviet, russia, ukraine
-	GiveUnitCrateAction@squadheavyallies:
-		SelectionShares: 7
-		Units: e1,e1,e1,e1,e3,e3,e3,e6,medi
-		ValidFactions: soviet, russia, ukraine
-		TimeDelay: 4500
-	GiveUnitCrateAction@squadheavysoviet:
-		SelectionShares: 7
-		Units: e1,e1,e4,e4,e3,e3,e3,e6
-		ValidFactions: soviet, russia, ukraine
-		TimeDelay: 4500
-	GrantExternalConditionCrateAction@invuln:
-		SelectionShares: 5
-		Sequence: invuln
-		Sound: ironcur9.aud
-		Condition: invulnerability
-		Duration: 600
-	GiveUnitCrateAction@arty:
-		SelectionShares: 5
-		Units: arty
-		ValidFactions: soviet, russia, ukraine
-	GiveUnitCrateAction@mrj:
-		SelectionShares: 2
-		Units: mrj
-		ValidFactions: soviet, russia, ukraine
-	GiveUnitCrateAction@squad1:
-		SelectionShares: 2
-		Units: e1,e1,e1,e1,e1
-	GiveUnitCrateAction@squad2:
-		SelectionShares: 2
-		Units: e1,e1,e1,e1,e2
-	GiveUnitCrateAction@squad3:
-		SelectionShares: 2
-		Units: e1,e1,e1,e1,e3
-	GiveUnitCrateAction@squad4:
-		SelectionShares: 2
-		Units: e1,e1,e1,e1,e6
-	GiveUnitCrateAction@squad5:
-		SelectionShares: 2
-		Units: e1,e1,e1,e2,e6
-	GiveUnitCrateAction@squad6:
-		SelectionShares: 2
-		Units: e1,e1,e1,e3,e6
-	GiveUnitCrateAction@squad7:
-		SelectionShares: 2
-		Units: e1,e1,e2,e3,e6
-	GiveUnitCrateAction@squad8:
-		SelectionShares: 2
-		Units: e1,e1,e1,e6,e6
-	GiveUnitCrateAction@squad9:
-		SelectionShares: 2
-		Units: e1,e1,e1,e3,e3
-	GiveUnitCrateAction@squad10:
-		SelectionShares: 2
-		Units: e1,e1,e1,e2,e2
-	GiveUnitCrateAction@2mcv:
-		SelectionShares: 1
-		Units: mcv,mcv
-		NoBaseSelectionShares: 95
-	ExplodeCrateAction@timequake:
-		Weapon: TimeQuake
-		SelectionShares: 3
-		Sequence: timequake
-	ExplodeCrateAction@ore:
-		Weapon: OreExplosion
-		SelectionShares: 2
-	ExplodeCrateAction@gem:
-		Weapon: GemExplosion
-		SelectionShares: 1
-	ExplodeCrateAction@atomic:
-		Weapon: atomic
-		SelectionShares: 1
-
-^DTree:
-	Inherits@1: ^SpriteActor
-	Inherits@shape: ^1x1Shape
-	Interactable:
-	Tooltip:
-		Name:  Tree (Burnt)
-		ShowOwnerRow: false
-	WithSpriteBody:
+UnkillTC01:
+	Inherits: ^TreeHusk
 	Building:
-		Footprint: x
-		Dimensions: 1,1
-	AppearsOnRadar:
-	RadarColorFromTerrain:
-		Terrain: Tree
-	AppearsOnMapPreview:
-		Terrain: Tree
-	Health:
-		HP: 50000
-	Armor:
-		Type: Wood
-	Targetable:
-		TargetTypes: Trees
-	HiddenUnderShroud:
-	ScriptTriggers:
+		Footprint: ___ xx_
+		Dimensions: 3,2
 	MapEditorData:
 		ExcludeTilesets: INTERIOR
-		Categories: Tree
-	RenderSprites:
-		Palette: terrain
-	RequiresSpecificOwners:
-		ValidOwnerNames: Neutral
+
 
 T08.Husk:
 	Inherits: ^DTree
@@ -6608,637 +5039,52 @@ TC01.Husk:
 		DeathSequencePalette: cncplayer
 		UseDeathTypeSuffix: false
 
-UnkillT04:
-	Inherits: ^TreeHusk
-	Building:
-		Footprint: __ x_
-		Dimensions: 2,2
-	MapEditorData:
-		ExcludeTilesets: TEMPERAT, SNOW, INTERIOR
-
-UnkillT08:
-	Inherits: ^TreeHusk
-	Building:
-		Footprint: x_
-		Dimensions: 2,1
-
-UnkillT09:
-	Inherits: ^TreeHusk
-	MapEditorData:
-		ExcludeTilesets: TEMPERAT, SNOW, INTERIOR
-
-UnkillTC01:
-	Inherits: ^TreeHusk
-	Building:
-		Footprint: ___ xx_
-		Dimensions: 3,2
-	MapEditorData:
-		ExcludeTilesets: INTERIOR
-
-SHOK:
-	Inherits: ^Soldier
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 130
-		Prerequisites: ~barr, stek, tsla, ~infantry.russia, ~techlevel.high
-		Description: Elite infantry with portable Tesla coils.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft
-	Valued:
-		Cost: 350
-	Tooltip:
-		Name: Shock Trooper
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 5000
-	Mobile:
-		Voice: Move
-	RevealsShroud:
-		Range: 5c0
-	Armament@PRIMARY:
-		Weapon: PortaTesla
-		LocalOffset: 427,0,341
-	Armament@GARRISONED:
-		Name: garrisoned
-		Weapon: PortaTesla
-	TakeCover:
-		ProneOffset: 227,0,-245
-	AttackFrontal:
-		Voice: Attack
-	AttackMove:
-		Voice: Move
-	Passenger:
-		Voice: Move
-	Guard:
-		Voice: Move
-	Explodes:
-		Weapon: UnitExplodeSmall
-		EmptyWeapon: UnitExplodeSmall
-		DamageSource: Killer
-		Chance: 50
-	WithInfantryBody:
-		DefaultAttackSequence: shoot
-		RequiresCondition: !parachute
-	WithInfantryBody@PARACHUTE:
-		StandSequences: parachute
-		RequiresCondition: parachute
-	Voiced:
-		VoiceSet: ShokVoice
-	ProducibleWithLevel:
-		Prerequisites: barracks.upgraded
-
-FTNK:
-	Inherits: ^TrackedVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 220
-		Prerequisites: fix, ~vehicles.soviet, ~techlevel.medium
-		Description: Secondary Soviet Main Battle Equipped with a Flamethrower instead of a Cannon\nMust be reloaded.\n  Strong vs Infantry, Vehicles\n  Weak vs  Aircraft
-	Valued:
-		Cost: 820
-	Tooltip:
-		Name: Flame Tank
-		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 45000
-	Armor:
-		Type: Heavy
-	Mobile:
-		Speed: 85
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Turreted:
-		TurnSpeed: 5
-	Armament:
-		Weapon: tankflamer
-		Recoil: 0
-		RecoilRecovery: 38
-		LocalOffset: 720,0,80
-		MuzzleSequence: muzzle
-		PauseOnCondition: !ammo
-	AttackTurreted:
-	WithMuzzleOverlay:
-	WithSpriteTurret:
-	SpawnActorOnDeath:
-		Actor: FTNK.Husk
-	SelectionDecorations:
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
+DOME:
+	Inherits: ^Building
+	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
+	Inherits@shape: ^2x2Shape
 	Selectable:
-		DecorationBounds: 28,28
-	AmmoPool:
-		Ammo: 160
-		PipCount: 4
-		ReloadDelay: 1
-		AmmoCondition: ammo
-	RenderSprites:
-		Image: 2TNK
-	Rearmable:
-		RearmActors: fix, mfix.deployed
-	Explodes:
-		Weapon: ArtilleryExplode
-		EmptyWeapon: UnitExplodeSmall
-		LoadedChance: 100
-
-FTNK.Husk:
-	Inherits: ^Husk
-	Tooltip:
-		Name: Husk (Flame Tank)
-	ThrowsParticle@turret:
-		Anim: turret
-	TransformOnCapture:
-		IntoActor: ftnk
-	InfiltrateForTransform:
-		IntoActor: ftnk
-	RenderSprites:
-		Image: 2tnk.destroyed
-
-FTRK:
-	Inherits: ^Vehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+		Bounds: 48,48
+	HitShape:
+		UseTargetableCellsOffsets: false
+		TargetableOffsets: 0,0,0, 630,-384,0, 630,384,0, -700,-512,0, -700,512,0
 	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 130
-		Prerequisites: ~vehicles.soviet, ~techlevel.low
-		Description: Mobile Anti-Air unit with mounted Flak cannon.\n  Strong vs Aircraft\n  Weak vs Infantry, Light armor, Tanks
+		Queue: Building
+		BuildPaletteOrder: 90
+		Prerequisites: WEAP, ~techlevel.medium
+		Description: Provides an overview\nof the battlefield.\nRequires power to operate.
 	Valued:
-		Cost: 600
+		Cost: 1800
 	Tooltip:
-		Name: Mobile Flak
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
+		Name: Radar Dome
+	Building:
+		Footprint: xx xx ==
+		Dimensions: 2,3
+		LocalCenterOffset: 0,-512,0
+	Targetable:
+		TargetTypes: GroundActor, Structure, C4, DetonateAttack, SpyInfiltrate
 	Health:
-		HP: 15000
+		HP: 100000
 	Armor:
-		Type: Light
-	Mobile:
-		TurnSpeed: 10
-		Speed: 118
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Turreted:
-		TurnSpeed: 10
-		Offset: -298,0,298
-	Armament:
-		Weapon: FLAK-23-AA
-		Recoil: 85
-		LocalOffset: 512,0,192
-		MuzzleSequence: muzzle
-	AttackTurreted:
-	WithMuzzleOverlay:
-	WithSpriteTurret:
-	SelectionDecorations:
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 28,28
-
-TRAN:
-	Inherits: ^Helicopter
-	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Helicopter
-		BuildPaletteOrder: 10
-		Prerequisites: ~hpad, ~techlevel.medium
-		Description: Fast Infantry Transport Helicopter.\n  Unarmed
-	Valued:
-		Cost: 900
-	Tooltip:
-		Name: Chinook
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 20000
+		Type: Wood
 	RevealsShroud:
 		MinRange: 6c0
-		Range: 8c0
-		Type: GroundPosition
+		Range: 10c0
+		RequiresCondition: !disabled
 		RevealGeneratedShroud: False
+	RevealsShroud@Offline:
+		Range: 5c0
+		RequiresCondition: disabled
 	RevealsShroud@GAPGEN:
 		Range: 6c0
-		Type: GroundPosition
-	Aircraft:
-		TurnSpeed: 5
-		Speed: 128
-		AltitudeVelocity: 0c58
-	WithIdleOverlay@ROTOR1AIR:
-		Offset: 597,0,213
-		Sequence: rotor
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTOR1GROUND:
-		Offset: 597,0,213
-		Sequence: slow-rotor
-		RequiresCondition: !airborne
-	WithIdleOverlay@ROTOR2AIR:
-		Offset: -597,0,341
-		Sequence: rotor2
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTOR2GROUND:
-		Offset: -597,0,341
-		Sequence: slow-rotor2
-		RequiresCondition: !airborne
-	Cargo:
-		Types: Infantry, Vehicle
-		MaxWeight: 8
-		PipCount: 8
-		AfterUnloadDelay: 40
-	SpawnActorOnDeath:
-		Actor: TRAN.Husk
-	SelectionDecorations:
-	Selectable:
-		DecorationBounds: 40,36
-	Chronoshiftable:
-
-SS:
-	Inherits: ^Ship
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Buildable:
-		Queue: Ship
-		BuildAtProductionType: Submarine
-		BuildPaletteOrder: 30
-		Prerequisites: ~spen, ~techlevel.low
-		Description: Submerged anti-ship unit\narmed with torpedoes.\nCan detect other submarines.\n  Strong vs Naval units\n  Weak vs Ground units, Aircraft\n  Special Ability: Submerge
-	Valued:
-		Cost: 950
-	Tooltip:
-		Name: Submarine
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 25000
-	Armor:
-		Type: Light
-	Mobile:
-		TurnSpeed: 4
-		Speed: 71
-	RevealsShroud:
-		MinRange: 5c0
-		Range: 8c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 5c0
-	Targetable:
-		TargetTypes: Ground, Water, Ship, Submarine, Repair
-		RequiresCondition: !underwater
-	Targetable@UNDERWATER:
-		TargetTypes: Underwater, Submarine
-		RequiresCondition: underwater
-	Cloak:
-		CloakTypes: Underwater
-		InitialDelay: 0
-		CloakDelay: 50
-		CloakSound: subshow1.aud
-		UncloakSound: subshow1.aud
-		CloakedCondition: underwater
-		Palette: submerged
-		PauseOnCondition: cloak-force-disabled
-	GrantConditionOnDamageState@UNCLOAK:
-		Condition: cloak-force-disabled
-		ValidDamageStates: Critical
-	Armament:
-		Weapon: TorpTube
-		LocalOffset: 0,-171,0, 0,171,0
-		FireDelay: 2
-	AttackFrontal:
-	SelectionDecorations:
-	AutoTarget:
-		InitialStance: AttackAnything
-		InitialStanceAI: AttackAnything
-		ScanOnIdle: true
-	AutoTargetPriority@DEFAULT:
-		ValidTargets: Water, Underwater
-	AutoTargetPriority@ATTACKANYTHING:
-		ValidTargets: Water, Underwater
-	DetectCloaked:
-		CloakTypes: Underwater
-		Range: 4c0
-	RenderDetectionCircle:
-	Explodes:
-		Weapon: UnitExplodeSubmarine
-		EmptyWeapon: UnitExplodeSubmarine
-	-MustBeDestroyed:
-	Selectable:
-		DecorationBounds: 38,38
-
-MCV:
-	Inherits: ^Vehicle
-	Inherits@selection: ^SelectableSupportUnit
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 210
-		Prerequisites: fix, ~techlevel.medium
-		BuildDurationModifier: 50
-		Description: Deploys into another Construction Yard.\n  Unarmed
-	Valued:
-		Cost: 2000
-	Tooltip:
-		Name: Mobile Construction Vehicle
-	Selectable:
-		DecorationBounds: 42,42
-	SelectionDecorations:
-	Health:
-		HP: 60000
-	Armor:
-		Type: Light
-	Mobile:
-		Speed: 71
-		Locomotor: heavywheeled
-	RevealsShroud:
-		Range: 4c0
-	Transforms:
-		IntoActor: fact
-		Offset: -1,-1
-		Facing: 96
-		TransformSounds: placbldg.aud, build5.aud
-		NoTransformNotification: BuildingCannotPlaceAudio
-	MustBeDestroyed:
-		RequiredForShortGame: true
-	BaseBuilding:
-	SpawnActorOnDeath:
-		Actor: MCV.Husk
-	TransferTimedExternalConditionOnTransform:
-		Condition: invulnerability
-	Passenger:
-		CargoType: Vehicle
-		Weight: 4
-
-APC:
-	Inherits: ^TrackedVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 120
-		Prerequisites: ~vehicles.soviet, ~techlevel.low
-		Description: Tough infantry transport.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
-	Valued:
-		Cost: 850
-	Tooltip:
-		Name: Armored Personnel Carrier
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 35000
-	Armor:
-		Type: Heavy
-	Mobile:
-		Speed: 142
-		PauseOnCondition: notmobile || being-captured
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Armament:
-		Weapon: M60mg
-		LocalOffset: 85,0,171
-		MuzzleSequence: muzzle
-	AttackFrontal:
-	WithMuzzleOverlay:
-	Cargo:
-		Types: Infantry
-		MaxWeight: 5
-		PipCount: 5
-		LoadingCondition: notmobile
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
-	Passenger:
-		CargoType: Vehicle
-		Weight: 2
-
-TRUK:
-	Inherits: ^Vehicle
-	Inherits@selection: ^SelectableSupportUnit
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 410
-		Prerequisites: ~techlevel.low
-		Description: Transports cash to other players.\n  Unarmed
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Supply Truck
-	Health:
-		HP: 11000
-	Armor:
-		Type: Light
-	Mobile:
-		Speed: 128
-	RevealsShroud:
-		Range: 4c0
-	DeliversCash:
-		Payload: 500
-		PlayerExperience: 50
-	SpawnActorOnDeath:
-		Actor: moneycrate
-	Passenger:
-		CargoType: Vehicle
-		Weight: 2
-
-TIMECRATE:
-	Inherits: ^Crate
-	Tooltip:
-		Name: quake
-	ExplodeCrateAction@timequake:
-		Weapon: TimeQuake
-		SelectionShares: 100
-		Sequence: timequake
-
-MONEYCRATE:
-	Inherits: ^Crate
-	Tooltip:
-		Name: Money Crate
-	GiveCashCrateAction:
-		Amount: 500
-		SelectionShares: 1
-		UseCashTick: true
-		Sequence: dollar
-	RenderSprites:
-		Image: wcrate
-
-LST:
-	Inherits: ^Ship
-	Buildable:
-		Queue: Ship
-		BuildPaletteOrder: 10
-		Prerequisites: ~techlevel.low
-		Description: General-purpose naval transport.\nCan carry infantry and tanks.\n  Unarmed
-	Valued:
-		Cost: 700
-	Tooltip:
-		Name: Transport
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 35000
-	Armor:
-		Type: Heavy
-	Mobile:
-		Locomotor: lcraft
-		Speed: 113
-		PauseOnCondition: notmobile
-	RevealsShroud:
-		MinRange: 5c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 5c0
-	SelectionDecorations:
-	WithLandingCraftAnimation:
-		OpenTerrainTypes: Clear, Rough, Road, Ore, Gems, Beach
-	Cargo:
-		Types: Infantry, Vehicle
-		MaxWeight: 10
-		PipCount: 10
-		PassengerFacing: 0
-		LoadingCondition: notmobile
-	-Chronoshiftable:
-	Selectable:
-		DecorationBounds: 36,36
-
-BADR.hd:
-	Inherits: BADR
-	Health:
-		HP: 30500
-	Aircraft:
-		CruiseAltitude: 3500
-		TurnSpeed: 5
-		Speed: 150
-		Repulsable: False
-		MaximumPitch: 56
-	RenderSprites:
-		Image: BADR
-
-hbbadr:
-	Inherits: ^NeutralPlane
-	AttackBomber:
-	Armament:
-		Weapon: ParaBomb
-	Health:
-		HP: 40000
-	Aircraft:
-		CruiseAltitude: 4060
-		TurnSpeed: 5
-		Speed: 120
-		Repulsable: False
-		MaximumPitch: 56
-	AmmoPool:
-		Ammo: 15
-	-Selectable:
-	SelectionDecorations:
-		RenderSelectionBars: False
-	-Voiced:
-	Tooltip:
-		Name: Badger
-	Contrail@1:
-		Offset: -432,560,0
-	Contrail@2:
-		Offset: -432,-560,0
-	SpawnActorOnDeath:
-		Actor: BADR.Husk
-	SmokeTrailWhenDamaged@0:
-		Offset: -432,560,0
-		Interval: 2
-	SmokeTrailWhenDamaged@1:
-		Offset: -432,-560,0
-		Interval: 2
-	-EjectOnDeath:
-	-MapEditorData:
-	RejectsOrders:
-	RenderSprites:
-		Image: badr
-	GivesExperience:
-		Experience: 1000
-	Interactable:
-
-BADRIBomber:
-	Inherits: ^NeutralPlane
-	AttackBomber:
-	Armament:
-		Weapon: SParaBomb
-	Health:
-		HP: 200000
-	Aircraft:
-		CruiseAltitude: 2000
-		TurnSpeed: 7
-		Speed: 500
-		Repulsable: False
-		MaximumPitch: 56
-	AmmoPool:
-		Ammo: 1
-	-Selectable:
-	SelectionDecorations:
-		RenderSelectionBars: False
-	-Voiced:
-	Tooltip:
-		Name: Strategic Bomber
-	Contrail@1:
-		Offset: -725,683,0
-	Contrail@2:
-		Offset: -725,-683,0
-	SpawnActorOnDeath:
-		Actor: U2.Husk
-	SmokeTrailWhenDamaged:
-		Offset: -1c43,0,0
-		Interval: 2
-	-EjectOnDeath:
-	MapEditorData:
-	RejectsOrders:
-	RenderSprites:
-		Image: u2
-	GivesExperience:
-		Experience: 1000
-	Interactable:
-
-TENTFIX:
-	Inherits: ^TechBuilding
-	Inherits@shape: ^2x2Shape
-	OwnerLostAction:
-		Action: ChangeOwner
-	Selectable:
-		Priority: 0
-		Bounds: 48,48
-	Building:
-		Footprint: xx xx
-		Dimensions: 2,2
-	Health:
-		HP: 80000
-	CaptureManager:
-	Capturable:
-		Types: building
-	CapturableProgressBar:
-	CapturableProgressBlink:
-	EngineerRepairable:
-	Tooltip:
-		Name: Vehicle Maintenance Outpost
-	TooltipDescription@ally:
-		Description: Provides vehicles with self-healing.
-		ValidStances: Ally
-	TooltipDescription@other:
-		Description: Capture to enable self-healing for vehicles.
-		ValidStances: Neutral, Enemy
-	RevealsShroud:
-		Range: 4c0
+		RequiresCondition: !disabled
 	WithBuildingBib:
-		HasMinibib: true
+	ProvidesRadar:
+		RequiresCondition: !jammed && !disabled
+	InfiltrateForExploration:
+		Types: SpyInfiltrate
+	Power:
+		Amount: -40
 	ProvidesPrerequisite@buildingname:
-	AppearsOnMapPreview:
-	GpsDot:
-		String: Hospital
-	RenderSprites:
-		Image: tent
+	ExternalCondition@JAMMED:
+		Condition: jammed
